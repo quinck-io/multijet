@@ -1,5 +1,7 @@
 # multijet
 
+![logo](https://cdn.discordapp.com/attachments/1004365881675087984/1080896514509000754/image.png)
+
 **Multijet** is a highly opinonated framework for building large **microservice based** monorepos in Typescript.
 
 The core concept of multijet is the **microservices/libs** structure:
