@@ -44,16 +44,12 @@ export function createHandlers(components: AppComponents): Handlers {
     return {
         completeForceChangePasswordChallenge:
             authController.completeForceChangePasswordChallenge,
-        confirmSignup: authController.confirmSignup,
         createUser: adminController.createUser,
-        forgotPassword: authController.forgotPassword,
         getUserProfile: profileController.getUserProfile,
         getUsers: adminController.getUsers,
         login: authController.login,
-        refreshLogin: authController.refreshLogin,
         resendSignupConfirmation: authController.resendSignupConfirmation,
         resetPassword: authController.resetPassword,
-        signup: profileController.signup,
         updateUserCredentials: authController.updateUserCredentials,
         updateUserProfile: profileController.updateUserProfile,
     }

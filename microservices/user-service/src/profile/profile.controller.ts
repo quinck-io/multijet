@@ -15,20 +15,6 @@ export class ProfileController extends BasicController {
         super(ProfileController.name)
     }
 
-    public signup: Handler<'signup'> = this.tryDo(async (request, reply) => {
-        const { email, password } = request.body
-        await this.userManager.signUp(
-            {
-                password,
-                username: email,
-            },
-            { email },
-        )
-
-        reply.statusCode = StatusCodes.NO_CONTENT
-        return null
-    })
-
     public getUserProfile: Handler<'getUserProfile'> = this.tryDo(
         async request => {
             const userId = userIdFromHeaders(request.headers)

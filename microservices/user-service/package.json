@@ -6,7 +6,7 @@
     "main": "src/index.ts",
     "scripts": {
         "start": "node ./dist/index.js",
-        "build": "esbuild ./src/index.js --bundle --platform=node --outfile=dist/index.js",
+        "build": "esbuild ./src/lambda.ts --bundle --platform=node --outfile=dist/index.js",
         "typecheck": "tsc"
     },
     "dependencies": {

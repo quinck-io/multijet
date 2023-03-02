@@ -1,11 +1,9 @@
 import {
     BasicController,
     ConfirmSignupByCode,
-    formatRefreshAuthToken,
     formatUserToken,
     Handler,
     Login,
-    userIdFromHeaders,
     userIdFromToken,
 } from '@libs/fastify-utils'
 import {
@@ -46,21 +44,6 @@ export class AuthController extends BasicController {
         })
     })
 
-    public confirmSignup: Handler<'confirmSignup'> = this.tryDo(
-        async (request, reply) => {
-            return this.handleUserManagerOperation(async () => {
-                const { confirmByCode } = request.body
-                const userId = userIdFromHeaders(request.headers)
-
-                if (confirmByCode)
-                    await this.confirmByCode(userId, confirmByCode)
-
-                reply.statusCode = StatusCodes.NO_CONTENT
-                return null
-            })
-        },
-    )
-
     public completeForceChangePasswordChallenge: Handler<'completeForceChangePasswordChallenge'> =
         this.tryDo(async request => {
             return this.handleUserManagerOperation(async () => {
@@ -78,25 +61,6 @@ export class AuthController extends BasicController {
                 return this.formatLogin(tokens)
             })
         })
-
-    public refreshLogin: Handler<'refreshLogin'> = this.tryDo(async request => {
-        const { refreshToken } = formatRefreshAuthToken(request.headers)
-        const tokens = await this.authManager.refresh({
-            refreshToken,
-        })
-
-        return this.formatLogin(tokens)
-    })
-
-    public forgotPassword: Handler<'forgotPassword'> = this.tryDo(
-        async (request, reply) => {
-            const { email } = request.body
-            this.authManager.forgotPassword(email)
-
-            reply.statusCode = StatusCodes.NO_CONTENT
-            return null
-        },
-    )
 
     public resetPassword: Handler<'resetPassword'> = this.tryDo(
         async (request, reply) => {
