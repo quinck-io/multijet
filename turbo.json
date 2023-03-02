@@ -5,7 +5,8 @@
             "dependsOn": ["^build", "typecheck"],
             "outputs": ["dist/**", ".next/**"]
         },
-        "lint": {}
+        "lint": {},
+        "openapi:generate": {}
     },
     "globalDependencies": ["tsconfig.base.json"]
 }
