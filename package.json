@@ -11,8 +11,7 @@
         "lint:fix": "turbo run lint:fix",
         "test": "turbo run test --parallel",
         "typecheck": "turbo run typecheck",
-        "openapi:generate": "turbo run openapi:generate",
-        "server:start": "npm run start -w @microservices/sum-service"
+        "openapi:generate": "turbo run openapi:generate"
     },
     "dependencies": {
         "@quinck/collections": "^0.2.0",
