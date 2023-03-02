@@ -1,0 +1,28 @@
+{
+	"name": "multijet",
+	"private": true,
+	"workspaces": [
+		"microservices/*",
+		"libs/*"
+	],
+	"scripts": {
+		"build": "turbo run typecheck && turbo run build",
+		"dev": "turbo run dev --parallel",
+		"lint": "turbo run lint",
+		"lint:fix": "turbo run lint:fix",
+		"test": "turbo run test --parallel",
+		"typecheck": "turbo run typecheck",
+		"server:start": "npm run start -w @microservices/sum-service"
+	},
+	"dependencies": {
+		"turbo": "latest"
+	},
+	"engines": {
+		"npm": ">=7.0.0",
+		"node": ">=14.0.0"
+	},
+	"packageManager": "npm@8.11.0",
+	"devDependencies": {
+		"@tsconfig/node16": "^1.0.3"
+	}
+}
