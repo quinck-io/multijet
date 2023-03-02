@@ -1,5 +1,3 @@
-import fastify from 'fastify'
-export default fastify
 export * from './auth/auth'
 export * from './errors/common'
 export * from './errors/database'

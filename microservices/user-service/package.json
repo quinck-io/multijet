@@ -1,0 +1,19 @@
+{
+    "name": "@microservices/user-service",
+    "private": true,
+    "version": "0.0.1",
+    "types": "src/index.ts",
+    "main": "src/index.ts",
+    "scripts": {
+        "start": "node ./dist/index.js",
+        "build": "esbuild ./src/index.js --bundle --platform=node --outfile=dist/index.js",
+        "typecheck": "tsc"
+    },
+    "dependencies": {
+        "@fastify/aws-lambda": "^3.2.0",
+        "@libs/fastify-utils": "^0.0.1",
+        "@libs/user-manager": "^0.0.1",
+        "@libs/utils": "^0.0.1",
+        "@quinck/aws-cognito-client": "0.0.9"
+    }
+}
