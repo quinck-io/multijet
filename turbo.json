@@ -1,11 +1,11 @@
 {
-	"pipeline": {
-		"build": {
-			"dependsOn": ["^build"],
-			"outputs": ["dist/**", ".next/**"]
-		},
-		"typecheck": {},
-		"lint": {}
-	},
-	"globalDependencies": ["tsconfig.base.json"]
+    "pipeline": {
+        "typecheck": {},
+        "build": {
+            "dependsOn": ["^build", "typecheck"],
+            "outputs": ["dist/**", ".next/**"]
+        },
+        "lint": {}
+    },
+    "globalDependencies": ["tsconfig.base.json"]
 }

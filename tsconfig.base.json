@@ -1,14 +1,15 @@
 {
-	"extends": "@tsconfig/node16",
-	"exclude": ["node_modules", "**/*/dist", "**/*.test.ts"],
-	"compilerOptions": {
-		// Disable emitting file from a compilation.
-		// We'll use esbuild to compile our TypeScript files to JavaScript, so we
-		// avoid emitting files when using tsc (and use it only for type-checking).
-		"noEmit": true,
-		"baseUrl": ".",
-		"paths": {
-			"@libs/*": ["./libs/*"]
-		}
-	}
+    "extends": "@tsconfig/node16",
+    "exclude": ["node_modules", "**/*/dist", "**/*.test.ts"],
+    "compilerOptions": {
+        // Disable emitting file from a compilation.
+        // We'll use esbuild to compile our TypeScript files to JavaScript, so we
+        // avoid emitting files when using tsc (and use it only for type-checking).
+        "noEmit": true,
+        "baseUrl": ".",
+        "resolveJsonModule": true,
+        "paths": {
+            "@libs/*": ["./libs/*"]
+        }
+    }
 }
