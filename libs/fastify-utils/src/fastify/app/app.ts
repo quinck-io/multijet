@@ -1,5 +1,5 @@
+import openapiGlue from '@quinck/fastify-openapi-glue'
 import fastify, { FastifyInstance, FastifyServerOptions } from 'fastify'
-import openapiGlue from 'fastify-openapi-glue'
 import { StatusCodes } from 'http-status-codes'
 import { ErrorCode, ErrorData } from '../../generated/openapi'
 import { Handlers } from '../../generated/openapi/handlers'

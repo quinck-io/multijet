@@ -4,7 +4,7 @@
 -   [x] add common libs from the old boilerblate
 -   [x] remove unused handler to make service build
 -   [ ] add eslint
--   [ ] add sam deploy
+-   [x] add sam deploy
 -   [ ] add local unit test and execute with turbo
 -   [ ] add docker deploy
 -   [ ] fix fastify openapi glue

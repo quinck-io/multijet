@@ -8,7 +8,7 @@ Transform: AWS::Serverless-2016-10-31
 Parameters:
   MemorySize:
     Type: Number
-    Default: 128
+    Default: 192
 Resources:
   ExamplePublicApi:
     Type: AWS::Serverless::Api
@@ -36,14 +36,14 @@ Resources:
       #     HostedZoneId: <ID>
 
   # TODO: change or remove the included Example Function
-  ExampleFunction:
+  HelloFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ../../microservices/example-service/build
-      Handler: microservices/example-service/dist/lambda.handler
+      CodeUri: ../../../microservices/hello-service/dist
+      Handler: lambda.handler
       Runtime: nodejs16.x
       MemorySize: !Ref MemorySize
-      # Timeout: 100
+      Timeout: 100
       # Policies:
       #   # put policies here
       # Environment:
@@ -53,7 +53,7 @@ Resources:
         login:
           Type: Api
           Properties:
-            Path: /helloWorld
+            Path: /hello-world
             Method: GET
             RestApiId: !Ref ExamplePublicApi
             Auth:

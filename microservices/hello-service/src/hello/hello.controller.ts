@@ -7,7 +7,7 @@ export class HelloController extends BasicController {
 
     public getHello: Handler<'getHelloWorld'> = this.tryDo(async () => {
         return {
-            hello: 'world',
+            hello: this.message,
         }
     })
 }

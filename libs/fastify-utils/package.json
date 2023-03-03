@@ -12,7 +12,7 @@
     "dependencies": {
         "@fastify/cors": "^8.2.0",
         "@libs/utils": "*",
-        "fastify-openapi-glue": "^4.1.2",
+        "@quinck/fastify-openapi-glue": "^4.1.2",
         "jwt-decode": "^3.1.2"
     },
     "devDependencies": {
