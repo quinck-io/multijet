@@ -6,7 +6,17 @@
 
 The core concept of multijet is the **microservices/libs** structure:
 
--   Each microservice is a separate Node.js project that uses the Fastify web framework
+-   Each microservice is a separate Node.js project usually based on the `Fastify` web framework.
 -   The packages included in the `libs/` folder also are separate Node.js projects can be imported and used either by a Microservice or by another **lib**.
 
 Thanks to `turborepo` and `esbuild`, multijet can build and bundle all your microservices and their dependencies in a matter of milliseconds
+
+## Features
+
+-   Extremely fast builds
+-   OpenAPI-first design
+-   Modular and flexible
+-   Multiple deploy methods (AWS Lambda and Docker by default)
+-   Easily configurable
+-   Single file bundled microservices
+-   Optional Jenkins pipeline and SonarCloud
