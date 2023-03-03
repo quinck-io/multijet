@@ -1,0 +1,188 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: >-
+  multijet-sample-template
+
+Transform: AWS::Serverless-2016-10-31
+
+Parameters:
+  MemorySize:
+    Type: Number
+    Default: 128
+Resources:
+  ExamplePublicApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: !Ref AWS::StackName
+      StageName: Api
+      Cors:
+        AllowMethods: "'*'"
+        AllowHeaders: "'*'"
+        AllowOrigin: "'*'"
+      # Auth:
+      #   DefaultAuthorizer: ExampleApiAuthorizer
+      #   Authorizers:
+      #     ExampleApiAuthorizer:
+      #       UserPoolArn: !GetAtt UserManager.Arn
+      #       Identity:
+      #         Header: "Authorization"
+      #   AddDefaultAuthorizerToCorsPreflight: False
+      # Domain:
+      #   DomainName: <domain>
+      #   CertificateArn: <cert arn>
+      #   EndpointConfiguration: REGIONAL
+      #   SecurityPolicy: TLS_1_2
+      #   Route53:
+      #     HostedZoneId: <ID>
+
+  # TODO: change or remove the included Example Function
+  ExampleFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ../../microservices/example-service/build
+      Handler: microservices/example-service/dist/lambda.handler
+      Runtime: nodejs16.x
+      MemorySize: !Ref MemorySize
+      # Timeout: 100
+      # Policies:
+      #   # put policies here
+      # Environment:
+      #   Variables:
+      #     # put your env variables here
+      Events:
+        login:
+          Type: Api
+          Properties:
+            Path: /helloWorld
+            Method: GET
+            RestApiId: !Ref ExamplePublicApi
+            Auth:
+              Authorizer: NONE
+
+  # AuthFunction:
+  #   Type: AWS::Serverless::Function
+  #   Properties:
+  #     CodeUri: microservices/auth-service/build
+  #     Handler: microservices/auth-service/dist/lambda.handler
+  #     Runtime: nodejs16.x
+  #     MemorySize: !Ref MemorySize
+  #     Timeout: 100
+  #     Policies:
+  #       - Version: "2012-10-17"
+  #         Statement:
+  #           - Effect: Allow
+  #             Action:
+  #               - "cognito-idp:*"
+  #             Resource: !GetAtt UserManager.Arn
+  #     Environment:
+  #       Variables:
+  #         USER_POOL_ID: !Ref UserManager
+  #         USER_CLIENT_ID: !Ref UserClientId
+  #     Events:
+  #       login:
+  #         Type: Api
+  #         Properties:
+  #           Path: /auth/login
+  #           Method: POST
+  #           RestApiId: !Ref ExamplePublicApi
+  #           Auth:
+  #             Authorizer: NONE
+  #       firstLogin:
+  #         Type: Api
+  #         Properties:
+  #           Path: /auth/firstLogin
+  #           Method: POST
+  #           RestApiId: !Ref ExamplePublicApi
+  #           Auth:
+  #             Authorizer: NONE
+  #       userRefreshToken:
+  #         Type: Api
+  #         Properties:
+  #           Path: /auth/login/refresh
+  #           Method: POST
+  #           RestApiId: !Ref ExamplePublicApi
+  #           Auth:
+  #             Authorizer: NONE
+  #       userForgotPassword:
+  #         Type: Api
+  #         Properties:
+  #           Path: /auth/forgotPassword
+  #           Method: POST
+  #           RestApiId: !Ref ExamplePublicApi
+  #           Auth:
+  #             Authorizer: NONE
+  #       userResetPassword:
+  #         Type: Api
+  #         Properties:
+  #           Path: /auth/resetPassword
+  #           Method: POST
+  #           RestApiId: !Ref ExamplePublicApi
+  #           Auth:
+  #             Authorizer: NONE
+  #       createNewUser:
+  #         Type: Api
+  #         Properties:
+  #           Path: /users
+  #           Method: POST
+  #           RestApiId: !Ref ExamplePublicApi
+  #       getProfileInformation:
+  #         Type: Api
+  #         Properties:
+  #           Path: /profile
+  #           Method: GET
+  #           RestApiId: !Ref ExamplePublicApi
+  # UserManager:
+  #   Type: AWS::Cognito::UserPool
+  #   Properties:
+  #     AccountRecoverySetting:
+  #       RecoveryMechanisms:
+  #         - Name: verified_email
+  #           Priority: 1
+  #     AdminCreateUserConfig:
+  #       AllowAdminCreateUserOnly: true
+  #       InviteMessageTemplate:
+  #         EmailMessage: Your username is {username} and temporary password is {####}
+  #         EmailSubject: Your temporary password
+  #     AutoVerifiedAttributes:
+  #       - email
+  #     Policies:
+  #       PasswordPolicy:
+  #         MinimumLength: 8
+  #     Schema:
+  #       - AttributeDataType: String
+  #         DeveloperOnlyAttribute: false
+  #         Mutable: false
+  #         Name: email
+  #         Required: true
+  #       - AttributeDataType: String
+  #         DeveloperOnlyAttribute: false
+  #         Mutable: false
+  #         Name: customerId
+  #         Required: false
+  #     UsernameAttributes:
+  #       - email
+  #     UsernameConfiguration:
+  #       CaseSensitive: false
+  # UserManagerAppClient:
+  #   Type: AWS::Cognito::UserPoolClient
+  #   Properties:
+  #     ExplicitAuthFlows:
+  #       - ALLOW_CUSTOM_AUTH
+  #       - ALLOW_USER_SRP_AUTH
+  #       - ALLOW_REFRESH_TOKEN_AUTH
+  #     GenerateSecret: false
+  #     PreventUserExistenceErrors: ENABLED
+  #     AccessTokenValidity: 60
+  #     IdTokenValidity: 60
+  #     RefreshTokenValidity: 30
+  #     TokenValidityUnits:
+  #       AccessToken: minutes
+  #       IdToken: minutes
+  #       RefreshToken: days
+  #       # RefreshToken: days
+  #     UserPoolId: !Ref UserManager
+  # UserManagerPoolDomain:
+  #   Type: AWS::Cognito::UserPoolDomain
+  #   Properties:
+  #     Domain: !Sub "${AWS::StackName}-domain"
+  #     UserPoolId: !Ref UserManager
