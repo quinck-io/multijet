@@ -11,7 +11,7 @@ import { DEFAULT_OPTIONS } from './app.consts'
 import { ApplicationOptions } from './app.models'
 import { decorateAppWithCors } from './cors.app'
 // @ts-ignore
-import openapiFile from '../../../res/openapi.yml'
+import openapiFile from '../../../../../configs/openapi.yml'
 
 export function defaultApp(
     handlers: Handlers,
