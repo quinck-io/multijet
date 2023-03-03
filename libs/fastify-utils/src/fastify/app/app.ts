@@ -1,7 +1,6 @@
 import fastify, { FastifyInstance, FastifyServerOptions } from 'fastify'
 import openapiGlue from 'fastify-openapi-glue'
 import { StatusCodes } from 'http-status-codes'
-import path from 'path'
 import { ErrorCode, ErrorData } from '../../generated/openapi'
 import { Handlers } from '../../generated/openapi/handlers'
 import {
@@ -11,6 +10,8 @@ import {
 import { DEFAULT_OPTIONS } from './app.consts'
 import { ApplicationOptions } from './app.models'
 import { decorateAppWithCors } from './cors.app'
+// @ts-ignore
+import openapiFile from '../../../res/openapi.yml'
 
 export function defaultApp(
     handlers: Handlers,
@@ -61,14 +62,7 @@ export function defaultApp(
     )
 
     app.register(openapiGlue, {
-        specification: path.join(
-            __dirname,
-            '..',
-            '..',
-            '..',
-            'res',
-            'openapi.yml',
-        ),
+        specification: openapiFile,
         service: handlers,
     })
 
