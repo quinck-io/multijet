@@ -3,7 +3,7 @@
         "typecheck": {},
         "build": {
             "dependsOn": ["^build", "typecheck"],
-            "outputs": ["dist/**", ".next/**"]
+            "outputs": ["dist/**"]
         },
         "lint": {},
         "openapi:generate": {}
