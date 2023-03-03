@@ -159,4 +159,20 @@ export interface Handlers {
 			Headers: openapi.createUserHeaders
     }
   >
+
+  /**
+   * Get hello world message
+   */
+	getHelloWorld?: RouteHandlerMethod<
+    RawServerDefault,
+    RawRequestDefaultExpression<RawServerDefault>,
+    RawReplyDefaultExpression<RawServerDefault>,
+    {
+			Params: openapi.getHelloWorldPathParams
+			Querystring: openapi.getHelloWorldQueryParams
+			Body: openapi.getHelloWorldRequestBody
+			Reply: openapi.getHelloWorldReplyBody
+			Headers: openapi.getHelloWorldHeaders
+    }
+  >
 }

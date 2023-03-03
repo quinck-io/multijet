@@ -228,6 +228,29 @@ paths:
           description: A user with the same email or username already exists
         500:
           $ref: "#/components/responses/InternalServerError"
+  /hello-world:
+    get:
+      tags:
+        - Example
+      summary: Get hello world message
+      operationId: getHelloWorld
+      responses:
+        200:
+          description: Users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  hello:
+                    type: string
+        401:
+          $ref: "#/components/responses/Unauthenticated"
+        403:
+          $ref: "#/components/responses/Unauthorized"
+        500:
+          $ref: "#/components/responses/InternalServerError"
+
 security:
   - apiKey: []
   - userAuth: []
