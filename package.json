@@ -33,7 +33,9 @@
     "devDependencies": {
         "@tsconfig/node16": "^1.0.3",
         "@types/node": "^18.14.4",
+        "@typescript-eslint/eslint-plugin": "^5.54.0",
         "eslint": "^8.35.0",
+        "eslint-config-prettier": "^8.6.0",
         "typescript": "^4.9.5"
     }
 }

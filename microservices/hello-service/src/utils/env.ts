@@ -1,7 +1,11 @@
 import Joi from 'joi'
 
-export type Environment = {}
+export type Environment = {
+    ENVIRONMENT: string
+}
 
 export const JoiEnvironmentValidationSchema = Joi.object<Environment>()
-    .keys({})
+    .keys({
+        ENVIRONMENT: Joi.string().required(),
+    })
     .unknown()
