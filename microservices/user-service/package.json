@@ -2,11 +2,9 @@
     "name": "@microservices/user-service",
     "private": true,
     "version": "0.0.1",
-    "types": "src/index.ts",
-    "main": "src/index.ts",
     "scripts": {
         "start": "node ./dist/index.js",
-        "build": "esbuild ./src/lambda.ts --bundle --platform=node --outfile=dist/index.js",
+        "build": "node ../../configs/esbuild/esbuild.config.js",
         "typecheck": "tsc"
     },
     "dependencies": {
