@@ -7,7 +7,7 @@
     "scripts": {
         "typecheck": "tsc",
         "lint": "eslint .",
-        "openapi:generate": "openapi_generate --input ./res/openapi.yml --output ./src/generated/openapi"
+        "openapi:generate": "openapi_generate --input ../../configs/openapi.yml --output ./src/generated/openapi"
     },
     "dependencies": {
         "@fastify/cors": "^8.2.0",
