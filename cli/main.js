@@ -16,6 +16,9 @@ switch (command) {
     case 'new-lib':
         break
     default:
-        console.log('please provide an option')
+        console.log(
+            'Please provide an argument.',
+            chalk.gray('[create, new-service, new-lib]'),
+        )
         break
 }

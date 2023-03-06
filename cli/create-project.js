@@ -1,3 +1,5 @@
+import chalk from 'chalk'
+import { execa } from 'execa'
 import {
     copyFileSync,
     cpSync,
@@ -73,6 +75,18 @@ async function createProject(answers) {
 
     spinner.start('Applying modules')
     spinner.succeed('Optional modules applied')
+
+    spinner.start('Installing dependencies')
+    await execa('npm', ['ci', '--prefix', projectDir]).catch(error => {
+        spinner.fail('Failed to install dependencies')
+        throw error
+    })
+    spinner.succeed('Dependenicies installed')
+
+    spinner.start('Initializing Git repository')
+    await execa('git', ['init'], { cwd: projectDir })
+    await execa('git', ['add', '-A'], { cwd: projectDir })
+    spinner.succeed('Repository initialized')
 }
 
 export function handleCreateProject() {
@@ -89,10 +103,26 @@ export function handleCreateProject() {
                 type: 'checkbox',
             },
             {
+                name: 'exampleService',
+                message: 'Include an example microservice?',
+                type: 'confirm',
+            },
+            {
                 name: 'initializeGit',
                 message: 'Initialize a Git repository?',
                 type: 'confirm',
             },
         ])
-        .then(async answers => await createProject(answers))
+        .then(async answers => {
+            await createProject(answers)
+            console.log(
+                chalk.blue(
+                    `${chalk.bold(
+                        'Your project is ready!',
+                    )} Enjoy the speed of Multijet:`,
+                ),
+            )
+            console.log('-', chalk.yellow(`cd ${answers.projectName}`))
+            console.log('-', chalk.yellow(`npm run build`))
+        })
 }
