@@ -1,9 +1,17 @@
 {
-	"name": "multijet",
-	"version": "1.0.0",
-	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
-	},
-	"license": "ISC",
-	"homepage": "https://bitbucket.org/Quinck/multijet#readme"
+    "name": "multijet",
+    "version": "1.0.0",
+    "bin": "cli/main.js",
+    "type": "module",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "license": "ISC",
+    "homepage": "https://bitbucket.org/Quinck/multijet#readme",
+    "dependencies": {
+        "chalk": "^5.2.0",
+        "execa": "^7.0.0",
+        "inquirer": "^9.1.4",
+        "ora": "^6.1.2"
+    }
 }
