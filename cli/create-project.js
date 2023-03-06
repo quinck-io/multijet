@@ -1,19 +1,13 @@
 import chalk from 'chalk'
 import { execa } from 'execa'
-import {
-    copyFileSync,
-    cpSync,
-    mkdirSync,
-    readdirSync,
-    readFileSync,
-    writeFileSync,
-} from 'fs'
+import { copyFileSync, cpSync, mkdirSync, readdirSync } from 'fs'
 import inquirer from 'inquirer'
 import ora from 'ora'
 import path from 'path'
 
 import { dirname } from 'path'
 import { fileURLToPath } from 'url'
+import { changePackageName } from './helper.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -54,13 +48,7 @@ async function createProject(answers) {
                 },
             )
         })
-
-        const packageJsonPath = path.join(projectDir, 'package.json')
-        const pkgFile = readFileSync(packageJsonPath, {
-            encoding: 'utf-8',
-        })
-        const newPkg = { ...JSON.parse(pkgFile), name: projectName }
-        writeFileSync(packageJsonPath, JSON.stringify(newPkg, null, 4))
+        changePackageName(projectDir, projectName)
 
         copyFileSync(
             path.join(optionalDir, '_gitignore'),
@@ -77,15 +65,21 @@ async function createProject(answers) {
     spinner.succeed('Optional modules applied')
 
     spinner.start('Installing dependencies')
-    await execa('npm', ['ci', '--prefix', projectDir]).catch(error => {
+    await execa('npm', ['i'], { cwd: projectDir }).catch(error => {
         spinner.fail('Failed to install dependencies')
         throw error
     })
     spinner.succeed('Dependenicies installed')
 
     spinner.start('Initializing Git repository')
-    await execa('git', ['init'], { cwd: projectDir })
-    await execa('git', ['add', '-A'], { cwd: projectDir })
+    try {
+        await execa('git', ['init'], { cwd: projectDir })
+        await execa('git', ['add', '-A'], { cwd: projectDir })
+    } catch (error) {
+        spinner.fail('Failed to initialize repository! is Git installed?')
+        throw error
+    }
+
     spinner.succeed('Repository initialized')
 }
 
