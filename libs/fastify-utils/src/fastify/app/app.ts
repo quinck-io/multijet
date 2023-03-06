@@ -1,6 +1,7 @@
 import openapiGlue from '@quinck/fastify-openapi-glue'
 import fastify, { FastifyInstance, FastifyServerOptions } from 'fastify'
 import { StatusCodes } from 'http-status-codes'
+import openapiFile from '../../../../../configs/openapi.json'
 import { ErrorCode, ErrorData } from '../../generated/openapi'
 import { Handlers } from '../../generated/openapi/handlers'
 import {
@@ -10,8 +11,6 @@ import {
 import { DEFAULT_OPTIONS } from './app.consts'
 import { ApplicationOptions } from './app.models'
 import { decorateAppWithCors } from './cors.app'
-// @ts-ignore
-import openapiFile from '../../../../../configs/openapi.yml'
 
 export function defaultApp(
     handlers: Handlers,
