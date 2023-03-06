@@ -5,7 +5,7 @@ import { handleCreateProject } from './create-project.js'
 
 const [command] = process.argv.slice(2)
 
-console.log(`${chalk.white.bgBlue(' MULTIJET ')} cli v1.0.0`)
+console.log(`${chalk.white.bgBlue(' MULTIJET ')} CLI v1.0.0`)
 
 switch (command) {
     case 'create':
