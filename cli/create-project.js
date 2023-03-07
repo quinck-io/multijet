@@ -87,6 +87,7 @@ export function handleCreateProject() {
             {
                 name: 'projectName',
                 message: 'How do you want to name the project?',
+                type: 'input',
             },
             {
                 name: 'modulesIncluded',
