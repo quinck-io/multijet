@@ -18,7 +18,6 @@ switch (command) {
         break
     case 'new-lib':
         await handleCreatePackage(secondArgument, LIB)
-
         break
     default:
         console.log(

@@ -11,4 +11,4 @@
 -   [ ] addd jenkins pipeline
 -   [x] fix fastify openapi glue
 -   [ ] `npx` cli command to create a new project
--   [ ] `npx` command to create new microservice or lib
+-   [x] `npx` command to create new microservice or lib

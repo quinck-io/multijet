@@ -14,11 +14,9 @@ const CURRENT_USER_DIR = process.cwd()
 
 export async function handleCreatePackage(packageName, packageType) {
     const templateDir = path.join(__dirname, 'templates', packageType)
-    const fullPackageName = `@${packageType}/${packageName}`
-    const workspaceDir = path.join(
-        CURRENT_USER_DIR,
-        packageType === 'lib' ? 'libs' : 'microservices',
-    )
+    const subfolderName = packageType === 'lib' ? 'libs' : 'microservices'
+    const fullPackageName = `@${subfolderName}/${packageName}`
+    const workspaceDir = path.join(CURRENT_USER_DIR, subfolderName)
     const newPackageDir = path.join(workspaceDir, packageName)
 
     const spinner = ora(`Scaffolding ${packageType} '${packageName}'`)
