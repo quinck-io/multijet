@@ -7,7 +7,7 @@ import path from 'path'
 
 import { dirname } from 'path'
 import { fileURLToPath } from 'url'
-import { changePackageName } from './helper.js'
+import { changePackageName } from './helper/helper.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
