@@ -17,7 +17,8 @@ const __dirname = dirname(__filename)
 const CURRENT_USER_DIR = process.cwd()
 
 async function createProject(answers) {
-    const { projectName, modulesIncluded } = answers
+    const { projectName, modulesIncluded, initializeGit } = answers
+
     const projectDir = path.join(CURRENT_USER_DIR, projectName)
     const coreFilesPath = path.join(__dirname, '..', 'core')
     const optionalDir = path.join(__dirname, 'optional')
@@ -66,16 +67,18 @@ async function createProject(answers) {
     })
     spinner.succeed('Dependenicies installed')
 
-    spinner.start('Initializing Git repository')
-    try {
-        await execa('git', ['init'], { cwd: projectDir })
-        await execa('git', ['add', '-A'], { cwd: projectDir })
-    } catch (error) {
-        spinner.fail('Failed to initialize repository! is Git installed?')
-        throw error
-    }
+    if (initializeGit) {
+        spinner.start('Initializing Git repository')
+        try {
+            await execa('git', ['init'], { cwd: projectDir })
+            await execa('git', ['add', '-A'], { cwd: projectDir })
+        } catch (error) {
+            spinner.fail('Failed to initialize repository! is Git installed?')
+            throw error
+        }
 
-    spinner.succeed('Repository initialized')
+        spinner.succeed('Repository initialized')
+    }
 }
 
 export function handleCreateProject() {
