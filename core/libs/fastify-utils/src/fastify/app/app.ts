@@ -1,4 +1,3 @@
-import openapiGlue from '@quinck/fastify-openapi-glue'
 import fastify, { FastifyInstance, FastifyServerOptions } from 'fastify'
 import { StatusCodes } from 'http-status-codes'
 import openapiFile from '../../../../../configs/openapi.json'
@@ -60,9 +59,11 @@ export function defaultApp(
         },
     )
 
-    app.register(openapiGlue, {
-        specification: openapiFile,
-        service: handlers,
+    import('@quinck/fastify-openapi-glue').then(({ fastifyOpenapiGlue }) => {
+        app.register(fastifyOpenapiGlue, {
+            specification: openapiFile,
+            service: handlers,
+        })
     })
 
     applyApplicationOptions(app, appOptions)
