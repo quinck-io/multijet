@@ -7,26 +7,17 @@ import path from 'path'
 
 import { dirname } from 'path'
 import { fileURLToPath } from 'url'
+import { FILE_BLACKLIST, OPTIONAL_MODULES } from './helper/consts.js'
 import { changePackageName } from './helper/helper.js'
+import { applyOptionalModules } from './helper/optional-scaffolder.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
 const CURRENT_USER_DIR = process.cwd()
 
-const fileBlacklist = ['.aws-sam', 'node_modules', 'dist', '.turbo']
-
-const modulesOptions = [
-    'Unit Tests',
-    'E2E Tests',
-    'User authentication',
-    'DynamoDB utilities',
-    'Media storage',
-    'Jenkins pipeline',
-]
-
 async function createProject(answers) {
-    const { projectName } = answers
+    const { projectName, modulesIncluded } = answers
     const projectDir = path.join(CURRENT_USER_DIR, projectName)
     const coreFilesPath = path.join(__dirname, '..', 'core')
     const optionalDir = path.join(__dirname, 'optional')
@@ -44,7 +35,7 @@ async function createProject(answers) {
                 {
                     recursive: true,
                     filter: file =>
-                        !fileBlacklist.includes(path.basename(file)),
+                        !FILE_BLACKLIST.includes(path.basename(file)),
                 },
             )
         })
@@ -62,6 +53,10 @@ async function createProject(answers) {
     }
 
     spinner.start('Applying modules')
+    await applyOptionalModules(projectDir, modulesIncluded).catch(error => {
+        spinner.fail('Failed to apply optional modules')
+        throw error
+    })
     spinner.succeed('Optional modules applied')
 
     spinner.start('Installing dependencies')
@@ -93,7 +88,7 @@ export function handleCreateProject() {
             {
                 name: 'modulesIncluded',
                 message: 'What modules to you want to include?',
-                choices: modulesOptions,
+                choices: OPTIONAL_MODULES,
                 type: 'checkbox',
             },
             {
