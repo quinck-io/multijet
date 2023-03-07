@@ -2,7 +2,6 @@ import { expect } from 'chai'
 import Joi from 'joi'
 import 'mocha'
 
-import { LibLabel } from '../../../test/unit/common/labels'
 import { getEnvironment } from '../src/env/env'
 
 export type Environment = {
@@ -20,7 +19,7 @@ export const JoiEnvironmentValidationSchema = Joi.object<Environment>()
     .required()
     .unknown()
 
-describe(`${LibLabel.UTILS} getEnvironment`, () => {
+describe('libs-utils getEnvironment', () => {
     beforeEach(() => {
         delete process.env.MY_PROP
         delete process.env.WARN_PROP

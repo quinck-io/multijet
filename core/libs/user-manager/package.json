@@ -6,7 +6,8 @@
     "main": "src/index.ts",
     "scripts": {
         "typecheck": "tsc",
-        "lint": "eslint ."
+        "lint": "eslint .",
+        "test": "mocha"
     },
     "dependencies": {
         "@quinck/aws-cognito-client": "0.0.9"

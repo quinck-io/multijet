@@ -6,7 +6,8 @@
             "outputs": ["dist/**"]
         },
         "lint": {},
-        "openapi:generate": {}
+        "openapi:generate": {},
+        "test": {}
     },
     "globalDependencies": ["tsconfig.base.json"]
 }

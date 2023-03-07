@@ -1,0 +1,4 @@
+{
+    "require": "esbuild-runner/register",
+    "spec": "**/test/**/*.test.ts"
+}
