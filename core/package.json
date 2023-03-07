@@ -36,6 +36,7 @@
         "@types/node": "^18.14.4",
         "@typescript-eslint/eslint-plugin": "^5.54.0",
         "chai": "^4.3.7",
+        "chai-as-promised": "^7.1.1",
         "esbuild-runner": "^2.2.2",
         "eslint": "^8.35.0",
         "eslint-config-prettier": "^8.6.0",

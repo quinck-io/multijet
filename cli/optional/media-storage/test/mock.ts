@@ -1,0 +1,12 @@
+import path from 'path'
+
+export const MOCK_MEDIA_STORAGE_NAME = 'MOCK_MEDIA_STORAGE_NAME'
+export const MOCK_MEDIA_STORAGE_BASE_DIR = 'MOCK_MEDIA_STORAGE_BASE_DIR'
+export const MOCK_FILE_PATH = 'MOCK_FILE_PATH'
+export const MOCK_FILE_CONTENT = Buffer.from('MOCK_FILE_CONTENT')
+
+export const MOCK_KEY = MOCK_FILE_PATH
+export const MOCK_KEY_WITH_BASE_DIR = path.join(
+    MOCK_MEDIA_STORAGE_BASE_DIR,
+    MOCK_FILE_PATH,
+)
