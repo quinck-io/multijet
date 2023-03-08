@@ -98,11 +98,6 @@ export function handleCreateProject() {
                 type: 'checkbox',
             },
             {
-                name: 'exampleService',
-                message: 'Include an example microservice?',
-                type: 'confirm',
-            },
-            {
                 name: 'initializeGit',
                 message: 'Initialize a Git repository?',
                 type: 'confirm',
