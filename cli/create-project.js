@@ -17,7 +17,13 @@ const __dirname = dirname(__filename)
 const CURRENT_USER_DIR = process.cwd()
 
 async function createProject(answers) {
-    const { projectName, modulesIncluded, initializeGit } = answers
+    const {
+        projectName: inputProjectName,
+        modulesIncluded,
+        initializeGit,
+    } = answers
+
+    const projectName = inputProjectName.replaceAll(' ', '-')
 
     const projectDir = path.join(CURRENT_USER_DIR, projectName)
     const coreFilesPath = path.join(__dirname, '..', 'core')
@@ -54,10 +60,12 @@ async function createProject(answers) {
     }
 
     spinner.start('Applying modules')
-    await applyOptionalModules(projectDir, modulesIncluded).catch(error => {
-        spinner.fail('Failed to apply optional modules')
-        throw error
-    })
+    await applyOptionalModules(projectName, projectDir, modulesIncluded).catch(
+        error => {
+            spinner.fail('Failed to apply optional modules')
+            throw error
+        },
+    )
     spinner.succeed('Optional modules applied')
 
     spinner.start('Installing dependencies')

@@ -16,7 +16,7 @@ phases:
       # [Aws sam]
       # ------------------------------------------------ #
       - npm run build
-      - S3_BUCKET="meddle-saas-backend-sam"
+      - S3_BUCKET="BUCKET-NAME"
       - TEMPLATE_PARAMETERS_FILE_PATH=deploy/aws/sam/template-parameters/${ENVIRONMENT_CLASS}-parameters.sam.json
       - TEMPLATE_PARAMS=$(npm run ts deploy/aws/scripts/print-formatted-template-parameters.ts $TEMPLATE_PARAMETERS_FILE_PATH)
       - sam deploy \
