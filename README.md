@@ -11,6 +11,8 @@ The core concept of multijet is the **microservices/libs** structure:
 
 Thanks to `turborepo` and `esbuild`, multijet can build and bundle all your microservices and their dependencies in a matter of milliseconds
 
+To get started, head to the [official documentation](https://quinck.gitbook.io/multijet/).
+
 ## Features
 
 -   Extremely fast builds
