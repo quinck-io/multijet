@@ -1,0 +1,167 @@
+import hudson.tasks.junit.TestResultSummary
+
+String lastRunningStage;
+
+pipeline {
+  agent { label 'master' }
+
+  tools {
+    nodejs "nodejs16.18"
+  }
+
+  options {
+    disableConcurrentBuilds()
+  }
+  
+  environment {
+
+    DEV_ENV = 'dev'
+    RELEASE_ENV = 'release'
+    PROD_ENV = 'prod'
+
+  }
+
+  stages {
+
+    stage('Project Init') {
+      steps {
+        script {
+          lastRunningStage="Project Init"
+        }
+        nodejs(nodeJSInstallationName: 'nodejs16.18') {
+          sh '''
+            npm ci
+          '''
+        }
+      }
+    }
+    
+    stage("Lint") {
+      steps {
+          script {
+            lastRunningStage="Lint"
+          }
+        nodejs(nodeJSInstallationName: 'nodejs16.18') {
+          sh 'npm run lint'
+        }
+      }
+    }
+
+    /**
+      * TODO
+      * Comment this stage if you don't have tests in your project.
+    */
+    stage("Unit Testing") {
+      steps {
+          script {
+            lastRunningStage="Unit Testing"
+          }
+        nodejs(nodeJSInstallationName: 'nodejs16.18') {
+          sh '''
+            npm run test
+          '''
+        }
+      }
+    }
+
+    stage('SonarQube Analysis') {
+      steps {
+        script {
+          lastRunningStage="SonarQube Analysis"
+          def scannerHome = tool 'Sonar Scanner';
+          withSonarQubeEnv('QuinckSonarcloud') {
+            sh "${scannerHome}/bin/sonar-scanner -Dsonar.branch.name=${env.BRANCH_NAME}"
+          }
+        }
+      }
+    }
+
+    stage('Quality Gate') {
+      steps {
+        script {
+          lastRunningStage="Quality Gate"
+          timeout(time: 1, unit: 'HOURS') {
+            def qualitygate = waitForQualityGate()
+            if (qualitygate.status != "OK") {
+              error "Pipeline aborted due to quality gate coverage failure: ${qualitygate.status}"
+            }
+          }
+        }
+      }
+    }
+
+    stage("Build And Deploy") {
+      when {
+        anyOf {
+          branch 'develop';
+          branch 'master';
+          branch pattern: "release/.*", comparator: "REGEXP";
+        }
+      }
+      steps { 
+        script {
+          lastRunningStage = 'Build And Deploy'
+          def configs = readYaml file: "project.configs.yml"
+          String commitId = sh(returnStdout: true, script: 'git rev-parse HEAD')
+          String region = configs.aws.region
+
+          String environment
+          String environmentClass
+
+          if (env.BRANCH_NAME == 'master') { // Production
+              environment = "${PROD_ENV}"
+              environmentClass = "${PROD_ENV}"
+            } else if (env.BRANCH_NAME == 'develop') { // Development
+              environment = "${DEV_ENV}"
+              environmentClass = "${DEV_ENV}"
+            } else { // Releases
+              String branchName = env.BRANCH_NAME
+              String normalizedBranchName = branchName.replaceAll(/[\/\.]/, "-")
+              environment = "${normalizedBranchName}"
+              environmentClass = "${RELEASE_ENV}"
+            }
+
+          String envVariables = new StringBuilder()
+            .append('[ ')
+            .append(" { AWS_REGION, ${region} } ")
+            .append(" { PROJECT_NAME, ${configs.projectName} } ")
+            .append(", { ENVIRONMENT, ${environment} } ")
+            .append(", { ENVIRONMENT_CLASS, ${environmentClass} } ")
+            .append(' ]')
+
+          withAWS(credentials:'aws-credentials', region: region) {
+            awsCodeBuild projectName: configs.aws.codebuildProjectName, credentialsType: 'keys',
+            envVariables: envVariables,
+            region: region,
+            sourceControlType: 'project',
+            sourceVersion: commitId
+          }
+        }
+      }
+    }
+  }
+
+  post {
+    always {
+      script {
+        String rootDir = pwd()
+        def configs = readYaml file: "project.configs.yml"
+        def notifier = load "${rootDir}/configs/pipeline/notifyDiscord.groovy"
+        def testResult
+        try { 
+          testResult = junit "test-results.xml"
+        } catch(Exception e) {
+          echo 'No test results available'
+        }
+        notifier.notifyDiscord(currentBuild.result, lastRunningStage, testResult, configs)
+        deleteDir() /* clean up our workspace */
+      }
+    }
+    failure {
+      script {
+        deleteDir() /* clean up our workspace */
+        sh 'exit 1'
+      }
+    }
+  }
+}

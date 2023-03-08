@@ -9,5 +9,5 @@ export const OPTIONAL_MODULES = [
     { name: 'User authentication', code: 'auth' },
     { name: 'DynamoDB utilities', code: 'dynamoose-utils', type: LIB },
     { name: 'Media storage', code: 'media-storage', type: LIB },
-    { name: 'Jenkins pipeline', code: 'jenkins' },
+    { name: 'Jenkins pipeline', code: 'pipeline' },
 ]

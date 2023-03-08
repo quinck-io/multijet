@@ -1,0 +1,17 @@
+# The name of the project
+# This is also used for:
+#   - stack-name: base name to create aws stacks
+projectName: "my-project"
+
+# URL of the discord webhook where to send pipeline notifications
+discordWebhookUrl: ""
+
+# URL of the sonar cloud project
+sonarCloudUrl: ""
+
+# Aws specific properties
+aws:
+  # Project aws region
+  region: "eu-west-1"
+  # Name of the aws codebuild project to be invoke
+  codebuildProjectName: "my-project"
