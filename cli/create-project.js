@@ -116,6 +116,7 @@ export function handleCreateProject() {
 
             await createProject(projectName, answers)
             console.log(
+                '\n',
                 chalk.blue(
                     `${chalk.bold(
                         'Your project is ready!',
