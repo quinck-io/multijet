@@ -16,14 +16,8 @@ const __dirname = dirname(__filename)
 
 const CURRENT_USER_DIR = process.cwd()
 
-async function createProject(answers) {
-    const {
-        projectName: inputProjectName,
-        modulesIncluded,
-        initializeGit,
-    } = answers
-
-    const projectName = inputProjectName.replaceAll(' ', '-')
+async function createProject(projectName, answers) {
+    const { modulesIncluded, initializeGit } = answers
 
     const projectDir = path.join(CURRENT_USER_DIR, projectName)
     const coreFilesPath = path.join(__dirname, '..', 'core')
@@ -115,7 +109,12 @@ export function handleCreateProject() {
             },
         ])
         .then(async answers => {
-            await createProject(answers)
+            const projectName = answers.projectName
+                .trim()
+                .replaceAll(' ', '-')
+                .replace(/[^\w\d\s-]/g, '')
+
+            await createProject(projectName, answers)
             console.log(
                 chalk.blue(
                     `${chalk.bold(
@@ -123,7 +122,7 @@ export function handleCreateProject() {
                     )} Enjoy the speed of Multijet:`,
                 ),
             )
-            console.log('-', chalk.yellow(`cd ${answers.projectName}`))
+            console.log('-', chalk.yellow(`cd ${projectName}`))
             console.log('-', chalk.yellow(`npm run build`))
         })
 }
