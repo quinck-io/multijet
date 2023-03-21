@@ -5,6 +5,7 @@
     "scripts": {
         "start": "node ./dist/index.js",
         "build": "node ../../configs/esbuild/esbuild.config.js",
+        "build:debug": "node ../../configs/esbuild/esbuild.debug.js",
         "lint": "eslint ./src",
         "typecheck": "tsc"
     },

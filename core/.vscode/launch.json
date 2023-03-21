@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "hello-service",
+            "program": "${workspaceFolder}/microservices/hello-service/dist/main.js",
+            "request": "launch",
+            "sourceMaps": true,
+            "skipFiles": ["<node_internals>/**"],
+            "type": "node",
+            "outputCapture": "std",
+            "cwd": "${workspaceRoot}",
+            "preLaunchTask": "npm: build:debug"
+        }
+    ]
+}
