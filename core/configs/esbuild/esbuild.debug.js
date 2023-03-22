@@ -4,7 +4,7 @@ const { build } = require('esbuild')
 
 build({
     entryPoints: ['src/main.ts'],
-    outfile: 'dist/main.js',
+    outfile: 'dist/main.debug.js',
     bundle: true,
     sourcemap: 'inline',
     platform: 'node',

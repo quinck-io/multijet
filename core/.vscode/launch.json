@@ -3,7 +3,7 @@
     "configurations": [
         {
             "name": "hello-service",
-            "program": "${workspaceFolder}/microservices/hello-service/dist/main.js",
+            "program": "${workspaceFolder}/microservices/hello-service/dist/main.debug.js",
             "request": "launch",
             "sourceMaps": true,
             "skipFiles": ["<node_internals>/**"],
