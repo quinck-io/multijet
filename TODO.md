@@ -7,8 +7,9 @@
 -   [x] add sam deploy
 -   [x] add local unit test and execute with turbo
 -   [ ] add docker deploy
--   [ ] add codebuild
--   [ ] addd jenkins pipeline
+-   [x] add codebuild
+-   [x] add jenkins pipeline
+-   [x] add vscode debugger
 -   [x] fix fastify openapi glue
 -   [x] `npx` cli command to create a new project
 -   [x] `npx` command to create new microservice or lib
