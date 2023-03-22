@@ -12,6 +12,7 @@
         "lint": "turbo run lint",
         "lint:fix": "turbo run lint:fix",
         "test": "turbo run test --parallel",
+        "clean": "turbo run clean && rm -rf .aws-sam node_modules",
         "typecheck": "turbo run typecheck",
         "openapi:generate": "turbo run openapi:generate",
         "presam:build": "npm run build",

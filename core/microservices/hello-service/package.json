@@ -7,7 +7,8 @@
         "build": "node ../../configs/esbuild/esbuild.config.js",
         "build:debug": "node ../../configs/esbuild/esbuild.debug.js",
         "lint": "eslint ./src",
-        "typecheck": "tsc"
+        "typecheck": "tsc",
+        "clean": "rm -rf dist .turbo node_modules"
     },
     "dependencies": {
         "@fastify/aws-lambda": "^3.2.0",
