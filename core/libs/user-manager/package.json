@@ -7,7 +7,8 @@
     "scripts": {
         "typecheck": "tsc",
         "lint": "eslint .",
-        "test": "mocha"
+        "test": "mocha",
+        "clean": "rm -rf .turbo node_modules"
     },
     "dependencies": {
         "@quinck/aws-cognito-client": "0.0.9"

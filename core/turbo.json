@@ -12,7 +12,10 @@
         "openapi:generate": {
             "cache": false
         },
-        "test": {}
+        "test": {},
+        "clean": {
+            "cache": false
+        }
     },
     "globalDependencies": ["tsconfig.base.json"]
 }

@@ -12,6 +12,7 @@
         "lint": "turbo run lint",
         "lint:fix": "turbo run lint:fix",
         "test": "turbo run test --parallel",
+        "clean": "turbo run clean && rm -rf .aws-sam node_modules",
         "typecheck": "turbo run typecheck",
         "openapi:generate": "turbo run openapi:generate",
         "presam:build": "npm run build",
@@ -21,29 +22,29 @@
     },
     "dependencies": {
         "@quinck/collections": "^0.2.0",
-        "esbuild": "^0.17.10",
+        "esbuild": "^0.17.12",
         "execa": "^7.1.1",
-        "fastify": "^4.9.2",
+        "fastify": "^4.15.0",
         "http-status-codes": "^2.2.0",
-        "turbo": "latest"
+        "turbo": "^1.8.5"
     },
     "engines": {
         "npm": ">=7.0.0",
-        "node": ">=14.0.0"
+        "node": ">=16.0.0"
     },
     "packageManager": "npm@8.11.0",
     "devDependencies": {
         "@tsconfig/node16": "^1.0.3",
         "@types/chai": "^4.3.4",
         "@types/mocha": "^10.0.1",
-        "@types/node": "^18.14.4",
-        "@typescript-eslint/eslint-plugin": "^5.54.0",
+        "@types/node": "^18.15.5",
+        "@typescript-eslint/eslint-plugin": "^5.56.0",
         "chai": "^4.3.7",
         "chai-as-promised": "^7.1.1",
         "esbuild-runner": "^2.2.2",
-        "eslint": "^8.35.0",
-        "eslint-config-prettier": "^8.6.0",
+        "eslint": "^8.36.0",
+        "eslint-config-prettier": "^8.8.0",
         "mocha": "^10.2.0",
-        "typescript": "^4.9.5"
+        "typescript": "^5.0.2"
     }
 }

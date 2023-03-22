@@ -8,6 +8,7 @@
         "typecheck": "tsc",
         "lint": "eslint .",
         "test": "mocha",
+        "clean": "rm -rf .turbo node_modules",
         "openapi:generate": "openapi_generate --input ../../configs/openapi.json --output ./src/generated/openapi"
     },
     "dependencies": {
