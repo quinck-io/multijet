@@ -1,30 +1,23 @@
-import { BasicController, Handler, User } from '@libs/fastify-utils'
+import { Handlers, User } from '@libs/fastify-utils'
 import { AdminUserManager, UserAlreadyExistsError } from '@libs/user-manager'
 import { StatusCodes } from 'http-status-codes'
 import { AccountAlreadyExistsError } from './admin.errors'
 
-export class AdminController extends BasicController {
-    constructor(private readonly adminManager: AdminUserManager) {
-        super(AdminController.name)
+export class AdminController {
+    constructor(private readonly adminManager: AdminUserManager) {}
+
+    public createUser: Handlers['createUser'] = async (request, reply) => {
+        return this.handleUserManagerOperation(async () => {
+            const { email } = request.body
+
+            await this.adminManager.createUser({ username: email }, { email })
+
+            reply.statusCode = StatusCodes.NO_CONTENT
+            return null
+        })
     }
 
-    public createUser: Handler<'createUser'> = this.tryDo(
-        async (request, reply) => {
-            return this.handleUserManagerOperation(async () => {
-                const { email } = request.body
-
-                await this.adminManager.createUser(
-                    { username: email },
-                    { email },
-                )
-
-                reply.statusCode = StatusCodes.NO_CONTENT
-                return null
-            })
-        },
-    )
-
-    public getUsers: Handler<'getUsers'> = this.tryDo(async () => {
+    public getUsers: Handlers['getUsers'] = async () => {
         return this.handleUserManagerOperation(async () => {
             const users = await this.adminManager.searchUsers({})
 
@@ -36,7 +29,7 @@ export class AdminController extends BasicController {
                 })),
             }
         })
-    })
+    }
 
     private async handleUserManagerOperation<X>(
         fun: () => Promise<X>,

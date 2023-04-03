@@ -1,8 +1,7 @@
 import {
-    BasicController,
     ConfirmSignupByCode,
     formatUserToken,
-    Handler,
+    Handlers,
     Login,
     userIdFromToken,
 } from '@libs/fastify-utils'
@@ -20,16 +19,14 @@ import {
 } from './auth.errors'
 import { AuthManagerLogin } from './auth.models'
 
-export class AuthController extends BasicController {
+export class AuthController {
     constructor(
         private readonly authManager: AuthManager,
         private readonly adminManager: AdminUserManager,
         private readonly userManager: UserManager,
-    ) {
-        super(AuthController.name)
-    }
+    ) {}
 
-    public login: Handler<'login'> = this.tryDo(async request => {
+    public login: Handlers['login'] = async request => {
         return this.handleUserManagerOperation(async () => {
             const { email, password } = request.body
             const { idToken, refreshToken } = await this.authManager.login({
@@ -42,10 +39,10 @@ export class AuthController extends BasicController {
                 userId: userIdFromToken(idToken),
             }
         })
-    })
+    }
 
-    public completeForceChangePasswordChallenge: Handler<'completeForceChangePasswordChallenge'> =
-        this.tryDo(async request => {
+    public completeForceChangePasswordChallenge: Handlers['completeForceChangePasswordChallenge'] =
+        async request => {
             return this.handleUserManagerOperation(async () => {
                 const { email, newPassword, temporaryPassword } = request.body
                 const tokens = await this.authManager.login(
@@ -60,55 +57,55 @@ export class AuthController extends BasicController {
 
                 return this.formatLogin(tokens)
             })
+        }
+
+    public resetPassword: Handlers['resetPassword'] = async (
+        request,
+        reply,
+    ) => {
+        const { email, newPassword, temporaryPassword } = request.body
+        this.authManager.resetPassword({
+            username: email,
+            confirmationCode: temporaryPassword,
+            newPassword,
         })
 
-    public resetPassword: Handler<'resetPassword'> = this.tryDo(
+        reply.statusCode = StatusCodes.NO_CONTENT
+        return null
+    }
+
+    public resendSignupConfirmation: Handlers['resendSignupConfirmation'] =
         async (request, reply) => {
-            const { email, newPassword, temporaryPassword } = request.body
-            this.authManager.resetPassword({
-                username: email,
-                confirmationCode: temporaryPassword,
-                newPassword,
-            })
-
-            reply.statusCode = StatusCodes.NO_CONTENT
-            return null
-        },
-    )
-
-    public resendSignupConfirmation: Handler<'resendSignupConfirmation'> =
-        this.tryDo(async (request, reply) => {
             const { email } = request.body
             if (email)
                 await this.authManager.resendConfirmationLinkByEmail(email)
 
             reply.statusCode = StatusCodes.NO_CONTENT
             return null
-        })
+        }
 
-    public updateUserCredentials: Handler<'updateUserCredentials'> = this.tryDo(
-        async (request, reply) => {
-            const { authorization, refreshToken } = formatUserToken(
-                request.headers,
-            )
-            const { newPassword, oldPassword } = request.body
-            //TODO implements this using the admin user manager to avoid using accessToken
-            await this.authManager.updateCredentials(
-                {
-                    newPassword,
-                    oldPassword,
-                },
-                {
-                    accessToken: '',
-                    idToken: authorization,
-                    refreshToken,
-                },
-            )
+    public updateUserCredentials: Handlers['updateUserCredentials'] = async (
+        request,
+        reply,
+    ) => {
+        const { authorization, refreshToken } = formatUserToken(request.headers)
+        const { newPassword, oldPassword } = request.body
+        //TODO implements this using the admin user manager to avoid using accessToken
+        await this.authManager.updateCredentials(
+            {
+                newPassword,
+                oldPassword,
+            },
+            {
+                accessToken: '',
+                idToken: authorization,
+                refreshToken,
+            },
+        )
 
-            reply.statusCode = StatusCodes.NO_CONTENT
-            return null
-        },
-    )
+        reply.statusCode = StatusCodes.NO_CONTENT
+        return null
+    }
 
     private async confirmByCode(
         userId: string,

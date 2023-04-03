@@ -1,12 +1,7 @@
 import fastify, { FastifyInstance, FastifyServerOptions } from 'fastify'
-import { StatusCodes } from 'http-status-codes'
 import openapiFile from '../../../../../configs/openapi.json'
-import { ErrorCode, ErrorData } from '../../generated/openapi'
+import { apiErrorHandler } from '../../errors/api-error-handler/api-error-handler'
 import { Handlers } from '../../generated/openapi/handlers'
-import {
-    FastifyValidationErrorWithMissingProps,
-    getInputId,
-} from '../../input-validation/input-validation'
 import { DEFAULT_OPTIONS } from './app.consts'
 import { ApplicationOptions } from './app.models'
 import { decorateAppWithCors } from './cors.app'
@@ -22,27 +17,7 @@ export function defaultApp(
         return payload == 'null' ? '' : payload
     })
 
-    app.setErrorHandler(function (error, request, reply) {
-        if (error.validation) {
-            const validationError =
-                error as FastifyValidationErrorWithMissingProps
-            const data: ErrorData = {
-                errorCode: ErrorCode._400_BAD_REQUEST,
-                description: validationError.message,
-            }
-            if (error.validation.length > 0) {
-                const inputId = getInputId(request, validationError)
-                if (inputId) data.inputId = inputId
-            }
-            reply.status(StatusCodes.BAD_REQUEST).send(data)
-        } else {
-            const data: ErrorData = {
-                errorCode: ErrorCode._500_INTERNAL_SERVER_ERROR,
-                description: error.message,
-            }
-            reply.status(StatusCodes.INTERNAL_SERVER_ERROR).send(data)
-        }
-    })
+    app.setErrorHandler(apiErrorHandler)
 
     app.addContentTypeParser(
         'application/json',
