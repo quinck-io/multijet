@@ -19,14 +19,12 @@
         "sam:build": "sam build -t deploy/aws/sam/template.yaml --parallel",
         "sam:generate-env": "npm run ts deploy/aws/scripts/create-json-env.ts .env deploy/aws/sam/.env.json",
         "presam:start": "npm run sam:build && npm run sam:generate-env",
-        "sam:start": "sam local start-api -t deploy/aws/sam/template.yaml"
+        "sam:start": "sam local start-api -t deploy/aws/sam/template.yaml --env-vars deploy/aws/sam/.env.json"
     },
     "dependencies": {
-        "@quinck/collections": "^0.2.0",
-        "esbuild": "^0.17.14",
+        "@quinck/collections": "^0.3.0",
         "fastify": "^4.15.0",
-        "http-status-codes": "^2.2.0",
-        "turbo": "^1.8.8"
+        "http-status-codes": "^2.2.0"
     },
     "engines": {
         "npm": ">=7.0.0",
@@ -38,13 +36,15 @@
         "@types/chai": "^4.3.4",
         "@types/mocha": "^10.0.1",
         "@types/node": "^18.15.11",
-        "@typescript-eslint/eslint-plugin": "^5.57.0",
+        "@typescript-eslint/eslint-plugin": "^5.57.1",
         "chai": "^4.3.7",
         "chai-as-promised": "^7.1.1",
+        "esbuild": "^0.17.15",
         "esbuild-runner": "^2.2.2",
         "eslint": "^8.37.0",
         "eslint-config-prettier": "^8.8.0",
         "mocha": "^10.2.0",
-        "typescript": "^5.0.2"
+        "turbo": "^1.8.8",
+        "typescript": "^5.0.3"
     }
 }
