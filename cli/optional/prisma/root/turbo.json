@@ -1,0 +1,25 @@
+{
+    "pipeline": {
+        "typecheck": {
+            "dependsOn": ["^typecheck", "prisma:generate"]
+        },
+        "prisma:generate": {
+            "cache": false
+        },
+        "build": {
+            "dependsOn": ["^build", "typecheck"],
+            "outputs": ["dist/**"]
+        },
+        "build:debug": {
+            "dependsOn": ["^build:debug", "typecheck"]
+        },
+        "lint": {},
+        "openapi:generate": {
+            "cache": false
+        },
+        "clean": {
+            "cache": false
+        }
+    },
+    "globalDependencies": ["tsconfig.base.json"]
+}

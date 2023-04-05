@@ -40,6 +40,7 @@
         "chai": "^4.3.7",
         "chai-as-promised": "^7.1.1",
         "esbuild": "^0.17.15",
+        "esbuild-plugin-copy": "^2.1.1",
         "esbuild-runner": "^2.2.2",
         "eslint": "^8.37.0",
         "eslint-config-prettier": "^8.8.0",
