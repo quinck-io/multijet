@@ -19,7 +19,7 @@
         "sam:build": "sam build -t deploy/aws/sam/template.yaml --parallel",
         "sam:generate-env": "npm run ts deploy/aws/scripts/create-json-env.ts .env deploy/aws/sam/.env.json",
         "presam:start": "npm run sam:build && npm run sam:generate-env",
-        "sam:start": "sam local start-api -t deploy/aws/sam/template.yaml"
+        "sam:start": "sam local start-api -t deploy/aws/sam/template.yaml --env-vars deploy/aws/sam/.env.json"
     },
     "dependencies": {
         "@quinck/collections": "^0.3.0",
