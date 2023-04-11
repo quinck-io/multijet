@@ -12,7 +12,12 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 const CURRENT_USER_DIR = process.cwd()
 
-export async function handleCreatePackage(packageName, packageType) {
+export async function handleCreatePackage(rawPackageName, packageType) {
+    const packageName = rawPackageName
+        .trim()
+        .replaceAll(' ', '-')
+        .replace(/[^\w\d\s-]/g, '')
+
     const templateDir = path.join(__dirname, 'templates', packageType)
     const subfolderName = packageType === 'lib' ? 'libs' : 'microservices'
     const fullPackageName = `@${subfolderName}/${packageName}`

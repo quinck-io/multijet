@@ -30,6 +30,8 @@ pipeline {
         }
         nodejs(nodeJSInstallationName: 'nodejs16.18') {
           sh '''
+            rm -rf node_modules
+            npm i turbo
             npm ci
           '''
         }
@@ -146,7 +148,7 @@ pipeline {
       script {
         String rootDir = pwd()
         def configs = readYaml file: "project.configs.yml"
-        def notifier = load "${rootDir}/configs/pipeline/notifyDiscord.groovy"
+        def notifier = load "${rootDir}/configs/pipeline/jenkins/notifyDiscord.groovy"
         def testResult
         try { 
           testResult = junit "test-results.xml"
