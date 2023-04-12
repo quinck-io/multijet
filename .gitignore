@@ -6,6 +6,8 @@
 .turbo
 .aws-sam
 .DS_Store
+.temp
+.cache
 # Node artifact files
 node_modules/
 dist/
