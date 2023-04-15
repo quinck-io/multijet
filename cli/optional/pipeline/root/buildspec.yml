@@ -8,6 +8,7 @@ phases:
       # ------------------------------------------------ #
       # [Aws sam]
       # ------------------------------------------------ #
+      - npm i turbo
       - npm ci
       - sam validate -t deploy/aws/sam/template.yaml --region=$AWS_REGION
   build:
