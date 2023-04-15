@@ -1,0 +1,14 @@
+-   **Getting started**
+    -   [Overview](/ 'Intro to Multijet')
+    -   [Create a project](pages/create-project.md)
+    -   [Directory structure](pages/directory-structure.md)
+    -   [Core concepts](pages/core-concepts.md)
+    -   [Multijet CLI](pages/multijet-cli.md)
+    -   [External modules](pages/external-modules.md)
+    -   [Default Commands](pages/default-commands.md)
+-   **Configuration**
+    -   [Project Configuration]()
+    -   [Microservices and libs]()
+    -   [Turborepo]()
+    -   [Build configuration]()
+    -   [Environment variables]()

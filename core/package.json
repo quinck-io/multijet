@@ -32,7 +32,7 @@
     },
     "packageManager": "npm@8.11.0",
     "devDependencies": {
-        "@tsconfig/node16": "^1.0.3",
+        "@tsconfig/node18": "^1.0.1",
         "@types/chai": "^4.3.4",
         "@types/mocha": "^10.0.1",
         "@types/node": "^18.15.11",
@@ -40,6 +40,7 @@
         "chai": "^4.3.7",
         "chai-as-promised": "^7.1.1",
         "esbuild": "^0.17.15",
+        "esbuild-plugin-copy": "^2.1.1",
         "esbuild-runner": "^2.2.2",
         "eslint": "^8.37.0",
         "eslint-config-prettier": "^8.8.0",

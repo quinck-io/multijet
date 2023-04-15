@@ -1,5 +1,5 @@
 {
-    "extends": "@tsconfig/node16",
+    "extends": "@tsconfig/node18",
     "exclude": ["node_modules", "**/*/dist", "**/*.test.ts"],
     "compilerOptions": {
         // Disable emitting file from a compilation.
