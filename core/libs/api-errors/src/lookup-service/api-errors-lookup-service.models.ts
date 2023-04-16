@@ -1,5 +1,6 @@
 import { ErrorIdentifier } from '@libs/errors'
 import { ErrorCode } from '@libs/fastify-utils'
+import { StatusCodes } from 'http-status-codes'
 
 /**
  * Encapsulate the logic of maintaing mappings between
@@ -27,7 +28,7 @@ export interface ApiErrorsInformationLookupService {
 
 export type ApiErrorInformation = {
     errorCode: ErrorCode
-    status: number
+    status: StatusCodes
 }
 
 export type ApiErrorInformationParser = (error: Error) => ApiErrorInformation

@@ -13,6 +13,7 @@
     },
     "dependencies": {
         "@fastify/cors": "^8.2.0",
+        "@libs/api-errors": "^0.0.1",
         "@libs/utils": "*",
         "@quinck/fastify-openapi-glue": "^4.1.2",
         "jwt-decode": "^3.1.2"

@@ -1,3 +1,4 @@
+import { apiErrorsInformationLookupService } from '@libs/api-errors'
 import fastify, { FastifyInstance, FastifyServerOptions } from 'fastify'
 import openapiFile from '../../../../../configs/openapi.json'
 import { apiErrorHandler } from '../../errors/api-error-handler/api-error-handler'
@@ -14,10 +15,15 @@ export function defaultApp(
     const app: FastifyInstance = fastify(fastifyOptions)
 
     app.addHook('onSend', async (request, reply, payload) => {
-        return payload == 'null' ? '' : payload
+        return payload == 'null' ? '' : payload // TODO: the bug of empty returns in fastify has been fixed, this can be removed
     })
 
-    app.setErrorHandler(apiErrorHandler)
+    app.setErrorHandler(
+        apiErrorHandler({
+            apiErrorsInformationLookupService:
+                apiErrorsInformationLookupService(), // TODO: use DI when availabe ton have this as singleton everywhere
+        }),
+    )
 
     app.addContentTypeParser(
         'application/json',
