@@ -1,3 +1,5 @@
+import { ErrorIdentifier } from '../error-identifier/error-identifier.types'
+
 /**
  * Operational errors represent runtime problems whose results
  * are expected and should be dealt with in a proper way.
@@ -18,5 +20,9 @@ export class OperationalError extends Error {
         Object.setPrototypeOf(this, new.target.prototype)
 
         Error.captureStackTrace(this)
+    }
+
+    public get identifier(): ErrorIdentifier {
+        return this.name
     }
 }
