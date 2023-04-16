@@ -1,5 +1,5 @@
 {
-    "name": "@libs/fastify-utils",
+    "name": "@libs/errors",
     "private": true,
     "version": "0.0.1",
     "types": "src/index.ts",
@@ -9,14 +9,5 @@
         "lint": "eslint .",
         "test": "mocha",
         "clean": "rm -rf .turbo node_modules"
-    },
-    "dependencies": {
-        "@fastify/cors": "^8.2.0",
-        "@libs/utils": "*",
-        "@quinck/fastify-openapi-glue": "^4.1.2",
-        "jwt-decode": "^3.1.2"
-    },
-    "devDependencies": {
-        "@quinck/fastify-openapi-typescript-generator": "^0.0.5"
     }
 }
