@@ -7,7 +7,8 @@
         "../core/libs/*"
     ],
     "scripts": {
-        "ts": "esr"
+        "ts": "esr",
+        "test": "mocha"
     },
     "author": "",
     "license": "ISC",
@@ -16,6 +17,10 @@
     },
     "devDependencies": {
         "@tsconfig/node18": "^2.0.0",
-        "esbuild-runner": "^2.2.2"
+        "@types/mocha": "^10.0.1",
+        "chai": "^4.3.7",
+        "chai-as-promised": "^7.1.1",
+        "esbuild-runner": "^2.2.2",
+        "mocha": "^10.2.0"
     }
 }
