@@ -72,5 +72,10 @@ export type { updateUserProfilePathParams } from './models/updateUserProfilePath
 export type { updateUserProfileQueryParams } from './models/updateUserProfileQueryParams';
 export type { updateUserProfileReplyBody } from './models/updateUserProfileReplyBody';
 export type { updateUserProfileRequestBody } from './models/updateUserProfileRequestBody';
+export type { uploadFileHeaders } from './models/uploadFileHeaders';
+export type { uploadFilePathParams } from './models/uploadFilePathParams';
+export type { uploadFileQueryParams } from './models/uploadFileQueryParams';
+export type { uploadFileReplyBody } from './models/uploadFileReplyBody';
+export type { uploadFileRequestBody } from './models/uploadFileRequestBody';
 export type { User } from './models/User';
 export type { UserProfile } from './models/UserProfile';

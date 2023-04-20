@@ -16,6 +16,10 @@
         {
             "name": "Example",
             "description": "Examples"
+        },
+        {
+            "name": "File",
+            "description": "Upload files"
         }
     ],
     "paths": {
@@ -368,6 +372,59 @@
                                     "properties": {
                                         "hello": {
                                             "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthenticated"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                }
+            }
+        },
+        "/file/upload": {
+            "post": {
+                "tags": ["File"],
+                "summary": "Multipart file upload",
+                "operationId": "uploadFile",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "file": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Uploaded file path",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": ["filePath, fileUrl"],
+                                    "properties": {
+                                        "filePath": {
+                                            "type": "string"
+                                        },
+                                        "fileUrl": {
+                                            "type": "string",
+                                            "format": "uri"
                                         }
                                     }
                                 }

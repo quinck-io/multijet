@@ -175,4 +175,20 @@ export interface Handlers {
 			Headers: openapi.getHelloWorldHeaders
     }
   >
+
+  /**
+   * Multipart file upload
+   */
+	uploadFile?: RouteHandlerMethod<
+    RawServerDefault,
+    RawRequestDefaultExpression<RawServerDefault>,
+    RawReplyDefaultExpression<RawServerDefault>,
+    {
+			Params: openapi.uploadFilePathParams
+			Querystring: openapi.uploadFileQueryParams
+			Body: openapi.uploadFileRequestBody
+			Reply: openapi.uploadFileReplyBody
+			Headers: openapi.uploadFileHeaders
+    }
+  >
 }
