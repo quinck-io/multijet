@@ -1,0 +1,21 @@
+{
+    "name": "multijet-modules",
+    "version": "1.0.0",
+    "description": "",
+    "workspaces": [
+        "libs/*",
+        "../core/libs/*"
+    ],
+    "scripts": {
+        "ts": "esr"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@quinck/collections": "^0.3.0"
+    },
+    "devDependencies": {
+        "@tsconfig/node18": "^2.0.0",
+        "esbuild-runner": "^2.2.2"
+    }
+}
