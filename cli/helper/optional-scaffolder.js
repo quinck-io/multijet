@@ -9,6 +9,7 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
 const optionalDir = path.join(__dirname, '..', 'optional')
+const optionalLibsDir = path.join(__dirname, '..', '..', 'modules', 'libs')
 
 export async function applyOptionalModules(
     projectName,
@@ -39,10 +40,14 @@ function scaffoldOptionalLibs(projectDir, optionalModules) {
     )
 
     selectedLibs.forEach(({ code: libName }) => {
-        cpSync(path.join(optionalDir, libName), path.join(libsDir, libName), {
-            recursive: true,
-            filter: file => !FILE_BLACKLIST.includes(path.basename(file)),
-        })
+        cpSync(
+            path.join(optionalLibsDir, libName),
+            path.join(libsDir, libName),
+            {
+                recursive: true,
+                filter: file => !FILE_BLACKLIST.includes(path.basename(file)),
+            },
+        )
     })
 }
 
@@ -57,7 +62,7 @@ function scaffoldPrismaFiles(projectDir) {
         force: true,
     })
     cpSync(
-        path.join(prismaDir, PRISMA_LIB_NAME),
+        path.join(optionalLibsDir, PRISMA_LIB_NAME),
         path.join(projectDir, 'libs', PRISMA_LIB_NAME),
         {
             recursive: true,
