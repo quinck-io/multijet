@@ -1,5 +1,5 @@
 export const MICROSERVICE = 'microservice'
-export const LIB = 'LIB'
+export const LIB = 'lib'
 export const OTHER = 'OTHER'
 
 export const FILE_BLACKLIST = ['.aws-sam', 'node_modules', 'dist', '.turbo']
