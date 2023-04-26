@@ -1,4 +1,4 @@
-# Contributing to Multijet
+# Contributing to Multijet ⚡️
 
 ## Project structure
 
