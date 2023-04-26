@@ -46,7 +46,7 @@ The modules monorepo picks the lib workspace from the multijet core so you can i
 ...
 ```
 
-The modules project includes mocha and chai so you can test all the optional modules by runing the following command:
+The modules project includes `mocha` and `chai` so you can test all the optional modules by running the following command:
 
 ```bash
 npm run test
