@@ -1,13 +1,13 @@
 import {
+    AdminUserManager,
+    UserAttribute,
+    UserUpdateAttribute,
+} from '@libs/user-manager'
+import {
     AdminCreateUserCredentials,
     CompleteUserInfo,
     SearchUsersParameters,
 } from '@quinck/aws-cognito-client'
-import {
-    AdminUserManager,
-    UserAttribute,
-    UserUpdateAttribute,
-} from '../../../libs/user-manager'
 import { DUMMY_USER_REPLY } from './mock.user'
 import { BasicMockService } from './utils/mock'
 

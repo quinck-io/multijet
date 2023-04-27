@@ -1,3 +1,4 @@
+import { InternalServerError } from '@libs/fastify-utils'
 import {
     AuthService,
     CompletedCustomAuthChallengeResponse,
@@ -9,7 +10,6 @@ import {
     UpdateCredentialsInfo,
     UserToken,
 } from '@quinck/aws-cognito-client'
-import { InternalServerError } from '../../../libs/fastify-utils'
 import {
     BasicMockService,
     mockIdToken,

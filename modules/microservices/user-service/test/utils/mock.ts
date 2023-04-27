@@ -1,4 +1,4 @@
-import { TokenHeader } from '../../../../libs/fastify-utils'
+import { TokenHeader } from '@libs/fastify-utils'
 
 export class BasicMockService {
     public error?: Error
