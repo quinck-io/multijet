@@ -2,13 +2,19 @@ import { cpSync, readFileSync, writeFileSync } from 'fs'
 import path, { dirname } from 'path'
 import { fileURLToPath } from 'url'
 import YAML from 'yaml'
-import { FILE_BLACKLIST, LIB, OPTIONAL_MODULES } from './consts.js'
+import {
+    FILE_BLACKLIST,
+    LIB,
+    MICROSERVICE,
+    OPTIONAL_MODULES,
+} from './consts.js'
 import { addScriptToPackage } from './helper.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
 const optionalDir = path.join(__dirname, '..', 'optional')
+const optionalModulesDir = path.join(__dirname, '..', '..', 'modules')
 
 export async function applyOptionalModules(
     projectName,
@@ -29,20 +35,29 @@ export async function applyOptionalModules(
     if (optionalModuleCodes.includes('pipeline'))
         scaffoldPipelineFiles(projectName, projectDir)
     if (optionalModuleCodes.includes('prisma')) scaffoldPrismaFiles(projectDir)
+    if (optionalModuleCodes.includes('auth')) {
+        scaffoldModule(projectDir, 'user-service', MICROSERVICE)
+        scaffoldModule(projectDir, 'user-manager', LIB)
+    }
+}
+
+function scaffoldModule(projectDir, moduleName, type) {
+    const workspace = type === LIB ? 'libs' : 'microservices'
+    const sourceDir = path.join(optionalModulesDir, workspace)
+    const targetDir = path.join(projectDir, workspace)
+
+    cpSync(path.join(sourceDir, moduleName), path.join(targetDir, moduleName), {
+        recursive: true,
+        filter: file => !FILE_BLACKLIST.includes(path.basename(file)),
+    })
 }
 
 function scaffoldOptionalLibs(projectDir, optionalModules) {
-    const libsDir = path.join(projectDir, 'libs')
-
     const selectedLibs = optionalModules.filter(
         module => module.type && module.type === LIB,
     )
-
     selectedLibs.forEach(({ code: libName }) => {
-        cpSync(path.join(optionalDir, libName), path.join(libsDir, libName), {
-            recursive: true,
-            filter: file => !FILE_BLACKLIST.includes(path.basename(file)),
-        })
+        scaffoldModule(projectDir, libName, LIB)
     })
 }
 
@@ -56,14 +71,7 @@ function scaffoldPrismaFiles(projectDir) {
         recursive: true,
         force: true,
     })
-    cpSync(
-        path.join(prismaDir, PRISMA_LIB_NAME),
-        path.join(projectDir, 'libs', PRISMA_LIB_NAME),
-        {
-            recursive: true,
-            filter: file => !FILE_BLACKLIST.includes(path.basename(file)),
-        },
-    )
+    scaffoldModule(projectDir, PRISMA_LIB_NAME, LIB)
     addScriptToPackage(projectDir, 'prisma', PRISMA_SCRIPT)
 }
 

@@ -1,14 +1,14 @@
 import {
+    UserAttribute,
+    UserManager,
+    UserUpdateAttribute,
+} from '@libs/user-manager'
+import {
     BasicUserInfo,
     Credentials,
     UserAuthToken,
     UserInfo,
 } from '@quinck/aws-cognito-client'
-import {
-    UserAttribute,
-    UserManager,
-    UserUpdateAttribute,
-} from '../../../libs/user-manager'
 import { BasicMockService } from './utils/mock'
 
 export const DUMMY_USER_INFO = {
