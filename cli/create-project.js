@@ -1,6 +1,13 @@
 import chalk from 'chalk'
 import { execa } from 'execa'
-import { copyFileSync, cpSync, mkdirSync, readdirSync } from 'fs'
+import {
+    copyFileSync,
+    cpSync,
+    mkdirSync,
+    readFileSync,
+    readdirSync,
+    writeFileSync,
+} from 'fs'
 import inquirer from 'inquirer'
 import ora from 'ora'
 import path from 'path'
@@ -45,6 +52,15 @@ async function createProject(projectName, answers) {
         copyFileSync(
             path.join(optionalDir, '_gitignore'),
             path.join(projectDir, '.gitignore'),
+        )
+
+        const readmeFilePath = path.join(projectDir, 'README.md')
+        const readmeLines = readFileSync(readmeFilePath, 'utf-8')
+            .split('\n')
+            .slice(1)
+        writeFileSync(
+            readmeFilePath,
+            [`# ${projectName}`, ...readmeLines].join('\n'),
         )
 
         spinner.succeed('Project initialized')
