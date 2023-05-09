@@ -126,7 +126,7 @@ pipeline {
           String envVariables = new StringBuilder()
             .append('[ ')
             .append(" { AWS_REGION, ${region} } ")
-            .append(" { PROJECT_NAME, ${configs.projectName} } ")
+            .append(", { PROJECT_NAME, ${configs.projectName} } ")
             .append(", { ENVIRONMENT, ${environment} } ")
             .append(", { ENVIRONMENT_CLASS, ${environmentClass} } ")
             .append(' ]')
