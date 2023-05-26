@@ -9,15 +9,17 @@
         "lint": "eslint .",
         "test": "mocha",
         "clean": "rm -rf .turbo node_modules",
-        "openapi:generate": "openapi_generate --input ../../configs/openapi.json --output ./src/generated/openapi"
+        "openapi:generate-routes": "fastify-generate-routes ../../configs/openapi.json ./src/generated/routes",
+        "openapi:generate-models": "openapi_generate --input ../../configs/openapi.json --output ./src/generated/openapi",
+        "openapi:generate": "npm run openapi:generate-routes && npm run openapi:generate-models"
     },
     "dependencies": {
         "@fastify/cors": "^8.2.0",
         "@libs/utils": "*",
-        "@quinck/fastify-openapi-glue": "^4.1.2",
         "jwt-decode": "^3.1.2"
     },
     "devDependencies": {
-        "@quinck/fastify-openapi-typescript-generator": "^0.0.5"
+        "@quinck/fastify-openapi-typescript-generator": "^0.0.5",
+        "@quinck/fastify-openapi-glue": "^4.1.4"
     }
 }

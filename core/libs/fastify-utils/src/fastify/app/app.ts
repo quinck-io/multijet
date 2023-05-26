@@ -1,8 +1,6 @@
 import fastify, { FastifyInstance, FastifyServerOptions } from 'fastify'
 import { StatusCodes } from 'http-status-codes'
-import openapiFile from '../../../../../configs/openapi.json'
 import { ErrorCode, ErrorData } from '../../generated/openapi'
-import { Handlers } from '../../generated/openapi/handlers'
 import {
     FastifyValidationErrorWithMissingProps,
     getInputId,
@@ -12,15 +10,10 @@ import { ApplicationOptions } from './app.models'
 import { decorateAppWithCors } from './cors.app'
 
 export function defaultApp(
-    handlers: Handlers,
     fastifyOptions: FastifyServerOptions = DEFAULT_OPTIONS,
     appOptions?: ApplicationOptions,
 ): FastifyInstance {
     const app: FastifyInstance = fastify(fastifyOptions)
-
-    app.addHook('onSend', async (request, reply, payload) => {
-        return payload == 'null' ? '' : payload
-    })
 
     app.setErrorHandler(function (error, request, reply) {
         if (error.validation) {
@@ -58,13 +51,6 @@ export function defaultApp(
             }
         },
     )
-
-    import('@quinck/fastify-openapi-glue').then(({ fastifyOpenapiGlue }) => {
-        app.register(fastifyOpenapiGlue, {
-            specification: openapiFile,
-            service: handlers,
-        })
-    })
 
     applyApplicationOptions(app, appOptions)
 
