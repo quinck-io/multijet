@@ -4,7 +4,6 @@ import chalk from 'chalk'
 import { Command } from 'commander'
 import { handleCreatePackage } from './create-package.js'
 import { handleCreateProject } from './create-project.js'
-import { LIB, MICROSERVICE } from './helper/consts.js'
 
 const version = '2.0.0'
 const cli = new Command()
@@ -18,15 +17,15 @@ cli.command('create')
 cli.command('new-lib')
     .description('generate a basic shared lib with given name')
     .argument('<name>', 'name of the lib to generate')
-    .action(name => {
-        handleCreatePackage(name, LIB)
+    .action(async name => {
+        await handleCreatePackage(name, 'lib')
     })
 
 cli.command('new-microservice')
     .description('generate a basic microservice with given name')
     .argument('<name>', 'name of the service to generate')
-    .action(name => {
-        handleCreatePackage(name, MICROSERVICE)
+    .action(async name => {
+        await handleCreatePackage(name, 'microservice')
     })
 
 console.log(chalk.white.bgBlue(' MULTIJET '))
