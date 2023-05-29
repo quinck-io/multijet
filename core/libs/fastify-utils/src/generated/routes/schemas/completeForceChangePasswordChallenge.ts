@@ -3,7 +3,7 @@
 /* eslint-disable */
 
 
-export const completeForceChangePasswordChallenge: any =
+export const completeForceChangePasswordChallengeRoute: any =
 {
   "method": "POST",
   "url": "/auth/signup/forceChangePassword",

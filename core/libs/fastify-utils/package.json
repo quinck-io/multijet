@@ -20,6 +20,6 @@
     },
     "devDependencies": {
         "@quinck/fastify-openapi-typescript-generator": "^0.0.5",
-        "@quinck/fastify-openapi-glue": "^4.1.4"
+        "@quinck/fastify-openapi-glue": "^4.1.5"
     }
 }

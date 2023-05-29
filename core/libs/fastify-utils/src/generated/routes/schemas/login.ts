@@ -3,7 +3,7 @@
 /* eslint-disable */
 
 
-export const login: any =
+export const loginRoute: any =
 {
   "method": "POST",
   "url": "/auth/login",

@@ -3,7 +3,7 @@
 /* eslint-disable */
 
 
-export const updateUserProfile: any =
+export const updateUserProfileRoute: any =
 {
   "method": "PATCH",
   "url": "/profile",

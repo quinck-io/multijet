@@ -3,7 +3,7 @@
 /* eslint-disable */
 
 
-export const getUserProfile: any =
+export const getUserProfileRoute: any =
 {
   "method": "GET",
   "url": "/profile",

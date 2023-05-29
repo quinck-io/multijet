@@ -3,7 +3,7 @@
 /* eslint-disable */
 
 
-export const resetPassword: any =
+export const resetPasswordRoute: any =
 {
   "method": "POST",
   "url": "/auth/resetPassword",

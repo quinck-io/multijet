@@ -3,7 +3,7 @@
 /* eslint-disable */
 
 
-export const createUser: any =
+export const createUserRoute: any =
 {
   "method": "POST",
   "url": "/users",

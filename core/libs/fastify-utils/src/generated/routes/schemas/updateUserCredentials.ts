@@ -3,7 +3,7 @@
 /* eslint-disable */
 
 
-export const updateUserCredentials: any =
+export const updateUserCredentialsRoute: any =
 {
   "method": "PATCH",
   "url": "/auth/credentials",

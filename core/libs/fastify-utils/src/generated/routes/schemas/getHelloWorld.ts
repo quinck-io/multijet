@@ -3,7 +3,7 @@
 /* eslint-disable */
 
 
-export const getHelloWorld: any =
+export const getHelloWorldRoute: any =
 {
   "method": "GET",
   "url": "/hello-world",

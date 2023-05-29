@@ -3,7 +3,7 @@
 /* eslint-disable */
 
 
-export const resendSignupConfirmation: any =
+export const resendSignupConfirmationRoute: any =
 {
   "method": "POST",
   "url": "/auth/signup/resendConfirm",

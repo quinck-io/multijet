@@ -3,7 +3,7 @@
 /* eslint-disable */
 
 
-export const getUsers: any =
+export const getUsersRoute: any =
 {
   "method": "GET",
   "url": "/users",
