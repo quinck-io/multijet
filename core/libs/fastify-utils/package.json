@@ -9,8 +9,8 @@
         "lint": "eslint .",
         "test": "mocha",
         "clean": "rm -rf .turbo node_modules",
-        "openapi:generate-routes": "fastify-generate-routes ../../configs/openapi.json ./src/generated/routes",
-        "openapi:generate-models": "openapi_generate --input ../../configs/openapi.json --output ./src/generated/openapi",
+        "openapi:generate-routes": "fastify-generate-routes ../../configs/openapi.yaml ./src/generated/routes",
+        "openapi:generate-models": "openapi_generate --input ../../configs/openapi.yaml --output ./src/generated/openapi",
         "openapi:generate": "npm run openapi:generate-routes && npm run openapi:generate-models"
     },
     "dependencies": {
