@@ -1,11 +1,25 @@
-import { defaultApp } from '@libs/fastify-utils'
+import { defaultApp, getHelloWorldRoute } from '@libs/fastify-utils'
 import { FastifyInstance, FastifyServerOptions } from 'fastify'
-import { AppComponents, createHandlers } from './utils/app'
+import { HelloController } from './hello/hello.controller'
+import { AppComponents } from './utils/components'
+
+export function createRoutes(
+    app: FastifyInstance,
+    components: AppComponents,
+): FastifyInstance {
+    const helloController = new HelloController(components.message)
+
+    app.route({ ...getHelloWorldRoute, handler: helloController.getHello })
+
+    return app
+}
 
 export function buildApp(
     components: AppComponents,
     opts?: FastifyServerOptions,
 ): FastifyInstance {
-    const app = defaultApp(createHandlers(components), opts)
+    const app = defaultApp(opts)
+    createRoutes(app, components)
+
     return app
 }
