@@ -9,7 +9,7 @@
     ],
     "scripts": {
         "ts": "esr",
-        "test": "mocha"
+        "test": "mocha --require esbuild-runner/register"
     },
     "author": "",
     "license": "ISC",
@@ -21,6 +21,8 @@
     },
     "devDependencies": {
         "@tsconfig/node18": "^2.0.0",
+        "@types/chai": "^4.3.5",
+        "@types/chai-as-promised": "^7.1.5",
         "@types/mocha": "^10.0.1",
         "chai": "^4.3.7",
         "chai-as-promised": "^7.1.1",

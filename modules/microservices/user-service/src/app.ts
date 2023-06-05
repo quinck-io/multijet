@@ -1,11 +1,16 @@
 import { defaultApp } from '@libs/fastify-utils'
 import { FastifyInstance, FastifyServerOptions } from 'fastify'
-import { AppComponents, createHandlers } from './utils/app'
+import { createRoutes } from './routes'
+import { AppComponents } from './utils/components'
 
 export function buildApp(
     components: AppComponents,
     opts?: FastifyServerOptions,
 ): FastifyInstance {
-    const app = defaultApp(createHandlers(components), opts)
+    const app = defaultApp(opts)
+
+    const routes = createRoutes(components)
+    routes.forEach(({ config, handler }) => app.route({ ...config, handler }))
+
     return app
 }

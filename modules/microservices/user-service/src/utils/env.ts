@@ -10,4 +10,5 @@ export const JoiEnvironmentValidationSchema = Joi.object<Environment>()
         USER_POOL_ID: Joi.string().required(),
         USER_CLIENT_ID: Joi.string().required(),
     })
+    .required()
     .unknown()
