@@ -9,8 +9,8 @@
         "lint": "eslint .",
         "test": "mocha",
         "clean": "rm -rf .turbo node_modules",
-        "openapi-types:generate": "fastify-openapi-typescript -i ../../configs/openapi.json -o ./src/generated/types",
-        "openapi-route-configs:generate": "fastify-openapi-route-configs -i ../../configs/openapi.json -o ./src/generated/configs",
+        "openapi-types:generate": "fastify-openapi-typescript -i ../../configs/openapi.yaml -o ./src/generated/types",
+        "openapi-route-configs:generate": "fastify-openapi-route-configs -i ../../configs/openapi.yaml -o ./src/generated/routes",
         "openapi:generate": "npm run openapi-route-configs:generate && npm run openapi-types:generate"
     },
     "dependencies": {
@@ -19,6 +19,6 @@
         "jwt-decode": "^3.1.2"
     },
     "devDependencies": {
-        "@quinck/fastify-openapi-typescript-generator": "^1.1.1"
+        "@quinck/fastify-openapi-typescript-generator": "^1.2.0"
     }
 }
