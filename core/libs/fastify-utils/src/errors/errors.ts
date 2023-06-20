@@ -1,4 +1,4 @@
-import { ErrorData, ErrorCode } from '../generated/openapi'
+import { ErrorCode, ErrorData } from '@libs/models'
 import { StatusCodes } from 'http-status-codes'
 
 export class ServiceError extends Error {

@@ -19,6 +19,6 @@
         "jwt-decode": "^3.1.2"
     },
     "devDependencies": {
-        "@quinck/fastify-openapi-typescript-generator": "^1.2.0"
+        "@quinck/fastify-openapi-typescript-generator": "^1.2.1"
     }
 }

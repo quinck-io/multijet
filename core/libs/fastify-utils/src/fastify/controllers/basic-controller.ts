@@ -1,7 +1,6 @@
+import { ErrorData } from '@libs/models'
 import { InternalServerError } from '../../errors/common'
 import { ServiceError } from '../../errors/errors'
-import { ErrorData } from '../../generated/openapi'
-import { Handlers } from '../../generated/openapi/handlers'
 import { FastifyController } from './fastify-controller'
 
 export class BasicController extends FastifyController<ErrorData> {
@@ -15,5 +14,3 @@ export class BasicController extends FastifyController<ErrorData> {
         return error.toErrorReponse()
     }
 }
-
-export type Handler<TProp extends keyof Handlers> = NonNullable<Handlers[TProp]>

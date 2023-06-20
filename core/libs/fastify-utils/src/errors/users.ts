@@ -1,5 +1,5 @@
+import { ErrorCode } from '@libs/models'
 import { StatusCodes } from 'http-status-codes'
-import { ErrorCode } from '../generated/openapi'
 import { ServiceError } from './errors'
 
 export class UserAlreadyExistError extends ServiceError {

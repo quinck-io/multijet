@@ -1,6 +1,6 @@
+import { ErrorCode, ErrorData } from '@libs/models'
 import fastify, { FastifyInstance, FastifyServerOptions } from 'fastify'
 import { StatusCodes } from 'http-status-codes'
-import { ErrorCode, ErrorData } from '../../generated/openapi'
 import {
     FastifyValidationErrorWithMissingProps,
     getInputId,

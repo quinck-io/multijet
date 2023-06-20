@@ -1,6 +1,7 @@
+import { ErrorCode } from '@libs/models'
 import fastify, { FastifyInstance } from 'fastify'
 import { StatusCodes } from 'http-status-codes'
-import { ErrorCode, ServiceError } from '../../../src'
+import { ServiceError } from '../../../src'
 import { FastifyController } from '../../../src/fastify/controllers/fastify-controller'
 
 export const MOCK_NAME = 'MOCK_NAME'
