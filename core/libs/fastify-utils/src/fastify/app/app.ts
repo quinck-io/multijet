@@ -16,7 +16,7 @@ export type AppFactory = (
 export const defaultApp =
     ({ apiErrorHandler }: AppParams): AppFactory =>
     (fastifyOptions = DEFAULT_OPTIONS, appOptions) => {
-        const app: FastifyInstance = fastify(fastifyOptions)
+        const app = fastify(fastifyOptions)
 
         app.addHook('onSend', async (request, reply, payload) => {
             return payload == 'null' ? '' : payload // TODO: the bug of empty returns in fastify has been fixed, this can be removed
