@@ -8,6 +8,7 @@
 .DS_Store
 .temp
 .cache
+*.env*
 # Node artifact files
 node_modules/
 dist/

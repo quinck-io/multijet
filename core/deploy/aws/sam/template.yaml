@@ -41,7 +41,7 @@ Resources:
     Properties:
       CodeUri: ../../../microservices/hello-service/dist
       Handler: lambda.handler
-      Runtime: nodejs16.x
+      Runtime: nodejs18.x
       MemorySize: !Ref MemorySize
       Timeout: 100
       # Policies:

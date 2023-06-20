@@ -1,5 +1,5 @@
 import { buildApp } from './app'
-import { createAppComponents } from './utils/app'
+import { createAppComponents } from './utils/components'
 
 async function bootstrap() {
     const app = buildApp(createAppComponents())

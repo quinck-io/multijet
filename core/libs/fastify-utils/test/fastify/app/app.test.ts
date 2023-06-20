@@ -39,7 +39,7 @@ describe(`${FASTIFY_UTILS} fastify app app defaultApp`, () => {
 
             it('should setup the health check route correctly if specified', async () => {
                 const healthCheckPath = '/health'
-                const app = defaultApp({}, noLoggerOpt, {
+                const app = defaultApp(noLoggerOpt, {
                     healthCheck: {
                         path: healthCheckPath,
                     },
