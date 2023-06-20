@@ -10,8 +10,7 @@
         },
         "lint": {},
         "openapi:generate": {
-            "cache": false,
-            "filter": ["@libs/models"]
+            "cache": false
         },
         "test": {},
         "clean": {

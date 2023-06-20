@@ -66,3 +66,6 @@ _.avi
 _.flv
 _.mov
 _.wmv
+
+# Generated files
+generated/
