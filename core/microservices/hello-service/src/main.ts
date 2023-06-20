@@ -1,9 +1,9 @@
-import { Components, setupModuleContainer } from './utils/components'
+import { appContainer } from './di-container'
 
 async function bootstrap() {
-    const container = setupModuleContainer()
+    const container = appContainer()
 
-    const createApp = container.resolve(Components.createApp)
+    const createApp = container.resolve('createApp')
 
     const app = createApp()
 

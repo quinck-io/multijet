@@ -2,7 +2,7 @@ import {
     RoutesHandlerMapping,
     getHelloWorldRouteConfig,
 } from '@libs/fastify-utils'
-import { AppComponents } from './utils/components'
+import { AppComponents } from './di-container'
 
 export type RoutesFactory = () => RoutesHandlerMapping
 

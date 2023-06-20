@@ -1,4 +1,5 @@
 export * from './auth/auth'
+export * from './di-container'
 export * from './fastify/app/app'
 export * from './fastify/app/app.models'
 export * from './generated/routes'

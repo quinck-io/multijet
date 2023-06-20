@@ -9,13 +9,13 @@ import { StatusCodes } from 'http-status-codes'
 
 export type ErrorHandler = Parameters<FastifyInstance['setErrorHandler']>[0]
 
-export type ErrorHandlerParameters = {
+export type ErrorHandlerParams = {
     apiErrorsInformationLookupService: ApiErrorsInformationLookupService
 }
 
-export const apiErrorHandler = (params: ErrorHandlerParameters): ErrorHandler =>
+export const apiErrorHandler = (params: ErrorHandlerParams): ErrorHandler =>
     function (error, request, reply) {
-        this.log.error(error) // TODO: improve error logging
+        this.log.error(error)
 
         const { apiErrorsInformationLookupService } = params
 

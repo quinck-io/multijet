@@ -19,7 +19,7 @@ export const getBody = '/getBody'
 
 export const requestBodyRequiredProperty = 'requiredProperty'
 export const getApp = () =>
-    defaultApp(noLoggerOpt)
+    defaultApp({ apiErrorHandler: app => app })(noLoggerOpt)
         .get(errorPath, () => {
             throw genericError
         })

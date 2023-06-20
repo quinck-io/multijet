@@ -1,12 +1,11 @@
-import { defaultApp } from '@libs/fastify-utils'
 import { FastifyInstance, FastifyServerOptions } from 'fastify'
-import { AppComponents } from './utils/components'
+import { AppComponents } from './di-container'
 
-export type AppParams = Pick<AppComponents, 'createRoutes'>
+export type AppParams = Pick<AppComponents, 'createRoutes' | 'defaultApp'>
 export type AppFactory = (opts?: FastifyServerOptions) => FastifyInstance
 
 export const createApp =
-    ({ createRoutes }: AppParams): AppFactory =>
+    ({ createRoutes, defaultApp }: AppParams): AppFactory =>
     opts => {
         const app = defaultApp(opts)
 
