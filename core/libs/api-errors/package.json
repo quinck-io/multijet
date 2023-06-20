@@ -12,7 +12,6 @@
     },
     "dependencies": {
         "@libs/errors": "*",
-        "@libs/fastify-utils": "*",
         "http-status-codes": "^2.2.0"
     }
 }

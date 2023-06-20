@@ -2,10 +2,10 @@ import {
     ApiErrorInformation,
     ApiErrorsInformationLookupService,
 } from '@libs/api-errors'
+import { ErrorCode, ErrorData } from '@libs/models'
 import { isPresent } from '@libs/utils'
 import { FastifyError, FastifyInstance } from 'fastify'
 import { StatusCodes } from 'http-status-codes'
-import { ErrorCode, ErrorData } from '../../generated/openapi'
 
 export type ErrorHandler = Parameters<FastifyInstance['setErrorHandler']>[0]
 

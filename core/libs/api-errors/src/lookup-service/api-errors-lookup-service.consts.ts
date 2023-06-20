@@ -1,4 +1,4 @@
-import { ErrorCode } from '@libs/fastify-utils'
+import { ErrorCode } from '@libs/models'
 import { StatusCodes } from 'http-status-codes'
 import { ApiErrorInformationParser } from './api-errors-lookup-service.models'
 
