@@ -8,6 +8,7 @@
     "scripts": {
         "ts": "esr",
         "build": "turbo run build",
+        "build:nocache": "turbo run build --force",
         "build:debug": "turbo run build:debug",
         "lint": "turbo run lint",
         "lint:fix": "turbo run lint:fix",
