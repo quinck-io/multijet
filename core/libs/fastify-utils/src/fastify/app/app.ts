@@ -1,14 +1,11 @@
-import { apiErrorsInformationLookupService } from '@libs/api-errors'
+import { ApiErrorsInformationLookupService } from '@libs/api-errors'
 import fastify, { FastifyInstance, FastifyServerOptions } from 'fastify'
-import openapiFile from '../../../../../configs/openapi.json'
 import { apiErrorHandler } from '../../errors/api-error-handler/api-error-handler'
-import { Handlers } from '../../generated/openapi/handlers'
 import { DEFAULT_OPTIONS } from './app.consts'
 import { ApplicationOptions } from './app.models'
 import { decorateAppWithCors } from './cors.app'
 
 export function defaultApp(
-    handlers: Handlers,
     fastifyOptions: FastifyServerOptions = DEFAULT_OPTIONS,
     appOptions?: ApplicationOptions,
 ): FastifyInstance {
@@ -40,13 +37,6 @@ export function defaultApp(
         },
     )
 
-    import('@quinck/fastify-openapi-glue').then(({ fastifyOpenapiGlue }) => {
-        app.register(fastifyOpenapiGlue, {
-            specification: openapiFile,
-            service: handlers,
-        })
-    })
-
     applyApplicationOptions(app, appOptions)
 
     return app
@@ -64,4 +54,7 @@ function applyApplicationOptions(
         if (healthCheck) app.all(healthCheck.path, async () => null)
     }
     return app
+}
+function apiErrorsInformationLookupService(): ApiErrorsInformationLookupService {
+    throw new Error('Function not implemented.')
 }

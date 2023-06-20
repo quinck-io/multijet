@@ -1,7 +1,9 @@
 import awsLambdaFastify from '@fastify/aws-lambda'
-import { buildApp } from './app'
-import { createAppComponents } from './utils/app'
+import { Components, setupModuleContainer } from './utils/components'
 
-const app = buildApp(createAppComponents())
+const container = setupModuleContainer()
+const createApp = container.resolve(Components.createApp)
+
+const app = createApp()
 const proxy = awsLambdaFastify(app)
 export const handler = proxy

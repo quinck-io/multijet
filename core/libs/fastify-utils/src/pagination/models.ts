@@ -1,4 +1,4 @@
-import { Paginated } from '../generated/openapi'
+import { Paginated } from '@libs/models'
 import { FastifyReply, FastifyRequest } from 'fastify'
 
 export type TypedPaginated<X> = Omit<Paginated, 'items'> & {

@@ -1,0 +1,32 @@
+{
+    "name": "multijet-modules",
+    "version": "1.0.0",
+    "description": "",
+    "workspaces": [
+        "libs/*",
+        "microservices/*",
+        "../core/libs/*"
+    ],
+    "scripts": {
+        "ts": "esr",
+        "test": "mocha --require esbuild-runner/register"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@quinck/collections": "^0.3.0",
+        "fastify": "^4.17.0",
+        "http-status-codes": "^2.2.0",
+        "joi": "^17.9.2"
+    },
+    "devDependencies": {
+        "@tsconfig/node18": "^2.0.0",
+        "@types/chai": "^4.3.5",
+        "@types/chai-as-promised": "^7.1.5",
+        "@types/mocha": "^10.0.1",
+        "chai": "^4.3.7",
+        "chai-as-promised": "^7.1.1",
+        "esbuild-runner": "^2.2.2",
+        "mocha": "^10.2.0"
+    }
+}

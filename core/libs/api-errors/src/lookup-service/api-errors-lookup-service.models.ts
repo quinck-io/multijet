@@ -1,5 +1,5 @@
 import { ErrorIdentifier } from '@libs/errors'
-import { ErrorCode } from '@libs/fastify-utils'
+import { ErrorCode } from '@libs/models'
 import { StatusCodes } from 'http-status-codes'
 
 /**

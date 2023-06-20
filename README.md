@@ -22,3 +22,5 @@ To get started, head to the [official documentation](https://quinck.gitbook.io/m
 -   Easily configurable
 -   Single file bundled microservices
 -   Optional Jenkins pipeline and SonarCloud
+
+💙 If you wish to contribute, check out [CONTRIBUTING.md](./CONTRIBUTING.md)
