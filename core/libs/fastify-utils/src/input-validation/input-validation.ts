@@ -1,14 +1,17 @@
+import { ValidationError } from '@libs/models'
 import { isPresent } from '@libs/utils'
 import { FastifyError } from 'fastify'
 
-export type ValidationError = FastifyError &
+export type FastifyValidationError = FastifyError &
     Required<Pick<FastifyError, 'validation' | 'validationContext'>>
 
-export const isValidationError = (error: Error): error is ValidationError =>
+export const isFastifyValidationError = (
+    error: Error,
+): error is FastifyValidationError =>
     isPresent((error as FastifyError).validation) &&
     isPresent((error as FastifyError).validationContext)
 
-export const getInputId = (validationError: ValidationError) => {
+export const getInputId = (validationError: FastifyValidationError) => {
     const { validation, validationContext } = validationError
     const [{ instancePath, schemaPath }] = validation
     const data = instancePath || schemaPath || ''
@@ -16,11 +19,17 @@ export const getInputId = (validationError: ValidationError) => {
     return `${validationContext}/${data.split('.').join('/')}`
 }
 
-export const getValidationErrors = (validationError: ValidationError) => {
+export const getValidationErrors = (
+    validationError: FastifyValidationError,
+): ValidationError[] => {
     const { validation, validationContext } = validationError
 
     return validation.map(validationError => ({
-        ...validationError,
-        validationContext,
+        field: validationError.instancePath,
+        message: validationError.message ?? '',
+        additionalData: {
+            ...validationError,
+            validationContext,
+        },
     }))
 }

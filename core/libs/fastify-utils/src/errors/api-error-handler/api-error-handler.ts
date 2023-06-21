@@ -3,10 +3,11 @@ import { ErrorCode, ErrorData } from '@libs/models'
 import { FastifyInstance } from 'fastify'
 import { StatusCodes } from 'http-status-codes'
 import {
-    ValidationError,
-    getInputId,
-    isValidationError,
+    FastifyValidationError,
+    getValidationErrors,
+    isFastifyValidationError,
 } from '../../input-validation/input-validation'
+import { httpErrorsRfcType } from './http-errors-rfc-types'
 
 export type ErrorHandler = Parameters<FastifyInstance['setErrorHandler']>[0]
 
@@ -30,10 +31,10 @@ const errorResponseInformation = (
 ): [StatusCodes, ErrorData] => {
     const error = optionalError ?? Error()
 
-    if (isValidationError(error)) {
+    if (isFastifyValidationError(error)) {
         const errorData = validationErrorData(error)
 
-        return [StatusCodes.BAD_REQUEST, errorData]
+        return [errorData.status, errorData]
     }
 
     if (apiErrorsLookupService.hasMapping(error.name)) {
@@ -48,19 +49,23 @@ const errorResponseInformation = (
     return [StatusCodes.INTERNAL_SERVER_ERROR, errorData]
 }
 
-function validationErrorData(error: ValidationError): ErrorData {
-    const errorData: ErrorData = {
+const validationErrorData = (error: FastifyValidationError) => {
+    const errorData = buildErrorData(error, {
         errorCode: ErrorCode._400_BAD_REQUEST,
-        description: error.message,
-    }
-
-    const inputId = getInputId(error)
-    if (inputId) errorData.inputId = inputId
+        status: StatusCodes.BAD_REQUEST,
+    })
+    errorData.validationErrors = getValidationErrors(error)
 
     return errorData
 }
 
-const buildErrorData = (error: Error, apiError?: ApiError): ErrorData => ({
-    errorCode: apiError?.errorCode ?? ErrorCode._500_INTERNAL_SERVER_ERROR,
-    description: error.message,
-})
+const buildErrorData = (error: Error, apiError?: ApiError): ErrorData => {
+    const status = apiError?.status ?? StatusCodes.INTERNAL_SERVER_ERROR
+
+    return {
+        type: httpErrorsRfcType(status),
+        title: apiError?.errorCode ?? ErrorCode._500_INTERNAL_SERVER_ERROR,
+        detail: error.message,
+        status,
+    }
+}
