@@ -1,23 +1,36 @@
-import { BadRequestError, ConflictError } from '@libs/fastify-utils'
+import { ApiErrorMappings } from '@libs/api-errors'
+import { ErrorCode } from '@libs/models'
+import { StatusCodes } from 'http-status-codes'
 
-export class ForceChangePasswordError extends ConflictError {
+export class ForceChangePasswordError extends Error {
     constructor() {
-        super(new Error('The user must change the password before login'))
+        super('The user must change the password before login')
     }
 }
 
-export class WrongEmailOrPasswordError extends BadRequestError {
+export class WrongEmailOrPasswordError extends Error {
     constructor() {
-        super(new Error('The user entered a wrong email or password'))
+        super('The user entered a wrong email or password')
     }
 }
 
-export class PasswordFormatError extends BadRequestError {
+export class PasswordFormatError extends Error {
     constructor() {
-        super(
-            new Error(
-                'Password must satisfy regular expression pattern: ^\\S.*\\S$',
-            ),
-        )
+        super('Password must satisfy regular expression pattern: ^\\S.*\\S$')
     }
 }
+
+export const authRoutesErrors = (): ApiErrorMappings => ({
+    [ForceChangePasswordError.name]: () => ({
+        errorCode: ErrorCode._400_BAD_REQUEST,
+        status: StatusCodes.BAD_REQUEST,
+    }),
+    [WrongEmailOrPasswordError.name]: () => ({
+        errorCode: ErrorCode._401_UNAUTHORIZED_NOT_AUTHENTICATED,
+        status: StatusCodes.UNAUTHORIZED,
+    }),
+    [PasswordFormatError.name]: () => ({
+        errorCode: ErrorCode._400_BAD_REQUEST,
+        status: StatusCodes.BAD_REQUEST,
+    }),
+})

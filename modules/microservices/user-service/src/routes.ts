@@ -1,54 +1,48 @@
 import {
     RoutesHandlerMapping,
-    completeForceChangePasswordChallengeRoute,
-    createUserRoute,
-    getUserProfileRoute,
-    getUsersRoute,
-    loginRoute,
-    resendSignupConfirmationRoute,
-    resetPasswordRoute,
-    updateUserCredentialsRoute,
-    updateUserProfileRoute,
+    completeForceChangePasswordChallengeRouteConfig,
+    createUserRouteConfig,
+    getUserProfileRouteConfig,
+    getUsersRouteConfig,
+    loginRouteConfig,
+    resendSignupConfirmationRouteConfig,
+    resetPasswordRouteConfig,
+    updateUserCredentialsRouteConfig,
+    updateUserProfileRouteConfig,
 } from '@libs/fastify-utils'
-import { AdminController } from './admin/admin.controller'
-import { AuthController } from './auth/auth.controller'
-import { ProfileController } from './profile/profile.controller'
-import { AppComponents } from './utils/components'
+import { createUser, getUsers } from './admin/admin.controller'
+import {
+    completeForceChangePasswordChallenge,
+    login,
+    resendSignupConfirmation,
+    resetPassword,
+    updateUserCredentials,
+} from './auth/auth.controller'
+import { getUserProfile, updateUserProfile } from './profile/profile.controller'
 
-export function createRoutes(components: AppComponents): RoutesHandlerMapping {
-    const { adminManager, authManager, userManager } = components
-    const adminController = new AdminController(adminManager)
-    const authController = new AuthController(
-        authManager,
-        adminManager,
-        userManager,
-    )
-    const profileController = new ProfileController(adminManager, userManager)
-
-    return [
-        {
-            config: completeForceChangePasswordChallengeRoute,
-            handler: authController.completeForceChangePasswordChallenge,
-        },
-        { config: createUserRoute, handler: adminController.createUser },
-        {
-            config: getUserProfileRoute,
-            handler: profileController.getUserProfile,
-        },
-        { config: getUsersRoute, handler: adminController.getUsers },
-        { config: loginRoute, handler: authController.login },
-        {
-            config: resendSignupConfirmationRoute,
-            handler: authController.resendSignupConfirmation,
-        },
-        { config: resetPasswordRoute, handler: authController.resetPassword },
-        {
-            config: updateUserCredentialsRoute,
-            handler: authController.updateUserCredentials,
-        },
-        {
-            config: updateUserProfileRoute,
-            handler: profileController.updateUserProfile,
-        },
-    ]
-}
+export const createRoutes = (): RoutesHandlerMapping => [
+    {
+        config: completeForceChangePasswordChallengeRouteConfig,
+        handler: completeForceChangePasswordChallenge,
+    },
+    { config: createUserRouteConfig, handler: createUser },
+    {
+        config: getUserProfileRouteConfig,
+        handler: getUserProfile,
+    },
+    { config: getUsersRouteConfig, handler: getUsers },
+    { config: loginRouteConfig, handler: login },
+    {
+        config: resendSignupConfirmationRouteConfig,
+        handler: resendSignupConfirmation,
+    },
+    { config: resetPasswordRouteConfig, handler: resetPassword },
+    {
+        config: updateUserCredentialsRouteConfig,
+        handler: updateUserCredentials,
+    },
+    {
+        config: updateUserProfileRouteConfig,
+        handler: updateUserProfile,
+    },
+]

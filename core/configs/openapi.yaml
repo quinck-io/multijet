@@ -1,524 +1,522 @@
 openapi: 3.1.0
 info:
-  description: Example Server api definition
-  version: 1.0.0
-  title: Multijet Example API
-  contact:
-    email: info@quinck.io
-  license:
-    name: Apache 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
+    description: Example Server api definition
+    version: 1.0.0
+    title: Multijet Example API
+    contact:
+        email: info@quinck.io
+    license:
+        name: Apache 2.0
+        url: http://www.apache.org/licenses/LICENSE-2.0.html
 tags:
-  - name: Example
-    description: Examples
+    - name: Example
+      description: Examples
 paths:
-  /auth/signup/forceChangePassword:
-    post:
-      tags:
-        - Authentication
-      summary: Complete force change password challenge
-      operationId: completeForceChangePasswordChallenge
-      security:
-        - apiKey: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ForceChangePassword"
-        required: true
-      responses:
-        "200":
-          description: Correctly logged in
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Login"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthenticated"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-  /auth/signup/resendConfirm:
-    post:
-      tags:
-        - Authentication
-      summary: Resend Signup Confirmation
-      operationId: resendSignupConfirmation
-      security:
-        - apiKey: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ResendConfirmSignup"
-        required: true
-      responses:
-        "204":
-          description: Confirmation sent
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthenticated"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-  /auth/login:
-    post:
-      tags:
-        - Authentication
-      summary: Log a specific user into the system
-      operationId: login
-      security:
-        - apiKey: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/NewLogin"
-        required: true
-      responses:
-        "200":
-          description: Correctly logged in
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Login"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthenticated"
-        "409":
-          $ref: "#/components/responses/Conflict"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-  /auth/resetPassword:
-    post:
-      tags:
-        - Authentication
-      summary: Reset password operation
-      operationId: resetPassword
-      security:
-        - apiKey: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ResetPassword"
-        required: true
-      responses:
-        "204":
-          description: Password changed
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-  /profile:
-    patch:
-      tags:
-        - Profile
-      summary: Update user profile
-      operationId: updateUserProfile
-      security:
-        - apiKey: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UpdateUserProfile"
-        required: true
-      responses:
-        "204":
-          description: User profile updated
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthenticated"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-    get:
-      tags:
-        - Profile
-      summary: Get user's profile
-      operationId: getUserProfile
-      security:
-        - apiKey: []
-      responses:
-        "200":
-          description: User Profile retrived
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UserProfile"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthenticated"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-  /auth/credentials:
-    patch:
-      tags:
-        - Profile
-      summary: Update user credentials
-      operationId: updateUserCredentials
-      security:
-        - apiKey: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UpdateUserCredentials"
-        required: true
-      responses:
-        "200":
-          description: Credentials updated
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthenticated"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-  /users:
-    post:
-      tags:
-        - Users
-      summary: Create a new user
-      operationId: createUser
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/NewUser"
-        description: Created user object
-        required: true
-      responses:
-        "201":
-          description: User created
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthenticated"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "409":
-          description: A user with the same email or username already exists
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-    get:
-      tags:
-        - Users
-      summary: Search Users
-      operationId: getUsers
-      responses:
-        "200":
-          description: Users
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/PaginatedUsers"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthenticated"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "409":
-          description: A user with the same email or username already exists
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-  /hello-world:
-    get:
-      tags:
-        - Example
-      summary: Get hello world message
-      operationId: getHelloWorld
-      responses:
-        "200":
-          description: Users
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  hello:
-                    type: string
-        "401":
-          $ref: "#/components/responses/Unauthenticated"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
+    /auth/signup/forceChangePassword:
+        post:
+            tags:
+                - Authentication
+            summary: Complete force change password challenge
+            operationId: completeForceChangePasswordChallenge
+            security:
+                - apiKey: []
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/ForceChangePassword'
+                required: true
+            responses:
+                '200':
+                    description: Correctly logged in
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Login'
+                '400':
+                    $ref: '#/components/responses/BadRequest'
+                '401':
+                    $ref: '#/components/responses/Unauthenticated'
+                '500':
+                    $ref: '#/components/responses/InternalServerError'
+    /auth/signup/resendConfirm:
+        post:
+            tags:
+                - Authentication
+            summary: Resend Signup Confirmation
+            operationId: resendSignupConfirmation
+            security:
+                - apiKey: []
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/ResendConfirmSignup'
+                required: true
+            responses:
+                '204':
+                    description: Confirmation sent
+                '400':
+                    $ref: '#/components/responses/BadRequest'
+                '401':
+                    $ref: '#/components/responses/Unauthenticated'
+                '500':
+                    $ref: '#/components/responses/InternalServerError'
+    /auth/login:
+        post:
+            tags:
+                - Authentication
+            summary: Log a specific user into the system
+            operationId: login
+            security:
+                - apiKey: []
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/NewLogin'
+                required: true
+            responses:
+                '200':
+                    description: Correctly logged in
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Login'
+                '400':
+                    $ref: '#/components/responses/BadRequest'
+                '401':
+                    $ref: '#/components/responses/Unauthenticated'
+                '409':
+                    $ref: '#/components/responses/Conflict'
+                '500':
+                    $ref: '#/components/responses/InternalServerError'
+    /auth/resetPassword:
+        post:
+            tags:
+                - Authentication
+            summary: Reset password operation
+            operationId: resetPassword
+            security:
+                - apiKey: []
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/ResetPassword'
+                required: true
+            responses:
+                '204':
+                    description: Password changed
+                '400':
+                    $ref: '#/components/responses/BadRequest'
+                '500':
+                    $ref: '#/components/responses/InternalServerError'
+    /profile:
+        patch:
+            tags:
+                - Profile
+            summary: Update user profile
+            operationId: updateUserProfile
+            security:
+                - apiKey: []
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/UpdateUserProfile'
+                required: true
+            responses:
+                '204':
+                    description: User profile updated
+                '400':
+                    $ref: '#/components/responses/BadRequest'
+                '401':
+                    $ref: '#/components/responses/Unauthenticated'
+                '500':
+                    $ref: '#/components/responses/InternalServerError'
+        get:
+            tags:
+                - Profile
+            summary: Get user's profile
+            operationId: getUserProfile
+            security:
+                - apiKey: []
+            responses:
+                '200':
+                    description: User Profile retrived
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/UserProfile'
+                '400':
+                    $ref: '#/components/responses/BadRequest'
+                '401':
+                    $ref: '#/components/responses/Unauthenticated'
+                '403':
+                    $ref: '#/components/responses/Unauthorized'
+                '404':
+                    $ref: '#/components/responses/NotFound'
+    /auth/credentials:
+        patch:
+            tags:
+                - Profile
+            summary: Update user credentials
+            operationId: updateUserCredentials
+            security:
+                - apiKey: []
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/UpdateUserCredentials'
+                required: true
+            responses:
+                '200':
+                    description: Credentials updated
+                '400':
+                    $ref: '#/components/responses/BadRequest'
+                '401':
+                    $ref: '#/components/responses/Unauthenticated'
+                '500':
+                    $ref: '#/components/responses/InternalServerError'
+    /users:
+        post:
+            tags:
+                - Users
+            summary: Create a new user
+            operationId: createUser
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/NewUser'
+                description: Created user object
+                required: true
+            responses:
+                '201':
+                    description: User created
+                '400':
+                    $ref: '#/components/responses/BadRequest'
+                '401':
+                    $ref: '#/components/responses/Unauthenticated'
+                '403':
+                    $ref: '#/components/responses/Unauthorized'
+                '409':
+                    description: A user with the same email or username already exists
+                '500':
+                    $ref: '#/components/responses/InternalServerError'
+        get:
+            tags:
+                - Users
+            summary: Search Users
+            operationId: getUsers
+            responses:
+                '200':
+                    description: Users
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/PaginatedUsers'
+                '400':
+                    $ref: '#/components/responses/BadRequest'
+                '401':
+                    $ref: '#/components/responses/Unauthenticated'
+                '403':
+                    $ref: '#/components/responses/Unauthorized'
+                '409':
+                    description: A user with the same email or username already exists
+                '500':
+                    $ref: '#/components/responses/InternalServerError'
+    /hello-world:
+        get:
+            tags:
+                - Example
+            summary: Get hello world message
+            operationId: getHelloWorld
+            responses:
+                '200':
+                    description: Users
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    hello:
+                                        type: string
+                '401':
+                    $ref: '#/components/responses/Unauthenticated'
+                '403':
+                    $ref: '#/components/responses/Unauthorized'
+                '500':
+                    $ref: '#/components/responses/InternalServerError'
 security:
-  - apiKey: []
-  - userAuth: []
+    - apiKey: []
+    - userAuth: []
 components:
-  securitySchemes:
-    apiKey:
-      type: apiKey
-      in: header
-      name: api-key
-    userAuth:
-      type: http
-      scheme: bearer
-  responses:
-    NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/ErrorData"
-    Unauthenticated:
-      description: You are not authenticated
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/ErrorData"
-    Unauthorized:
-      description: You are authenticated but not authorized
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/ErrorData"
-    BadRequest:
-      description: The provided data are not acceptable
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/ErrorData"
-    Conflict:
-      description: The provided data are in conflict with stored data
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/ErrorData"
-    InternalServerError:
-      description: Internal Server Error
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/ErrorData"
-  parameters:
-    offset:
-      name: offset
-      in: query
-      schema:
-        type: integer
-        minimum: 0
-        default: 0
-      required: false
-      description: The number of items to be skipped.
-    limit:
-      name: limit
-      in: query
-      schema:
-        type: integer
-        minimum: 1
-        default: 10
-      required: false
-      description: |
-        The number of items to return.
+    securitySchemes:
+        apiKey:
+            type: apiKey
+            in: header
+            name: api-key
+        userAuth:
+            type: http
+            scheme: bearer
+    responses:
+        NotFound:
+            description: The specified resource was not found
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/ErrorData'
+        Unauthenticated:
+            description: You are not authenticated
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/ErrorData'
+        Unauthorized:
+            description: You are authenticated but not authorized
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/ErrorData'
+        BadRequest:
+            description: The provided data are not acceptable
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/ErrorData'
+        Conflict:
+            description: The provided data are in conflict with stored data
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/ErrorData'
+        InternalServerError:
+            description: Internal Server Error
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/ErrorData'
+    parameters:
+        offset:
+            name: offset
+            in: query
+            schema:
+                type: integer
+                minimum: 0
+                default: 0
+            required: false
+            description: The number of items to be skipped.
+        limit:
+            name: limit
+            in: query
+            schema:
+                type: integer
+                minimum: 1
+                default: 10
+            required: false
+            description: |
+                The number of items to return.
 
-        If not specified all the resulting 
-        items will be returned.
-    refreshToken:
-      name: refresh-token
-      in: header
-      description: The refresh token
-      required: true
-      schema:
-        type: string
-  schemas:
-    ErrorData:
-      type: object
-      description: Informations regarding a backend error
-      required:
-        - description
-        - errorCode
-      properties:
-        description:
-          type: string
-        errorCode:
-          $ref: "#/components/schemas/ErrorCode"
-        inputId:
-          type: string
-    ErrorCode:
-      type: string
-      description: |
-        4xx:
-          - client-side errors;
-
-        5xx:
-          - server-side errors;
-      enum:
-        - 400_BAD-REQUEST
-        - 401_UNAUTHORIZED-NOT-AUTHENTICATED
-        - 401_USER_NOT_CONFIRMED
-        - 401_UPDATE_CREDENTIALS_OLD_PASSWORD_WRONG
-        - 403_FORBIDDEN-NOT-AUTHORIZED
-        - 404_NOT-FOUND
-        - 404_USER_NOT_FOUND
-        - 409_CONFLICT
-        - 409_USER_ALREADY_EXISTS
-        - 413_PAYLOAD_TOO_LARGE
-        - 429_TOO-MANY-REQUESTS
-        - 500_INTERNAL-SERVER-ERROR
-        - 500_NOT-CREATED
-        - 500_NOT-UPDATED
-        - 500_NOT-DELETED
-        - 500_NOT-RETRIEVED
-        - 500_SEARCH-ERROR
-        - 500_USER_DATA_NOT_FOUND
-        - 501_NOT-IMPLEMENTED-ERROR
-    Paginated:
-      type: object
-      required:
-        - numberOfItems
-        - items
-      properties:
-        numberOfItems:
-          type: number
-          minimum: 0
-        items:
-          type: array
-          items:
+                If not specified all the resulting 
+                items will be returned.
+        refreshToken:
+            name: refresh-token
+            in: header
+            description: The refresh token
+            required: true
+            schema:
+                type: string
+    schemas:
+        ErrorData:
             type: object
-    HelloWorld:
-      type: object
-      required:
-        - helloWorld
-      properties:
-        helloWorld:
-          type: string
-    Email:
-      type: string
-      format: email
-    PhoneNumber:
-      type: string
-    Password:
-      type: string
-    ConfirmSignupByCode:
-      type: object
-      required:
-        - code
-      properties:
-        code:
-          type: string
-    ResendConfirmSignup:
-      type: object
-      properties:
-        email:
-          $ref: "#/components/schemas/Email"
-        phoneNumber:
-          $ref: "#/components/schemas/PhoneNumber"
-    ConfirmSignup:
-      type: object
-      properties:
-        confirmByCode:
-          $ref: "#/components/schemas/ConfirmSignupByCode"
-    ForceChangePassword:
-      allOf:
-        - $ref: "#/components/schemas/ResetPassword"
-    Login:
-      type: object
-      required:
-        - userId
-        - authorization
-        - refresh
-      properties:
-        userId:
-          type: string
-        authorization:
-          type: string
-        refresh:
-          type: string
-    Signup:
-      allOf:
-        - $ref: "#/components/schemas/NewUser"
-        - type: object
-          required:
-            - password
-          properties:
-            password:
-              $ref: "#/components/schemas/Password"
-    NewUser:
-      type: object
-      required:
-        - email
-      properties:
-        email:
-          $ref: "#/components/schemas/Email"
-    NewLogin:
-      type: object
-      required:
-        - email
-        - password
-      properties:
-        email:
-          $ref: "#/components/schemas/Email"
-        password:
-          $ref: "#/components/schemas/Password"
-    ForgotPassword:
-      type: object
-      required:
-        - email
-      properties:
-        email:
-          $ref: "#/components/schemas/Email"
-    ResetPassword:
-      type: object
-      required:
-        - email
-        - temporaryPassword
-        - newPassword
-      properties:
-        email:
-          $ref: "#/components/schemas/Email"
-        temporaryPassword:
-          $ref: "#/components/schemas/Password"
-        newPassword:
-          $ref: "#/components/schemas/Password"
-    User:
-      type: object
-      required:
-        - userId
-        - email
-      properties:
-        userId:
-          type: string
-        email:
-          $ref: "#/components/schemas/Email"
-    UserProfile:
-      allOf:
-        - $ref: "#/components/schemas/User"
-    UpdateUserProfile:
-      type: object
-    PaginatedUsers:
-      allOf:
-        - $ref: "#/components/schemas/Paginated"
-        - type: object
-          required:
-            - items
-          properties:
-            items:
-              type: array
-              items:
-                $ref: "#/components/schemas/User"
-    UpdateUserCredentials:
-      type: object
-      required:
-        - oldPassword
-        - newPassword
-      properties:
-        oldPassword:
-          $ref: "#/components/schemas/Password"
-        newPassword:
-          $ref: "#/components/schemas/Password"
+            description: Informations regarding a backend error
+            required:
+                - description
+                - errorCode
+            properties:
+                description:
+                    type: string
+                errorCode:
+                    $ref: '#/components/schemas/ErrorCode'
+                inputId:
+                    type: string
+        ErrorCode:
+            type: string
+            description: |
+                4xx:
+                  - client-side errors;
+
+                5xx:
+                  - server-side errors;
+            enum:
+                - 400_BAD-REQUEST
+                - 401_UNAUTHORIZED-NOT-AUTHENTICATED
+                - 401_USER_NOT_CONFIRMED
+                - 401_UPDATE_CREDENTIALS_OLD_PASSWORD_WRONG
+                - 403_FORBIDDEN-NOT-AUTHORIZED
+                - 404_NOT-FOUND
+                - 404_USER_NOT_FOUND
+                - 409_CONFLICT
+                - 409_USER_ALREADY_EXISTS
+                - 413_PAYLOAD_TOO_LARGE
+                - 429_TOO-MANY-REQUESTS
+                - 500_INTERNAL-SERVER-ERROR
+                - 500_NOT-CREATED
+                - 500_NOT-UPDATED
+                - 500_NOT-DELETED
+                - 500_NOT-RETRIEVED
+                - 500_SEARCH-ERROR
+                - 500_USER_DATA_NOT_FOUND
+                - 501_NOT-IMPLEMENTED-ERROR
+        Paginated:
+            type: object
+            required:
+                - numberOfItems
+                - items
+            properties:
+                numberOfItems:
+                    type: number
+                    minimum: 0
+                items:
+                    type: array
+        HelloWorld:
+            type: object
+            required:
+                - helloWorld
+            properties:
+                helloWorld:
+                    type: string
+        Email:
+            type: string
+            format: email
+        PhoneNumber:
+            type: string
+        Password:
+            type: string
+        ConfirmSignupByCode:
+            type: object
+            required:
+                - code
+            properties:
+                code:
+                    type: string
+        ResendConfirmSignup:
+            type: object
+            properties:
+                email:
+                    $ref: '#/components/schemas/Email'
+                phoneNumber:
+                    $ref: '#/components/schemas/PhoneNumber'
+        ConfirmSignup:
+            type: object
+            properties:
+                confirmByCode:
+                    $ref: '#/components/schemas/ConfirmSignupByCode'
+        ForceChangePassword:
+            allOf:
+                - $ref: '#/components/schemas/ResetPassword'
+        Login:
+            type: object
+            required:
+                - userId
+                - authorization
+                - refresh
+            properties:
+                userId:
+                    type: string
+                authorization:
+                    type: string
+                refresh:
+                    type: string
+        Signup:
+            allOf:
+                - $ref: '#/components/schemas/NewUser'
+                - type: object
+                  required:
+                      - password
+                  properties:
+                      password:
+                          $ref: '#/components/schemas/Password'
+        NewUser:
+            type: object
+            required:
+                - email
+            properties:
+                email:
+                    $ref: '#/components/schemas/Email'
+        NewLogin:
+            type: object
+            required:
+                - email
+                - password
+            properties:
+                email:
+                    $ref: '#/components/schemas/Email'
+                password:
+                    $ref: '#/components/schemas/Password'
+        ForgotPassword:
+            type: object
+            required:
+                - email
+            properties:
+                email:
+                    $ref: '#/components/schemas/Email'
+        ResetPassword:
+            type: object
+            required:
+                - email
+                - temporaryPassword
+                - newPassword
+            properties:
+                email:
+                    $ref: '#/components/schemas/Email'
+                temporaryPassword:
+                    $ref: '#/components/schemas/Password'
+                newPassword:
+                    $ref: '#/components/schemas/Password'
+        User:
+            type: object
+            required:
+                - userId
+                - email
+            properties:
+                userId:
+                    type: string
+                email:
+                    $ref: '#/components/schemas/Email'
+        UserProfile:
+            allOf:
+                - $ref: '#/components/schemas/User'
+        UpdateUserProfile:
+            type: object
+        PaginatedUsers:
+            allOf:
+                - $ref: '#/components/schemas/Paginated'
+                - type: object
+                  required:
+                      - items
+                  properties:
+                      items:
+                          type: array
+                          items:
+                              $ref: '#/components/schemas/User'
+        UpdateUserCredentials:
+            type: object
+            required:
+                - oldPassword
+                - newPassword
+            properties:
+                oldPassword:
+                    $ref: '#/components/schemas/Password'
+                newPassword:
+                    $ref: '#/components/schemas/Password'
 servers:
-  - description: Development Server
-    url: https://dev-my-server.quinckdev.com
-  - description: Release Server
-    url: https://release-my-server.quinckdev.com
-  - description: Production Server
-    url: https://prod-my-server.quinckdev.com
+    - description: Development Server
+      url: https://dev-my-server.quinckdev.com
+    - description: Release Server
+      url: https://release-my-server.quinckdev.com
+    - description: Production Server
+      url: https://prod-my-server.quinckdev.com

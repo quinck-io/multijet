@@ -1,4 +1,4 @@
-import { UserProfile } from '@libs/fastify-utils'
+import { UserProfile } from '@libs/models'
 import { UserAttribute } from '@libs/user-manager'
 import { CompleteUserInfo } from '@quinck/aws-cognito-client'
 
