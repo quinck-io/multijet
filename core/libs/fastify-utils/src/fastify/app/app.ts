@@ -1,48 +1,45 @@
+import {
+    ApiErrorsLookupService,
+    createApiErrorsLookupService,
+} from '@libs/api-errors'
 import fastify, { FastifyInstance, FastifyServerOptions } from 'fastify'
-import { ErrorHandler } from '../../errors/api-error-handler/api-error-handler'
+import { apiErrorHandler } from '../../errors/api-error-handler/api-error-handler'
 import { DEFAULT_OPTIONS } from './app.consts'
 import { ApplicationOptions } from './app.models'
 import { decorateAppWithCors } from './cors.app'
 
-export type AppParams = {
-    apiErrorHandler: ErrorHandler
-}
-
-export type AppFactory = (
-    fastifyOptions?: FastifyServerOptions,
+export const defaultApp = (
+    fastifyOptions: FastifyServerOptions = DEFAULT_OPTIONS,
     appOptions?: ApplicationOptions,
-) => FastifyInstance
+    apiErrorsLookupService: ApiErrorsLookupService = createApiErrorsLookupService(),
+) => {
+    const app = fastify(fastifyOptions)
 
-export const defaultApp =
-    ({ apiErrorHandler }: AppParams): AppFactory =>
-    (fastifyOptions = DEFAULT_OPTIONS, appOptions) => {
-        const app = fastify(fastifyOptions)
+    app.addHook('onSend', async (request, reply, payload) => {
+        return payload == 'null' ? '' : payload // TODO: the bug of empty returns in fastify has been fixed, this can be removed
+    })
 
-        app.addHook('onSend', async (request, reply, payload) => {
-            return payload == 'null' ? '' : payload // TODO: the bug of empty returns in fastify has been fixed, this can be removed
-        })
+    app.setErrorHandler(apiErrorHandler(apiErrorsLookupService))
 
-        app.setErrorHandler(apiErrorHandler)
+    app.addContentTypeParser(
+        'application/json',
+        { parseAs: 'string' },
+        (_, body: string, done) => {
+            try {
+                const isBodyEmpty =
+                    body == undefined || body == null || body == ''
+                if (isBodyEmpty) done(null)
+                else done(null, JSON.parse(body))
+            } catch (err) {
+                done(err as Error, null)
+            }
+        },
+    )
 
-        app.addContentTypeParser(
-            'application/json',
-            { parseAs: 'string' },
-            (_, body: string, done) => {
-                try {
-                    const isBodyEmpty =
-                        body == undefined || body == null || body == ''
-                    if (isBodyEmpty) done(null)
-                    else done(null, JSON.parse(body))
-                } catch (err) {
-                    done(err as Error, null)
-                }
-            },
-        )
+    applyApplicationOptions(app, appOptions)
 
-        applyApplicationOptions(app, appOptions)
-
-        return app
-    }
+    return app
+}
 
 function applyApplicationOptions(
     app: FastifyInstance,

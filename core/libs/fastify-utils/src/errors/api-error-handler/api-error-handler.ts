@@ -1,7 +1,4 @@
-import {
-    ApiErrorInformation,
-    ApiErrorsInformationLookupService,
-} from '@libs/api-errors'
+import { ApiError, ApiErrorsLookupService } from '@libs/api-errors'
 import { ErrorCode, ErrorData } from '@libs/models'
 import { isPresent } from '@libs/utils'
 import { FastifyError, FastifyInstance } from 'fastify'
@@ -9,18 +6,14 @@ import { StatusCodes } from 'http-status-codes'
 
 export type ErrorHandler = Parameters<FastifyInstance['setErrorHandler']>[0]
 
-export type ErrorHandlerParams = {
-    apiErrorsInformationLookupService: ApiErrorsInformationLookupService
-}
-
-export const apiErrorHandler = (params: ErrorHandlerParams): ErrorHandler =>
+export const apiErrorHandler = (
+    apiErrorsLookupService: ApiErrorsLookupService,
+): ErrorHandler =>
     function (error, request, reply) {
         this.log.error(error)
 
-        const { apiErrorsInformationLookupService } = params
-
         const [statusCode, errorData] = errorResponseInformation(
-            apiErrorsInformationLookupService,
+            apiErrorsLookupService,
             error,
         )
 
@@ -28,7 +21,7 @@ export const apiErrorHandler = (params: ErrorHandlerParams): ErrorHandler =>
     }
 
 const errorResponseInformation = (
-    apiErrorsInformationLookupService: ApiErrorsInformationLookupService,
+    apiErrorsLookupService: ApiErrorsLookupService,
     optionalError?: Error,
 ): [StatusCodes, ErrorData] => {
     const error = optionalError ?? Error()
@@ -41,13 +34,12 @@ const errorResponseInformation = (
 
     // TODO: add different handling for operational and non operation errors?
 
-    if (apiErrorsInformationLookupService.hasMapping(error.name)) {
-        const apiErrorInformationParser =
-            apiErrorsInformationLookupService.getParser(error.name)
-        const apiErrorInformation = apiErrorInformationParser(error)
-        const errorData = buildErrorData(error, apiErrorInformation)
+    if (apiErrorsLookupService.hasMapping(error.name)) {
+        const apiErrorParser = apiErrorsLookupService.getParser(error.name)
+        const apiError = apiErrorParser(error)
+        const errorData = buildErrorData(error, apiError)
 
-        return [apiErrorInformation.status, errorData]
+        return [apiError.status, errorData]
     }
 
     const errorData = buildErrorData(error)
@@ -69,12 +61,8 @@ function validationErrorData(error: FastifyError): ErrorData {
     return errorData
 }
 
-const buildErrorData = (
-    error: Error,
-    apiErrorInformation?: ApiErrorInformation,
-): ErrorData => ({
-    errorCode:
-        apiErrorInformation?.errorCode ?? ErrorCode._500_INTERNAL_SERVER_ERROR,
+const buildErrorData = (error: Error, apiError?: ApiError): ErrorData => ({
+    errorCode: apiError?.errorCode ?? ErrorCode._500_INTERNAL_SERVER_ERROR,
     description: error.message,
 })
 

@@ -1,39 +1,22 @@
-import {
-    FastifyUtilsComponents,
-    fastifyUtilsContainer,
-} from '@libs/fastify-utils'
-import { getEnvironment } from '@libs/utils'
-import {
-    AwilixContainer,
-    asClass,
-    asFunction,
-    asValue,
-    createContainer,
-} from 'awilix'
-import { AppFactory, createApp } from './app'
-import { HelloController } from './hello/hello.controller'
-import { RoutesFactory, createRoutes } from './routes'
-import { Environment, JoiEnvironmentValidationSchema } from './utils/env'
+import { AwilixContainer, asFunction, asValue, createContainer } from 'awilix'
 
-export type AppComponents = FastifyUtilsComponents & {
-    message: string
-    helloController: HelloController
-    createRoutes: RoutesFactory
-    createApp: AppFactory
-    environment: Environment
+declare module 'fastify' {
+    interface FastifyRequest {
+        services: AppServices
+    }
 }
 
-export function appContainer(): AwilixContainer<AppComponents> {
-    const fastifyUtils = fastifyUtilsContainer()
+export type AppServices = {
+    message: string
+    dateTime: Date
+}
 
-    const container = createContainer<AppComponents>({}, fastifyUtils)
+export function appContainer(): AwilixContainer<AppServices> {
+    const container = createContainer<AppServices>()
 
     container.register({
-        environment: asValue(getEnvironment(JoiEnvironmentValidationSchema)),
         message: asValue('world'),
-        helloController: asClass(HelloController).scoped(),
-        createRoutes: asFunction<RoutesFactory>(createRoutes).singleton(),
-        createApp: asFunction<AppFactory>(createApp).singleton(),
+        dateTime: asFunction(() => new Date()),
     })
 
     return container
