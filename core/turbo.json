@@ -1,6 +1,8 @@
 {
     "pipeline": {
-        "typecheck": {},
+        "typecheck": {
+            "dependsOn": ["^typecheck", "openapi:generate"]
+        },
         "build": {
             "dependsOn": ["^build", "typecheck"],
             "outputs": ["dist/**"]
