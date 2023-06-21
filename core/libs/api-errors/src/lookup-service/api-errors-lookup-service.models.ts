@@ -1,6 +1,28 @@
-import { ErrorIdentifier } from '@libs/errors'
 import { ErrorCode } from '@libs/models'
 import { StatusCodes } from 'http-status-codes'
+
+/**
+ * Semantic type to represent the identifier of an error.
+ */
+export type ErrorIdentifier = string
+
+/**
+ * Semantic type to represent the additional information of a rest api error.
+ */
+export type ApiError = {
+    errorCode: ErrorCode
+    status: StatusCodes
+}
+
+/**
+ * Semantic type to represent the parser of an error.
+ */
+export type ApiErrorParser = (error: Error) => ApiError
+
+/**
+ * Semantic type to represent the mappings between errors and the additional information they should provide in api response.
+ */
+export type ApiErrorMappings = Record<ErrorIdentifier, ApiErrorParser>
 
 /**
  * Encapsulate the logic of maintaing mappings between
@@ -25,12 +47,3 @@ export interface ApiErrorsLookupService {
      */
     hasMapping(identifier: ErrorIdentifier): boolean
 }
-
-export type ApiError = {
-    errorCode: ErrorCode
-    status: StatusCodes
-}
-
-export type ApiErrorParser = (error: Error) => ApiError
-
-export type ApiErrorMappings = Record<ErrorIdentifier, ApiErrorParser>

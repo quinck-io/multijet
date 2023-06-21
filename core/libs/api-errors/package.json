@@ -9,9 +9,5 @@
         "lint": "eslint .",
         "test": "mocha",
         "clean": "rm -rf .turbo node_modules"
-    },
-    "dependencies": {
-        "@libs/errors": "*",
-        "http-status-codes": "^2.2.0"
     }
 }
