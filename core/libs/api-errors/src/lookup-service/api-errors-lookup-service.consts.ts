@@ -7,6 +7,6 @@ import { ApiErrorParser } from './api-errors-lookup-service.models'
  * @returns the parser to be used to retrieve error information
  */
 export const defualtApiErrorParser: ApiErrorParser = () => ({
-    errorCode: ErrorCode._500_INTERNAL_SERVER_ERROR,
+    errorCode: ErrorCode.GENERIC,
     status: StatusCodes.INTERNAL_SERVER_ERROR,
 })

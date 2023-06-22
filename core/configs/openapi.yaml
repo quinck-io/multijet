@@ -387,32 +387,26 @@ components:
                   additionalProperties: true
         ErrorCode:
             type: string
-            description: |
-                4xx:
-                  - client-side errors;
-
-                5xx:
-                  - server-side errors;
             enum:
-                - 400_BAD-REQUEST
-                - 401_UNAUTHORIZED-NOT-AUTHENTICATED
-                - 401_USER_NOT_CONFIRMED
-                - 401_UPDATE_CREDENTIALS_OLD_PASSWORD_WRONG
-                - 403_FORBIDDEN-NOT-AUTHORIZED
-                - 404_NOT-FOUND
-                - 404_USER_NOT_FOUND
-                - 409_CONFLICT
-                - 409_USER_ALREADY_EXISTS
-                - 413_PAYLOAD_TOO_LARGE
-                - 429_TOO-MANY-REQUESTS
-                - 500_INTERNAL-SERVER-ERROR
-                - 500_NOT-CREATED
-                - 500_NOT-UPDATED
-                - 500_NOT-DELETED
-                - 500_NOT-RETRIEVED
-                - 500_SEARCH-ERROR
-                - 500_USER_DATA_NOT_FOUND
-                - 501_NOT-IMPLEMENTED-ERROR
+                # Generic errors
+                - GENERIC
+                - NOT_IMPLEMENTED
+                - VALIDATION
+                # Auth errors
+                - UNAUTHORIZED_NOT_AUTHENTICATED
+                - FORBIDDEN_NOT_AUTHORIZED
+                - USER_NOT_CONFIRMED
+                - UPDATE_CREDENTIALS_OLD_PASSWORD_WRONG
+                - USER_NOT_FOUND
+                - USER_ALREADY_EXISTS
+                # Generic resources operation errors
+                - RESOURCE_NOT_CREATED
+                - RESOURCE_NOT_UPDATED
+                - RESOURCE_NOT_DELETED
+                - RESOURCE_NOT_RETRIEVED
+                - RESOURCES_SEARCH_ERROR
+                # Application specific errors
+                # - PET_NOT_FOUND # Example
         Paginated:
             type: object
             required:

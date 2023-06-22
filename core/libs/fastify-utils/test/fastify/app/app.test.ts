@@ -1,16 +1,17 @@
+import { ErrorCode, ErrorData } from '@libs/models'
 import { expect } from 'chai'
 import { StatusCodes } from 'http-status-codes'
 import 'mocha'
-import { defaultApp, ErrorCode, ErrorData } from '../../../src'
+import { defaultApp } from '../../../src'
 import { FASTIFY_UTILS } from '../../labels'
 import {
+    MOCK_BODY,
     bodyCheckedPath,
     bodyPath,
     errorPath,
     genericError,
     getApp,
     getBody,
-    MOCK_BODY,
     noLoggerOpt,
     nullPath,
     requestBodyRequiredProperty,
@@ -79,25 +80,21 @@ describe(`${FASTIFY_UTILS} fastify app app defaultApp`, () => {
                 expect(response.statusCode).to.be.equal(StatusCodes.BAD_REQUEST)
             })
 
-            it(`should reply with a body including ${ErrorCode._400_BAD_REQUEST} as errorCode`, async () => {
+            it(`should reply with a body including ${ErrorCode.VALIDATION} as title`, async () => {
                 const app = getApp()
                 const response = await app.inject().post(bodyCheckedPath)
                 const errorData = JSON.parse(response.body) as ErrorData
-                expect(errorData.errorCode).to.be.equal(
-                    ErrorCode._400_BAD_REQUEST,
-                )
+                expect(errorData.title).to.be.equal(ErrorCode.VALIDATION)
             })
 
-            it('should reply with a body including the property that did not passed the validation in the description', async () => {
+            it('should reply with a body including the property that did not passed the validation in the detail', async () => {
                 const app = getApp()
                 const response = await app
                     .inject()
                     .post(bodyCheckedPath)
                     .body({})
                 const errorData = JSON.parse(response.body) as ErrorData
-                expect(errorData.description).to.include(
-                    requestBodyRequiredProperty,
-                )
+                expect(errorData.detail).to.include(requestBodyRequiredProperty)
             })
         })
 
@@ -110,20 +107,18 @@ describe(`${FASTIFY_UTILS} fastify app app defaultApp`, () => {
                 )
             })
 
-            it(`should reply with a body including ${ErrorCode._500_INTERNAL_SERVER_ERROR} as errorCode`, async () => {
+            it(`should reply with a body including ${ErrorCode.GENERIC} as title`, async () => {
                 const app = getApp()
                 const response = await app.inject().get(errorPath)
                 const errorData = JSON.parse(response.body) as ErrorData
-                expect(errorData.errorCode).to.be.equal(
-                    ErrorCode._500_INTERNAL_SERVER_ERROR,
-                )
+                expect(errorData.title).to.be.equal(ErrorCode.GENERIC)
             })
 
-            it('should reply with a body including the error message in the description', async () => {
+            it('should reply with a body including the error message in the detail', async () => {
                 const app = getApp()
                 const response = await app.inject().get(errorPath)
                 const errorData = JSON.parse(response.body) as ErrorData
-                expect(errorData.description).to.be.equal(genericError.message)
+                expect(errorData.detail).to.be.equal(genericError.message)
             })
         })
     })

@@ -51,7 +51,7 @@ const errorResponseInformation = (
 
 const validationErrorData = (error: FastifyValidationError) => {
     const errorData = buildErrorData(error, {
-        errorCode: ErrorCode._400_BAD_REQUEST,
+        errorCode: ErrorCode.VALIDATION,
         status: StatusCodes.BAD_REQUEST,
     })
     errorData.validationErrors = getValidationErrors(error)
@@ -64,7 +64,7 @@ const buildErrorData = (error: Error, apiError?: ApiError): ErrorData => {
 
     return {
         type: httpErrorsRfcType(status),
-        title: apiError?.errorCode ?? ErrorCode._500_INTERNAL_SERVER_ERROR,
+        title: apiError?.errorCode ?? ErrorCode.GENERIC,
         detail: error.message,
         status,
     }

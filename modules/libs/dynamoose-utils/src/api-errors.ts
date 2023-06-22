@@ -9,15 +9,15 @@ import {
 
 export const dynamooseUtilsErrors = (): ApiErrorMappings => ({
     [MissingAttributesError.name]: () => ({
-        errorCode: ErrorCode._500_INTERNAL_SERVER_ERROR,
+        errorCode: ErrorCode.GENERIC,
         status: StatusCodes.INTERNAL_SERVER_ERROR,
     }),
     [MissingItemError.name]: () => ({
-        errorCode: ErrorCode._500_INTERNAL_SERVER_ERROR,
+        errorCode: ErrorCode.GENERIC,
         status: StatusCodes.INTERNAL_SERVER_ERROR,
     }),
     [NonValidCommandOutputError.name]: () => ({
-        errorCode: ErrorCode._500_INTERNAL_SERVER_ERROR,
+        errorCode: ErrorCode.GENERIC,
         status: StatusCodes.INTERNAL_SERVER_ERROR,
     }),
 })
