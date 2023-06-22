@@ -1,49 +1,37 @@
 import { formatUserToken, Handlers, userIdFromToken } from '@libs/fastify-utils'
 import { Login } from '@libs/models'
-import {
-    ForceChangePasswordException,
-    WrongUsernameOrPasswordError,
-} from '@libs/user-manager'
 import { StatusCodes } from 'http-status-codes'
-import {
-    ForceChangePasswordError,
-    WrongEmailOrPasswordError,
-} from './auth.errors'
 import { AuthManagerLogin } from './auth.models'
 
 export const login: Handlers['login'] = async request => {
     const { authManager } = request.services
-    return handleUserManagerOperation(async () => {
-        const { email, password } = request.body
-        const { idToken, refreshToken } = await authManager.login({
-            username: email,
-            password,
-        })
-        return {
-            authorization: idToken,
-            refresh: refreshToken,
-            userId: userIdFromToken(idToken),
-        }
+    const { email, password } = request.body
+    const { idToken, refreshToken } = await authManager.login({
+        username: email,
+        password,
     })
+    return {
+        authorization: idToken,
+        refresh: refreshToken,
+        userId: userIdFromToken(idToken),
+    }
 }
 
 export const completeForceChangePasswordChallenge: Handlers['completeForceChangePasswordChallenge'] =
     async request => {
         const { authManager, adminManager } = request.services
-        return handleUserManagerOperation(async () => {
-            const { email, newPassword, temporaryPassword } = request.body
-            const tokens = await authManager.login(
-                {
-                    username: email,
-                    password: temporaryPassword,
-                },
-                { forceChangePassword: { password: newPassword } },
-            )
-            const userId = userIdFromToken(tokens.idToken)
-            await adminManager.forceEmailVerification(userId)
+        const { email, newPassword, temporaryPassword } = request.body
+        const tokens = await authManager.login(
+            {
+                username: email,
+                password: temporaryPassword,
+            },
+            { forceChangePassword: { password: newPassword } },
+        )
+        const userId = userIdFromToken(tokens.idToken)
+        await adminManager.forceEmailVerification(userId)
 
-            return formatLogin(tokens)
-        })
+        return formatLogin(tokens)
     }
 
 export const resetPassword: Handlers['resetPassword'] = async (
@@ -91,20 +79,6 @@ export const updateUserCredentials: Handlers['updateUserCredentials'] = async (
     )
 
     reply.statusCode = StatusCodes.NO_CONTENT
-}
-
-export const handleUserManagerOperation = async <X>(
-    fun: () => Promise<X>,
-): Promise<X> => {
-    try {
-        return await fun()
-    } catch (error) {
-        if (error instanceof ForceChangePasswordException)
-            throw new ForceChangePasswordError()
-        if (error instanceof WrongUsernameOrPasswordError)
-            throw new WrongEmailOrPasswordError()
-        throw error
-    }
 }
 
 export const formatLogin = ({

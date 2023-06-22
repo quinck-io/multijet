@@ -9,6 +9,8 @@
         "lint": "eslint ."
     },
     "dependencies": {
+        "@libs/api-errors": "*",
+        "@libs/models": "*",
         "@libs/utils": "^0.0.1",
         "dynamoose": "^3.1.0",
         "dynamoose-logger": "^3.1.0"
