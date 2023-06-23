@@ -1,53 +1,30 @@
-import fastify, { FastifyInstance, FastifyServerOptions } from 'fastify'
-import { StatusCodes } from 'http-status-codes'
-import openapiFile from '../../../../../configs/openapi.json'
-import { ErrorCode, ErrorData } from '../../generated/openapi'
-import { Handlers } from '../../generated/openapi/handlers'
 import {
-    FastifyValidationErrorWithMissingProps,
-    getInputId,
-} from '../../input-validation/input-validation'
+    ApiErrorsLookupService,
+    createApiErrorsLookupService,
+} from '@libs/api-errors'
+import fastify, { FastifyInstance, FastifyServerOptions } from 'fastify'
+import { apiErrorHandler } from '../../errors/api-error-handler/api-error-handler'
 import { DEFAULT_OPTIONS } from './app.consts'
 import { ApplicationOptions } from './app.models'
 import { decorateAppWithCors } from './cors.app'
 
-export function defaultApp(
-    handlers: Handlers,
+export const defaultApp = (
     fastifyOptions: FastifyServerOptions = DEFAULT_OPTIONS,
     appOptions?: ApplicationOptions,
-): FastifyInstance {
-    const app: FastifyInstance = fastify(fastifyOptions)
+    apiErrorsLookupService: ApiErrorsLookupService = createApiErrorsLookupService(),
+) => {
+    const app = fastify(fastifyOptions)
 
     app.addHook('onSend', async (request, reply, payload) => {
-        return payload == 'null' ? '' : payload
+        return payload == 'null' ? '' : payload // TODO: the bug of empty returns in fastify has been fixed, this can be removed
     })
 
-    app.setErrorHandler(function (error, request, reply) {
-        if (error.validation) {
-            const validationError =
-                error as FastifyValidationErrorWithMissingProps
-            const data: ErrorData = {
-                errorCode: ErrorCode._400_BAD_REQUEST,
-                description: validationError.message,
-            }
-            if (error.validation.length > 0) {
-                const inputId = getInputId(request, validationError)
-                if (inputId) data.inputId = inputId
-            }
-            reply.status(StatusCodes.BAD_REQUEST).send(data)
-        } else {
-            const data: ErrorData = {
-                errorCode: ErrorCode._500_INTERNAL_SERVER_ERROR,
-                description: error.message,
-            }
-            reply.status(StatusCodes.INTERNAL_SERVER_ERROR).send(data)
-        }
-    })
+    app.setErrorHandler(apiErrorHandler(apiErrorsLookupService))
 
     app.addContentTypeParser(
         'application/json',
         { parseAs: 'string' },
-        (req, body: string, done) => {
+        (_, body: string, done) => {
             try {
                 const isBodyEmpty =
                     body == undefined || body == null || body == ''
@@ -58,13 +35,6 @@ export function defaultApp(
             }
         },
     )
-
-    import('@quinck/fastify-openapi-glue').then(({ fastifyOpenapiGlue }) => {
-        app.register(fastifyOpenapiGlue, {
-            specification: openapiFile,
-            service: handlers,
-        })
-    })
 
     applyApplicationOptions(app, appOptions)
 
@@ -80,7 +50,7 @@ function applyApplicationOptions(
 
         decorateAppWithCors(app, cors)
 
-        if (healthCheck) app.all(healthCheck.path, async () => null)
+        if (healthCheck) app.all(healthCheck.path, (_, reply) => reply.send())
     }
     return app
 }

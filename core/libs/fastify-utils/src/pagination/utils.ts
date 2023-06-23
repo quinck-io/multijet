@@ -1,5 +1,5 @@
+import { Paginated } from '@libs/models'
 import { FastifyReply, FastifyRequest } from 'fastify'
-import { Paginated } from '../generated/openapi'
 import { defaultPaginatedMappers } from './mappers/defaults'
 import { AcceptHeader, BufferedDataMappers } from './mappers/models'
 import {
@@ -39,7 +39,7 @@ export function mapDataForBuffer<X>(
     return mapper ? mapper(data) : data
 }
 
-export function getPaginatedResult<Item>(
+export function getPaginatedResult<Item extends Paginated['items']>(
     params: GetPaginatedResultParams<Item>,
     bufferedDataMappers?: BufferedDataMappers<Paginated>,
 ): PaginatedResultOption {

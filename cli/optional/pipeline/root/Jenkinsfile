@@ -123,11 +123,16 @@ pipeline {
               environmentClass = "${RELEASE_ENV}"
             }
 
+          String stackName = "${configs.projectName}-${environment}"
+          String bucketName = "${configs.projectName}-sam"
+
           String envVariables = new StringBuilder()
             .append('[ ')
             .append(" { AWS_REGION, ${region} } ")
-            .append(" { PROJECT_NAME, ${configs.projectName} } ")
+            .append(", { PROJECT_NAME, ${configs.projectName} } ")
             .append(", { ENVIRONMENT, ${environment} } ")
+            .append(", { STACK_NAME, ${stackName} } ")
+            .append(", { S3_BUCKET, ${bucketName} } ")
             .append(", { ENVIRONMENT_CLASS, ${environmentClass} } ")
             .append(' ]')
 

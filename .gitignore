@@ -6,6 +6,9 @@
 .turbo
 .aws-sam
 .DS_Store
+.temp
+.cache
+*.env*
 # Node artifact files
 node_modules/
 dist/
@@ -51,3 +54,6 @@ Thumbs.db
 *.mov
 *.wmv
 
+# Generated files
+
+generated/

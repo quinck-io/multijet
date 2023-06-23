@@ -20,9 +20,10 @@
     ],
     "dependencies": {
         "chalk": "^5.2.0",
-        "execa": "^7.0.0",
-        "inquirer": "^9.1.4",
-        "ora": "^6.1.2",
-        "yaml": "^2.2.1"
+        "commander": "^10.0.1",
+        "execa": "^7.1.1",
+        "inquirer": "^9.2.6",
+        "ora": "^6.3.1",
+        "yaml": "^2.3.0"
     }
 }

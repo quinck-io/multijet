@@ -1,13 +1,6 @@
-import { BasicController, Handler } from '@libs/fastify-utils'
+import { Handlers } from '@libs/fastify-utils'
 
-export class HelloController extends BasicController {
-    constructor(private readonly message: string) {
-        super(HelloController.name)
-    }
-
-    public getHello: Handler<'getHelloWorld'> = this.tryDo(async () => {
-        return {
-            hello: this.message,
-        }
-    })
+export const getHello: Handlers['getHelloWorld'] = async request => {
+    const { message } = request.services
+    return { hello: message }
 }

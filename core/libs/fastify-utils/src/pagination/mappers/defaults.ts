@@ -1,4 +1,4 @@
-import { Paginated } from '../../generated/openapi'
+import { Paginated } from '@libs/models'
 import { BufferedDataMappersBuilder } from './BufferedDataMappersBuilder'
 import { AcceptHeader, BufferedDataMappers } from './models'
 

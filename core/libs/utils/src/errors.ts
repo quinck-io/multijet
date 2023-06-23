@@ -1,6 +1,8 @@
 import { isPresent } from './checks'
 
 export class BasicError extends Error {
+    name = BasicError.name
+
     constructor(error?: unknown) {
         super(BasicError.formatMessage(error))
     }
