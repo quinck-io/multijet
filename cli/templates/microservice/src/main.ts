@@ -1,8 +1,8 @@
-import { buildApp } from './app'
-import { createAppComponents } from './utils/components'
+import { createApp } from './app'
 
 async function bootstrap() {
-    const app = buildApp(createAppComponents())
+    const app = createApp()
+
     await app.listen({ port: 3000, host: '0.0.0.0' })
 }
 

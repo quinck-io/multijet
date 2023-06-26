@@ -1,9 +1,12 @@
-import { RoutesHandlerMapping, getHelloWorldRoute } from '@libs/fastify-utils'
-import { HelloController } from './hello/hello.controller'
-import { AppComponents } from './utils/components'
+import {
+    RoutesHandlerMapping,
+    getHelloWorldRouteConfig,
+} from '@libs/fastify-utils'
+import { getHello } from './hello/hello.controller'
 
-export function createRoutes(components: AppComponents): RoutesHandlerMapping {
-    const helloController = new HelloController(components.message)
-
-    return [{ config: getHelloWorldRoute, handler: helloController.getHello }]
-}
+export const createRoutes = (): RoutesHandlerMapping => [
+    {
+        config: getHelloWorldRouteConfig,
+        handler: getHello,
+    },
+]

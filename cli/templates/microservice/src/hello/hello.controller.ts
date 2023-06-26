@@ -1,9 +1,6 @@
 import { Handlers } from '@libs/fastify-utils'
 
-export class HelloController {
-    constructor(private readonly message: string) {}
-
-    public getHello: Handlers['getHelloWorld'] = async () => ({
-        hello: this.message,
-    })
+export const getHello: Handlers['getHelloWorld'] = async request => {
+    const { message } = request.services
+    return { hello: message }
 }

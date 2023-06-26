@@ -1,15 +1,18 @@
-import { defaultApp } from '@libs/fastify-utils'
-import { FastifyInstance, FastifyServerOptions } from 'fastify'
+import { defaultApp, diScope } from '@libs/fastify-utils'
+import { FastifyServerOptions } from 'fastify'
+import { appContainer } from './di-container'
 import { createRoutes } from './routes'
-import { AppComponents } from './utils/components'
 
-export function buildApp(
-    components: AppComponents,
-    opts?: FastifyServerOptions,
-): FastifyInstance {
+export const createApp = (opts?: FastifyServerOptions) => {
     const app = defaultApp(opts)
-    const routes = createRoutes(components)
-    routes.forEach(({ config, handler }) => app.route({ ...config, handler }))
+
+    diScope(app, appContainer(), request => {
+        request.services = request.scopedContainer.cradle
+    })
+
+    createRoutes().forEach(({ config, handler }) =>
+        app.route({ ...config, handler }),
+    )
 
     return app
 }

@@ -12,7 +12,7 @@
     },
     "dependencies": {
         "@fastify/aws-lambda": "^3.2.0",
-        "@libs/fastify-utils": "*",
-        "@libs/utils": "*"
+        "@libs/fastify-utils": "^0.0.1",
+        "@libs/utils": "^0.0.1"
     }
 }
