@@ -16,16 +16,18 @@
         "clean": "turbo run clean && rm -rf .aws-sam node_modules",
         "typecheck": "turbo run typecheck",
         "openapi:generate": "turbo run openapi:generate",
-        "presam:build": "npm run build",
+        "presam:build": "turbo run build -- -- lambda",
         "sam:build": "sam build -t deploy/aws/sam/template.yaml --parallel",
         "sam:generate-env": "npm run ts deploy/aws/scripts/create-json-env.ts .env deploy/aws/sam/.env.json",
         "presam:start": "npm run sam:build && npm run sam:generate-env",
-        "sam:start": "sam local start-api -t deploy/aws/sam/template.yaml --env-vars deploy/aws/sam/.env.json"
+        "sam:start": "sam local start-api -t deploy/aws/sam/template.yaml --env-vars deploy/aws/sam/.env.json",
+        "docker:build": "npm run ts deploy/docker/scripts/build-microservices.ts",
+        "docker:push": "npm run ts deploy/docker/scripts/push-microservices.ts"
     },
     "dependencies": {
-        "execa": "^7.1.1",
         "@quinck/collections": "^0.3.0",
         "awilix": "^8.0.1",
+        "execa": "^7.1.1",
         "fastify": "^4.18.0",
         "http-status-codes": "^2.2.0",
         "joi": "^17.9.2"
@@ -36,6 +38,8 @@
     },
     "packageManager": "npm@8.11.0",
     "devDependencies": {
+        "@aws-sdk/client-ecr": "^3.359.0",
+        "@aws-sdk/client-sts": "^3.359.0",
         "@tsconfig/node18": "^2.0.1",
         "@types/chai": "^4.3.5",
         "@types/mocha": "^10.0.1",
@@ -43,6 +47,7 @@
         "@typescript-eslint/eslint-plugin": "^5.60.0",
         "chai": "^4.3.7",
         "chai-as-promised": "^7.1.1",
+        "commander": "^11.0.0",
         "esbuild": "^0.18.5",
         "esbuild-plugin-copy": "^2.1.1",
         "esbuild-runner": "^2.2.2",

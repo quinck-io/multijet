@@ -1,64 +1,154 @@
 /* eslint-disable */
 
+import {
+    CreateRepositoryCommand,
+    DescribeRepositoriesCommand,
+    ECRClient,
+    Repository,
+} from '@aws-sdk/client-ecr'
+import { program } from 'commander'
 import { readdirSync } from 'fs'
 import path = require('path')
 
-const ENV = process.env.ENVIRONMENT
-const PROJECT_NAME = process.env.PROJECT_NAME
-const DOCKERFILE_PATH = path.join('..', '..', 'deploy', 'docker', 'Dockerfile')
-const DOCKER_PLATFORM = 'linux/amd64'
-
 const log = (label: string, text: string) => console.log(`${label}: ${text}`)
 
-async function buildMicroservice(name: string): Promise<void> {
+async function getRepositoryUri(
+    repoName: string,
+    awsRegion: string,
+): Promise<string> {
+    const client = new ECRClient({ region: awsRegion })
+
+    const command = new DescribeRepositoriesCommand({
+        repositoryNames: [repoName],
+    })
+
+    try {
+        const { repositories } = await client.send(command)
+        const { repositoryUri } = repositories[0]
+
+        console.log('Repository found:', repositoryUri)
+
+        return repositoryUri
+    } catch (error: unknown) {
+        console.error('Error describing repositories:', error)
+
+        if (
+            error instanceof Error &&
+            error.name == 'RepositoryNotFoundException'
+        ) {
+            const { repositoryUri } = await createECRRepository(
+                repoName,
+                awsRegion,
+            )
+
+            return repositoryUri
+        }
+
+        console.error('Error describing repositories:', error)
+        throw error
+    }
+}
+
+async function createECRRepository(
+    repositoryName: string,
+    awsRegion: string,
+): Promise<Repository> {
+    const client = new ECRClient({ region: awsRegion })
+
+    const command = new CreateRepositoryCommand({
+        repositoryName,
+    })
+
+    try {
+        const { repository } = await client.send(command)
+
+        console.log(
+            'Repository created successfully:',
+            repository.repositoryUri,
+        )
+
+        return repository
+    } catch (error) {
+        console.error('Error creating repository:', error)
+        throw error
+    }
+}
+
+const awsECRAccount = (repoUri: string, awsRegion: string) =>
+    `${repoUri.split('.')[0]}.dkr.ecr.${awsRegion}.amazonaws.com`
+
+const authenticateDockerClient = async (repoUri: string, awsRegion: string) => {
     const { execa } = await import('execa')
-    // const repoName = 'meddle/openvpn-client'
-    // const describeCommandOutput = execSync(
-    //     'aws ecr describe-repositories --repository-names ' + repoName,
-    // ).toString()
-    // const describeOutput = JSON.parse(describeCommandOutput)
 
-    // const repositoryUri = describeOutput.repositories
-    //     ? describeOutput.repositories.find(
-    //           repo => repo.repositoryName === repoName,
-    //       ).repositoryUri
-    //     : describeOutput.repository
+    const { stdout } = await execa('aws', [
+        'ecr',
+        'get-login-password',
+        '--region',
+        awsRegion,
+    ])
 
-    // if (!repositoryUri) throw new Error('cannot retrieve repository URI')
-    log(name, 'Build started')
+    const loginPassword = stdout.trim()
+    const awsAccount = awsECRAccount(repoUri, awsRegion)
 
     await execa(
         'docker',
-        [
-            'build',
-            '.',
-            '-f',
-            DOCKERFILE_PATH,
-            '-t',
-            `${PROJECT_NAME}/${name}:latest-${ENV}`,
-            `--platform=${DOCKER_PLATFORM}`,
-        ],
+        ['login', '--username', 'AWS', '--password-stdin', awsAccount],
         {
-            cwd: path.join('microservices', name),
+            input: loginPassword,
         },
     )
-    log(name, 'Image created')
 }
 
-async function buildAndPushMicroservices() {
-    if (!ENV || !PROJECT_NAME) {
-        console.error('One or more env variable is missing!')
-        process.exit(1)
-    }
+const pushDockerImage = async (target: string) => {
+    const { execa } = await import('execa')
 
-    const services = readdirSync('microservices')
-    console.log('STARTED DOCKER BUILD')
-    console.log('services to build:', services, '\n')
+    await execa('docker', ['push', target], {
+        stdio: 'inherit',
+    })
+}
 
-    const buildPromises = services.map(service => buildMicroservice(service))
-    await Promise.all(buildPromises)
+async function pushMicroservice(
+    microservice: string,
+    env: string,
+    projectName: string,
+    awsRegion: string,
+): Promise<void> {
+    const repoName = `${projectName}/${microservice}`
+    const imageTag = `latest-${env}`
+
+    const repositoryUri = await getRepositoryUri(repoName, awsRegion)
+
+    const target = `${repositoryUri}:${imageTag}`
+
+    log(microservice, 'Push started')
+
+    await authenticateDockerClient(repositoryUri, awsRegion)
+    await pushDockerImage(target)
+
+    log(microservice, 'Image pushed')
+}
+
+async function pushMicroservices(
+    env: string,
+    projectName: string,
+    awsRegion: string,
+) {
+    const microservices = readdirSync('microservices')
+
+    const pushPromises = microservices.map(microservice =>
+        pushMicroservice(microservice, env, projectName, awsRegion),
+    )
+    await Promise.all(pushPromises)
 
     console.log(`\nFinished in ${process.uptime().toFixed(2)} seconds`)
 }
 
-buildAndPushMicroservices()
+program
+    .argument('<env>', 'Environment')
+    .argument('<projectName>', 'Project name')
+    .action(async (env: string, projectName: string) => {
+        const { AWS_REGION } = process.env
+
+        await pushMicroservices(env, projectName, AWS_REGION)
+    })
+    .parse(process.argv)
