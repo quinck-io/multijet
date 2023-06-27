@@ -1,7 +1,7 @@
 {
     "pipeline": {
         "typecheck": {
-            "dependsOn": ["^typecheck", "openapi:generate"]
+            "dependsOn": ["^typecheck", "^openapi:generate"]
         },
         "build": {
             "dependsOn": ["^build", "typecheck"],
