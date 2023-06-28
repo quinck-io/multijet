@@ -1,4 +1,3 @@
-import { InternalServerError } from '@libs/fastify-utils'
 import {
     AuthService,
     CompletedCustomAuthChallengeResponse,
@@ -42,8 +41,7 @@ export class DummyAuthManager extends BasicMockService implements AuthService {
         userData: Credentials,
         additionalData?: LoginAdditionalData | undefined,
     ): Promise<UserToken> {
-        if (userData.password != DUMMY_USER_PAYLOAD.password)
-            throw new InternalServerError()
+        if (userData.password != DUMMY_USER_PAYLOAD.password) throw new Error()
         return this.throwErrorOrReturn(
             Promise.resolve({
                 accessToken: 'mockAccessToken',
@@ -54,7 +52,7 @@ export class DummyAuthManager extends BasicMockService implements AuthService {
     }
     refresh(token: RefreshAuthToken): Promise<UserToken> {
         if (token.refreshToken === mockWrongHeaders['refresh-token'])
-            throw new InternalServerError()
+            throw new Error()
         return this.throwErrorOrReturn(
             Promise.resolve({
                 accessToken: 'mockAccessToken',
@@ -79,8 +77,7 @@ export class DummyAuthManager extends BasicMockService implements AuthService {
         return this.throwErrorOrReturn(new Promise(resolve => resolve()))
     }
     resetPassword(data: ResetPasswordData): Promise<void> {
-        if (data.confirmationCode != DUMMY_CONFIRM_CODE)
-            throw new InternalServerError()
+        if (data.confirmationCode != DUMMY_CONFIRM_CODE) throw new Error()
         return this.throwErrorOrReturn(new Promise(resolve => resolve()))
     }
     initCustomAuthChallenge(
