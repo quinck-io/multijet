@@ -40,7 +40,6 @@
     "devDependencies": {
         "@aws-sdk/client-ecr": "^3.359.0",
         "@aws-sdk/client-sts": "^3.359.0",
-        "@tsconfig/node18": "^2.0.1",
         "@types/chai": "^4.3.5",
         "@types/mocha": "^10.0.1",
         "@types/node": "^18.16.1",
