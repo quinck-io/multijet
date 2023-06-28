@@ -1,8 +1,7 @@
 import { StatusCodes } from 'http-status-codes'
 
 export const httpErrorsRfcType = (status: StatusCodes): string => {
-    const pippo: StatusCodes = status
-    switch (pippo) {
+    switch (status) {
         case StatusCodes.CONTINUE:
             return 'https://datatracker.ietf.org/doc/html/rfc7231#section-6.2.1'
         case StatusCodes.SWITCHING_PROTOCOLS:
