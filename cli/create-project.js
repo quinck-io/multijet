@@ -19,8 +19,6 @@ import { applyOptionalModules } from './helper/optional-scaffolder.js'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
-const CURRENT_USER_DIR = process.cwd()
-
 /**
  * Creates a new project based on user's inputs.
  *
@@ -31,16 +29,15 @@ const CURRENT_USER_DIR = process.cwd()
  * @throws Will throw an error if the creation of the project fails.
  */
 async function createProject(projectName, answers) {
-    const { modulesIncluded, initializeGit } = answers
+    const { modulesIncluded, initializeGit, projectDir } = answers
 
-    const projectDir = path.join(CURRENT_USER_DIR, projectName)
     const coreFilesPath = path.join(__dirname, '..', 'core')
     const optionalDir = path.join(__dirname, 'optional')
 
     const spinner = ora('Scaffolding the project').start()
 
     try {
-        mkdirSync(path.join(CURRENT_USER_DIR, projectName))
+        mkdirSync(projectDir)
         const filesToCopy = readdirSync(coreFilesPath)
 
         filesToCopy.forEach(file => {
@@ -119,6 +116,12 @@ export function handleCreateProject() {
                 name: 'projectName',
                 message: 'How do you want to name the project?',
                 type: 'input',
+            },
+            {
+                name: 'projectDir',
+                message: 'Where do you want to place the project?',
+                type: 'input',
+                default: ({ projectName }) => projectName,
             },
             {
                 name: 'modulesIncluded',
