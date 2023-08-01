@@ -7,7 +7,6 @@
     "scripts": {
         "typecheck": "tsc",
         "lint": "eslint .",
-        "test": "mocha",
         "clean": "rm -rf .turbo node_modules"
     }
 }
