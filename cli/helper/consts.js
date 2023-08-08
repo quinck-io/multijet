@@ -12,5 +12,4 @@ export const OPTIONAL_MODULES = [
     { name: 'DynamoDB utilities', code: 'dynamoose-utils', type: 'LIB' },
     { name: 'Prisma ORM', code: 'prisma', type: 'OTHER' },
     { name: 'Media storage', code: 'media-storage', type: 'LIB' },
-    { name: 'Jenkins pipeline', code: 'pipeline', type: 'OTHER' },
 ]

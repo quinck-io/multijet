@@ -1,7 +1,6 @@
-import { cpSync, readFileSync, writeFileSync } from 'fs'
+import { cpSync } from 'fs'
 import path, { dirname } from 'path'
 import { fileURLToPath } from 'url'
-import YAML from 'yaml'
 import { FILE_BLACKLIST, OPTIONAL_MODULES } from './consts.js'
 import { addScriptToPackage } from './helper.js'
 
@@ -35,8 +34,6 @@ export async function applyOptionalModules(
 
     scaffoldOptionalLibs(projectDir, optionalModules)
 
-    if (optionalModuleCodes.includes('pipeline'))
-        scaffoldPipelineFiles(projectName, projectDir)
     if (optionalModuleCodes.includes('prisma')) scaffoldPrismaFiles(projectDir)
     if (optionalModuleCodes.includes('auth')) {
         scaffoldModule(projectDir, 'user-service', 'MICROSERVICE')
@@ -94,33 +91,6 @@ function scaffoldPrismaFiles(projectDir) {
     })
     scaffoldModule(projectDir, PRISMA_LIB_NAME, 'LIB')
     addScriptToPackage(projectDir, 'prisma', PRISMA_SCRIPT)
-}
-
-/**
- * Scaffold pipeline files in the project.
- *
- * @param {string} projectName - The name of the project.
- * @param {string} projectDir - The directory of the project.
- */
-function scaffoldPipelineFiles(projectName, projectDir) {
-    const pipelineDir = path.join(optionalDir, 'pipeline')
-
-    copyRootFiles(projectDir, pipelineDir)
-    cpSync(
-        path.join(pipelineDir, 'configs'),
-        path.join(projectDir, 'configs', 'pipeline'),
-        { recursive: true, force: false },
-    )
-
-    const projectConfigPath = path.join(projectDir, 'project.configs.yml')
-    const projectConfigFile = readFileSync(projectConfigPath, {
-        encoding: 'utf-8',
-    })
-    const newProjectConfig = YAML.parse(projectConfigFile)
-    newProjectConfig.projectName = projectName
-    newProjectConfig.aws.codebuildProjectName = projectName
-
-    writeFileSync(projectConfigPath, YAML.stringify(newProjectConfig, null, 4))
 }
 
 /**
