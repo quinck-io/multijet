@@ -1,2 +1,3 @@
 sonar-project.properties
 Jenkinsfile
+node_modules
