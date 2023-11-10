@@ -1,27 +1,88 @@
-import { isPresent } from './checks'
+export class UnkownInternalError extends Error {
+    name = UnkownInternalError.name
 
-export class BasicError extends Error {
-    name = BasicError.name
-
-    constructor(error?: unknown) {
-        super(BasicError.formatMessage(error))
+    constructor(message?: string) {
+        const baseMessage = 'An unknown error occurred'
+        super(message ? `${baseMessage}: ${message}` : baseMessage)
     }
+}
 
-    static formatMessage(error?: unknown): string {
-        if (!isPresent(error)) return ''
-        if (error instanceof Error) return `[${error.name}] ${error.message}`
-        switch (typeof error) {
-            case 'bigint':
-            case 'number':
-            case 'boolean':
-                return String(error)
-            case 'string':
-                return error
-            case 'object':
-            case 'function':
-                return error ? error.toString() : ''
-            default:
-                return ''
-        }
+export class ResourceNotFoundError extends Error {
+    name = ResourceNotFoundError.name
+    constructor(message?: string) {
+        const baseMessage = 'Requested resource does not exist'
+        super(message ? `${baseMessage}: ${message}` : baseMessage)
+    }
+}
+
+export class ExpectedResourceNotFoundError extends ResourceNotFoundError {
+    name = ExpectedResourceNotFoundError.name
+    constructor(message?: string) {
+        const baseMessage = 'The resource should exist but it does not'
+        super(message ? `${baseMessage}: ${message}` : baseMessage)
+    }
+}
+
+export class ForbiddenError extends Error {
+    name = ForbiddenError.name
+    constructor(message?: string) {
+        const baseMessage = 'You are not allowed to access this resource'
+        super(message ? `${baseMessage}: ${message}` : baseMessage)
+    }
+}
+
+export class BadRequestError extends Error {
+    name = BadRequestError.name
+    constructor(message?: string) {
+        const baseMessage = 'Bad request'
+        super(message ? `${baseMessage}: ${message}` : baseMessage)
+    }
+}
+
+export class UserNotAuthenticatedError extends Error {
+    name = UserNotAuthenticatedError.name
+    constructor(message?: string) {
+        const baseMessage = 'You are not authenticated'
+        super(message ? `${baseMessage}: ${message}` : baseMessage)
+    }
+}
+
+export class InvalidCredentialsError extends Error {
+    name = InvalidCredentialsError.name
+    constructor(message?: string) {
+        const baseMessage = 'Wrong username or password'
+        super(message ? `${baseMessage}: ${message}` : baseMessage)
+    }
+}
+
+export class UserAlreadyExistsError extends Error {
+    name = UserAlreadyExistsError.name
+    constructor(message?: string) {
+        const baseMessage = 'User with given username already exists'
+        super(message ? `${baseMessage}: ${message}` : baseMessage)
+    }
+}
+
+export class UserNotFoundError extends Error {
+    name = UserNotFoundError.name
+    constructor(message?: string) {
+        const baseMessage = 'User with given username not found'
+        super(message ? `${baseMessage}: ${message}` : baseMessage)
+    }
+}
+
+export class ProfileNotCreatedError extends Error {
+    name = ProfileNotCreatedError.name
+    constructor(message?: string) {
+        const baseMessage = 'User exists but profile has not been created'
+        super(message ? `${baseMessage}: ${message}` : baseMessage)
+    }
+}
+
+export class ConflictError extends Error {
+    name = ConflictError.name
+    constructor(message?: string) {
+        const baseMessage = 'Resource already exists'
+        super(message ? `${baseMessage}: ${message}` : baseMessage)
     }
 }
