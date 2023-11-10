@@ -15,10 +15,6 @@ export const defaultApp = (
 ) => {
     const app = fastify(fastifyOptions)
 
-    app.addHook('onSend', async (request, reply, payload) => {
-        return payload == 'null' ? '' : payload // TODO: the bug of empty returns in fastify has been fixed, this can be removed
-    })
-
     app.setErrorHandler(apiErrorHandler(apiErrorsLookupService))
 
     app.addContentTypeParser(

@@ -4,9 +4,11 @@ import { FastifyInstance } from 'fastify'
 export type AppCorsOptions = FastifyCorsOptions | boolean | undefined
 
 export const DEFAULT_CORS_OPTIONS: FastifyCorsOptions = {
-    origin: '*',
+    origin: true,
     allowedHeaders: '*',
-    methods: ['POST', 'PUT', 'DELETE', 'GET', 'OPTIONS'],
+    credentials: true,
+    methods: ['POST', 'PUT', 'DELETE', 'GET', 'OPTIONS', 'PATCH'],
+    strictPreflight: false,
 }
 
 export function decorateAppWithCors(
