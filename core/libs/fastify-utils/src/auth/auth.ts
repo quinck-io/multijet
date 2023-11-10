@@ -1,5 +1,5 @@
 import { IncomingHttpHeaders } from 'http2'
-import jwt_decode from 'jwt-decode'
+import { jwtDecode } from 'jwt-decode'
 // import { BadRequestError, FrobiddenError } from '../errors/common'
 // import { UserRole } from '../generated/openapi'
 
@@ -74,7 +74,7 @@ export function isUserInGroups(token: UserToken, groups: string[]): boolean {
 export function getUserGroupsFromToken(token: UserToken): UserWithGroups {
     return {
         'cognito:groups':
-            jwt_decode<UserWithGroups>(token.authorization)['cognito:groups'] ||
+            jwtDecode<UserWithGroups>(token.authorization)['cognito:groups'] ||
             [],
     }
 }
@@ -103,7 +103,7 @@ export function resourceFromToken(
     { authorization }: BasicAuthToken,
     resource: keyof IdTokenStructure,
 ): string {
-    const decodedToken = jwt_decode<IdTokenStructure>(authorization)
+    const decodedToken = jwtDecode<IdTokenStructure>(authorization)
     return decodedToken[resource]
 }
 
