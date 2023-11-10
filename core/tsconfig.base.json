@@ -2,16 +2,17 @@
     "exclude": ["node_modules", "**/*/dist", "**/*.test.ts"],
     "compilerOptions": {
         "lib": ["es2023"],
-        "module": "ES2022",
+        "module": "NodeNext",
         "strict": true,
         "esModuleInterop": true,
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
-        "moduleResolution": "node",
+        "moduleResolution": "NodeNext",
         "resolveJsonModule": true,
         // Disable emitting file from a compilation.
         // We'll use esbuild to compile our TypeScript files to JavaScript, so we
         // avoid emitting files when using tsc (and use it only for type-checking).
-        "noEmit": true
+        "noEmit": true,
+        "alwaysStrict": true
     }
 }

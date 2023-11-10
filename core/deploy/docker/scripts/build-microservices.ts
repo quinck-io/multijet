@@ -1,41 +1,37 @@
 /* eslint-disable */
 
-import { GetCallerIdentityCommand, STSClient } from '@aws-sdk/client-sts'
 import { program } from 'commander'
 import { readdir } from 'fs/promises'
-import path = require('path')
+import path from 'path'
+import microservicesConfigs from '../microservices-build-configs.json'
+
+type NonGenericMicroservice = {
+    dockerfilePath?: string
+    builderImage: string
+    runnerImage: string
+}
 
 const DOCKERFILE_PATH = path.join(__dirname, '..', 'Dockerfile')
+const MICROSERVICES_PATH = path.join(
+    __dirname,
+    '..',
+    '..',
+    '..',
+    'microservices',
+)
+const getMicroservicePath = (microservice: string) =>
+    path.join(MICROSERVICES_PATH, microservice)
+
+const NON_GENERIC: Record<string, NonGenericMicroservice> = microservicesConfigs
 
 const log = (label: string, ...text: unknown[]) =>
     console.log(`${label}: `, ...text)
 
-const getAWSAccountId = async (awsRegion: string): Promise<string> => {
-    const stsClient = new STSClient({ region: awsRegion })
-
-    try {
-        const command = new GetCallerIdentityCommand({})
-        const response = await stsClient.send(command)
-
-        const awsAccountId = response.Account
-        console.log('AWS Account ID:', awsAccountId)
-        return awsAccountId
-    } catch (error) {
-        console.error('Error retrieving AWS Account ID:', error)
-        throw error
-    }
-}
-
-const getRepositoryUri = (
-    awsAccountId: string,
-    repoName: string,
-    awsRegion: string,
-) => `${awsAccountId}.dkr.ecr.${awsRegion}.amazonaws.com/${repoName}`
-
 const buildDockerImage = async (
+    projectName: string,
     microservice: string,
-    target: string,
     platform: string,
+    fromImage: string,
 ) => {
     const { execa } = await import('execa')
 
@@ -45,71 +41,95 @@ const buildDockerImage = async (
         '-f',
         DOCKERFILE_PATH,
         '-t',
-        `${target}`,
+        `${projectName}-${microservice}`,
         '--build-arg',
         `MICROSERVICE=${microservice}`,
+        '--build-arg',
+        `FROM_DOCKER_IMAGE=${fromImage}`,
+        `--platform=${platform}`,
+    ])
+}
+
+const buildNonGenericDockerImage = async (
+    projectName: string,
+    microservice: string,
+    platform: string,
+) => {
+    const { execa } = await import('execa')
+
+    await execa('docker', [
+        'build',
+        getMicroservicePath(microservice),
+        '-f',
+        NON_GENERIC[microservice].dockerfilePath ??
+            path.join(getMicroservicePath(microservice), 'Dockerfile'),
+        '-t',
+        `${projectName}-${microservice}`,
+        '--build-arg',
+        `FROM_BUILDER_DOCKER_IMAGE=${NON_GENERIC[microservice].builderImage}`,
+        '--build-arg',
+        `FROM_RUNNER_DOCKER_IMAGE=${NON_GENERIC[microservice].runnerImage}`,
         `--platform=${platform}`,
     ])
 }
 
 async function buildMicroservice(
-    microservice: string,
-    awsAccountId: string,
-    env: string,
     projectName: string,
+    microservice: string,
     platform: string,
-    awsRegion: string,
+    fromImage: string,
 ): Promise<void> {
-    const repoName = `${projectName}/${microservice}`
-    const imageTag = `latest-${env}`
-
-    const repositoryUri = getRepositoryUri(awsAccountId, repoName, awsRegion)
-
-    const target = `${repositoryUri}:${imageTag}`
-
     log(microservice, 'Build started')
-
-    await buildDockerImage(microservice, target, platform)
-
+    if (Object.keys(NON_GENERIC).includes(microservice)) {
+        await buildNonGenericDockerImage(projectName, microservice, platform)
+    } else {
+        await buildDockerImage(projectName, microservice, platform, fromImage)
+    }
     log(microservice, 'Image created')
-
-    log(microservice, 'Image pushed')
 }
 
 async function buildMicroservices(
-    env: string,
     projectName: string,
     platform: string,
-    awsRegion: string,
+    fromImage: string,
+    sequential: boolean,
 ) {
     const microservices = await readdir('microservices')
     log('main', 'STARTED DOCKER BUILD')
-    log('services to build:', microservices)
+    log('services to build', microservices)
 
-    const awsAccountId = await getAWSAccountId(awsRegion)
+    if (sequential) {
+        for (const microservice of microservices) {
+            await buildMicroservice(
+                projectName,
+                microservice,
+                platform,
+                fromImage,
+            )
+        }
+    } else {
+        const buildPromises = microservices.map(microservice =>
+            buildMicroservice(projectName, microservice, platform, fromImage),
+        )
 
-    const buildPromises = microservices.map(service =>
-        buildMicroservice(
-            service,
-            awsAccountId,
-            env,
-            projectName,
-            platform,
-            awsRegion,
-        ),
-    )
-    await Promise.all(buildPromises)
+        await Promise.all(buildPromises)
+    }
 
     console.log(`\nFinished in ${process.uptime().toFixed(2)} seconds`)
 }
 
 program
-    .argument('<env>', 'Environment')
     .argument('<projectName>', 'Project name')
-    .argument('<platform>', 'Platform')
-    .action(async (env: string, projectName: string, platform: string) => {
-        const { AWS_REGION } = process.env
+    .option('-p, --platform <platform>', 'build platform', 'linux/amd64')
+    .option('-i, --fromImage <fromImage>', 'build from image', 'node:18-alpine')
+    .option('--sequential', 'build sequentially', false)
+    .action(async (projectName: string) => {
+        const options = program.opts()
 
-        await buildMicroservices(env, projectName, platform, AWS_REGION)
+        log('options', options)
+
+        const { platform, fromImage, sequential } = options
+
+        await buildMicroservices(projectName, platform, fromImage, sequential)
     })
     .parse(process.argv)

@@ -1,5 +1,7 @@
 # The builder image.
-FROM node:18-alpine AS builder
+ARG FROM_DOCKER_IMAGE
+
+FROM $FROM_DOCKER_IMAGE AS builder
 ARG MICROSERVICE
 ARG ENTRYPOINT="main"
 
@@ -10,17 +12,18 @@ WORKDIR /app
 COPY . .
 
 # Install dependencies.
-RUN npm install turbo
-RUN npm ci
+RUN npm i turbo esbuild
+RUN npm i
 
 # Build the microservice.
-RUN npm run build -- --filter=${MICROSERVICE} -- ${ENTRYPOINT} main
+# RUN npm run openapi:generate
+RUN npm run build:nocache -- --filter=${MICROSERVICE} -- ${ENTRYPOINT} main
 
 # # Set the working directory for the particular microservice.
 WORKDIR /app/microservices/${MICROSERVICE}
 
 # Production image.
-FROM node:18-alpine
+FROM $FROM_DOCKER_IMAGE
 ARG MICROSERVICE
 
 # Set the working directory.

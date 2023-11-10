@@ -8,15 +8,14 @@ import {
 } from '@aws-sdk/client-ecr'
 import { program } from 'commander'
 import { readdirSync } from 'fs'
-import path = require('path')
+import { writeFile } from 'fs/promises'
 
 const log = (label: string, text: string) => console.log(`${label}: ${text}`)
 
-async function getRepositoryUri(
-    repoName: string,
-    awsRegion: string,
-): Promise<string> {
-    const client = new ECRClient({ region: awsRegion })
+const awsRegion = process.env.AWS_REGION!
+
+async function getRepositoryUri(repoName: string): Promise<string> {
+    const client = new ECRClient()
 
     const command = new DescribeRepositoriesCommand({
         repositoryNames: [repoName],
@@ -24,24 +23,18 @@ async function getRepositoryUri(
 
     try {
         const { repositories } = await client.send(command)
-        const { repositoryUri } = repositories[0]
 
-        console.log('Repository found:', repositoryUri)
+        const [{ repositoryUri }] = repositories!
 
-        return repositoryUri
+        return repositoryUri!
     } catch (error: unknown) {
-        console.error('Error describing repositories:', error)
-
         if (
             error instanceof Error &&
             error.name == 'RepositoryNotFoundException'
         ) {
-            const { repositoryUri } = await createECRRepository(
-                repoName,
-                awsRegion,
-            )
+            const { repositoryUri } = await createECRRepository(repoName)
 
-            return repositoryUri
+            return repositoryUri!
         }
 
         console.error('Error describing repositories:', error)
@@ -49,11 +42,20 @@ async function getRepositoryUri(
     }
 }
 
+const getDoackerImageDigest = async (image: string): Promise<string> => {
+    const { execa } = await import('execa')
+
+    const { stdout } = await execa('docker', ['image', 'inspect', image])
+
+    const imageInfo = JSON.parse(stdout)[0]
+
+    return imageInfo.RepoDigests[0]
+}
+
 async function createECRRepository(
     repositoryName: string,
-    awsRegion: string,
 ): Promise<Repository> {
-    const client = new ECRClient({ region: awsRegion })
+    const client = new ECRClient()
 
     const command = new CreateRepositoryCommand({
         repositoryName,
@@ -64,31 +66,26 @@ async function createECRRepository(
 
         console.log(
             'Repository created successfully:',
-            repository.repositoryUri,
+            repository!.repositoryUri,
         )
 
-        return repository
+        return repository!
     } catch (error) {
         console.error('Error creating repository:', error)
         throw error
     }
 }
 
-const awsECRAccount = (repoUri: string, awsRegion: string) =>
+const awsECRAccount = (repoUri: string) =>
     `${repoUri.split('.')[0]}.dkr.ecr.${awsRegion}.amazonaws.com`
 
-const authenticateDockerClient = async (repoUri: string, awsRegion: string) => {
+const authenticateDockerClient = async (repoUri: string) => {
     const { execa } = await import('execa')
 
-    const { stdout } = await execa('aws', [
-        'ecr',
-        'get-login-password',
-        '--region',
-        awsRegion,
-    ])
-
+    const { stdout } = await execa('aws', ['ecr', 'get-login-password'])
     const loginPassword = stdout.trim()
-    const awsAccount = awsECRAccount(repoUri, awsRegion)
+
+    const awsAccount = awsECRAccount(repoUri)
 
     await execa(
         'docker',
@@ -97,6 +94,12 @@ const authenticateDockerClient = async (repoUri: string, awsRegion: string) => {
             input: loginPassword,
         },
     )
+}
+
+const tagDockerImage = async (source: string, target: string) => {
+    const { execa } = await import('execa')
+
+    await execa('docker', ['tag', source, target])
 }
 
 const pushDockerImage = async (target: string) => {
@@ -111,34 +114,46 @@ async function pushMicroservice(
     microservice: string,
     env: string,
     projectName: string,
-    awsRegion: string,
-): Promise<void> {
+) {
     const repoName = `${projectName}/${microservice}`
     const imageTag = `latest-${env}`
 
-    const repositoryUri = await getRepositoryUri(repoName, awsRegion)
+    const repositoryUri = await getRepositoryUri(repoName)
 
+    const source = `${projectName}-${microservice}`
     const target = `${repositoryUri}:${imageTag}`
+
+    await tagDockerImage(source, target)
 
     log(microservice, 'Push started')
 
-    await authenticateDockerClient(repositoryUri, awsRegion)
+    await authenticateDockerClient(repositoryUri)
     await pushDockerImage(target)
 
     log(microservice, 'Image pushed')
+
+    return [microservice, await getDoackerImageDigest(target)]
 }
 
 async function pushMicroservices(
     env: string,
     projectName: string,
-    awsRegion: string,
+    microservicesFile: string,
 ) {
     const microservices = readdirSync('microservices')
 
-    const pushPromises = microservices.map(microservice =>
-        pushMicroservice(microservice, env, projectName, awsRegion),
+    const pushedMicroservicesInformation = microservices.map(microservice =>
+        pushMicroservice(microservice, env, projectName),
     )
-    await Promise.all(pushPromises)
+
+    const microservicesInformation = (
+        await Promise.all(pushedMicroservicesInformation)
+    ).reduce((acc, [microservice, digest]) => {
+        acc[microservice] = { image: digest }
+        return acc
+    }, {} as Record<string, unknown>)
+
+    await writeFile(microservicesFile, JSON.stringify(microservicesInformation))
 
     console.log(`\nFinished in ${process.uptime().toFixed(2)} seconds`)
 }
@@ -146,9 +161,10 @@ async function pushMicroservices(
 program
     .argument('<env>', 'Environment')
     .argument('<projectName>', 'Project name')
-    .action(async (env: string, projectName: string) => {
-        const { AWS_REGION } = process.env
-
-        await pushMicroservices(env, projectName, AWS_REGION)
-    })
+    .argument('<microservicesFile>', 'Microservice file')
+    .action(
+        async (env: string, projectName: string, microservicesFile: string) => {
+            await pushMicroservices(env, projectName, microservicesFile)
+        },
+    )
     .parse(process.argv)
