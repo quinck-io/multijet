@@ -5,9 +5,7 @@
     "types": "src/index.ts",
     "main": "src/index.ts",
     "scripts": {
-        "typecheck": "tsc",
-        "lint": "eslint .",
-        "test": "mocha"
+        "typecheck": "tsc"
     },
     "devDependencies": {
         "aws-sdk-client-mock": "^2.1.0"

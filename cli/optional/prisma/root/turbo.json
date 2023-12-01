@@ -13,8 +13,6 @@
         "build:debug": {
             "dependsOn": ["^build:debug", "typecheck"]
         },
-        "lint": {},
-        "test": {},
         "openapi:generate": {
             "cache": false
         },

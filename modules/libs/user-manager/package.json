@@ -6,8 +6,6 @@
     "main": "src/index.ts",
     "scripts": {
         "typecheck": "tsc",
-        "lint": "eslint .",
-        "test": "mocha",
         "clean": "rm -rf .turbo node_modules"
     },
     "dependencies": {

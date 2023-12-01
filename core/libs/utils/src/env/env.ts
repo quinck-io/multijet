@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { isPresent } from '../checks'
+import { isPresent } from '..'
 import { createLoggerFromEnv } from '../logger/logger.factory'
 import { CommonEnvironment, NodeEnv } from './env.models'
 

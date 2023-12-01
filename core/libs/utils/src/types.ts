@@ -26,3 +26,11 @@ export type Optional<T> = T | undefined
 export type PropType<TObj, TProp extends keyof TObj> = TObj[TProp]
 
 export type StringKeyOf<T> = Extract<keyof T, string>
+
+export interface Builder<T> {
+    build(): T
+}
+
+export function isPresent<T>(x?: T | null): x is NonNullable<T> {
+    return x != undefined && x != null
+}

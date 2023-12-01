@@ -6,7 +6,6 @@
     "main": "src/generated/index.ts",
     "scripts": {
         "typecheck": "tsc",
-        "lint": "eslint .",
         "clean": "rm -rf .turbo node_modules",
         "openapi:generate": "openapi -i ../../configs/openapi.yaml -o ./src/generated --exportCore false --exportServices false --exportModels true --exportSchemas false"
     },

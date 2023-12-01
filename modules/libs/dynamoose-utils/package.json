@@ -5,8 +5,7 @@
     "types": "src/index.ts",
     "main": "src/index.ts",
     "scripts": {
-        "typecheck": "tsc",
-        "lint": "eslint ."
+        "typecheck": "tsc"
     },
     "dependencies": {
         "@libs/api-errors": "*",

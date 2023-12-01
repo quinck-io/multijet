@@ -8,8 +8,7 @@
         "../core/libs/*"
     ],
     "scripts": {
-        "ts": "esr",
-        "test": "mocha --require esbuild-runner/register"
+        "ts": "esr"
     },
     "author": "",
     "license": "ISC",

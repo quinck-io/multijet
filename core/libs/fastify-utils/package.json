@@ -6,7 +6,6 @@
     "main": "src/index.ts",
     "scripts": {
         "typecheck": "tsc",
-        "lint": "eslint .",
         "clean": "rm -rf .turbo node_modules",
         "openapi-types:generate": "fastify-openapi-typescript -i ../../configs/openapi.yaml -o ./src/generated/types --externalTypesImportFrom '@libs/models'",
         "openapi-route-configs:generate": "fastify-openapi-route-configs -i ../../configs/openapi.yaml -o ./src/generated/routes",
