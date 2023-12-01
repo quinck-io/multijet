@@ -15,7 +15,7 @@
         "clean": "turbo run clean && rm -rf .aws-sam node_modules",
         "typecheck": "turbo run typecheck",
         "openapi:generate": "turbo run openapi:generate",
-        "presam:build": "turbo run build -- -- lambda",
+        "presam:build": "turbo run build -- lambda",
         "sam:build": "sam build -t deploy/aws/sam/template.yaml --parallel",
         "sam:generate-env": "esr deploy/aws/scripts/create-json-env.ts .env deploy/aws/sam/.env.json",
         "presam:start": "npm run sam:build && npm run sam:generate-env",
