@@ -10,7 +10,7 @@
         "clean": "rm -rf dist .turbo node_modules"
     },
     "dependencies": {
-        "@fastify/aws-lambda": "^3.4.2",
+        "@fastify/aws-lambda": "^3.5.0",
         "@libs/fastify-utils": "^0.0.1",
         "@libs/utils": "^0.0.1"
     }
