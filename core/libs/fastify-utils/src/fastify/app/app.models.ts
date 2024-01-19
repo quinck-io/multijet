@@ -3,8 +3,8 @@ import {
     RawRequestDefaultExpression,
     RawServerDefault,
     RouteOptions,
-} from 'fastify'
-import { AppCorsOptions } from './cors.app'
+} from "fastify"
+import { AppCorsOptions } from "./cors.app"
 
 type GenericRouteOptions = RouteOptions<
     RawServerDefault,
@@ -20,8 +20,8 @@ type GenericRouteOptions = RouteOptions<
 >
 
 export type RoutesHandlerMapping = Array<{
-    config: Omit<GenericRouteOptions, 'handler'>
-    handler: GenericRouteOptions['handler']
+    config: Omit<GenericRouteOptions, "handler">
+    handler: GenericRouteOptions["handler"]
 }>
 
 export type ApplicationOptions = {

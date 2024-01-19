@@ -1,15 +1,15 @@
-import { ApiError, ApiErrorsLookupService } from '@libs/api-errors'
-import { ErrorCode, ErrorData } from '@libs/models'
-import { FastifyInstance } from 'fastify'
-import { StatusCodes } from 'http-status-codes'
+import { ApiError, ApiErrorsLookupService } from "@libs/api-errors"
+import { ErrorCode, ErrorData } from "@libs/models"
+import { FastifyInstance } from "fastify"
+import { StatusCodes } from "http-status-codes"
 import {
     FastifyValidationError,
     getValidationErrors,
     isFastifyValidationError,
-} from '../../input-validation/input-validation'
-import { httpErrorsRfcType } from './http-errors-rfc-types'
+} from "../../input-validation/input-validation"
+import { httpErrorsRfcType } from "./http-errors-rfc-types"
 
-export type ErrorHandler = Parameters<FastifyInstance['setErrorHandler']>[0]
+export type ErrorHandler = Parameters<FastifyInstance["setErrorHandler"]>[0]
 
 export const apiErrorHandler = (
     apiErrorsLookupService: ApiErrorsLookupService,

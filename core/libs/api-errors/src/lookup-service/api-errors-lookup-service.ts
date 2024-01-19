@@ -1,8 +1,8 @@
-import { defualtApiErrorParser } from './api-errors-lookup-service.consts'
+import { defualtApiErrorParser } from "./api-errors-lookup-service.consts"
 import {
     ApiErrorMappings,
     ApiErrorsLookupService,
-} from './api-errors-lookup-service.models'
+} from "./api-errors-lookup-service.models"
 
 /**
  * Factory to create a ApiErrorsLookupService.

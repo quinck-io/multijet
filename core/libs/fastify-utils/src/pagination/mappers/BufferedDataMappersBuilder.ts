@@ -1,4 +1,4 @@
-import { AcceptHeader, BufferedDataMappers } from './models'
+import { AcceptHeader, BufferedDataMappers } from "./models"
 
 export class BufferedDataMappersBuilder<T> {
     protected bufferedDataMappers: BufferedDataMappers<T>

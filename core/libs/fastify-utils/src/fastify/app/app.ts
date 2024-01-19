@@ -1,12 +1,12 @@
 import {
     ApiErrorsLookupService,
     createApiErrorsLookupService,
-} from '@libs/api-errors'
-import fastify, { FastifyInstance, FastifyServerOptions } from 'fastify'
-import { apiErrorHandler } from '../../errors/api-error-handler/api-error-handler'
-import { DEFAULT_OPTIONS } from './app.consts'
-import { ApplicationOptions } from './app.models'
-import { decorateAppWithCors } from './cors.app'
+} from "@libs/api-errors"
+import fastify, { FastifyInstance, FastifyServerOptions } from "fastify"
+import { apiErrorHandler } from "../../errors/api-error-handler/api-error-handler"
+import { DEFAULT_OPTIONS } from "./app.consts"
+import { ApplicationOptions } from "./app.models"
+import { decorateAppWithCors } from "./cors.app"
 
 export const defaultApp = (
     fastifyOptions: FastifyServerOptions = DEFAULT_OPTIONS,
@@ -18,12 +18,12 @@ export const defaultApp = (
     app.setErrorHandler(apiErrorHandler(apiErrorsLookupService))
 
     app.addContentTypeParser(
-        'application/json',
-        { parseAs: 'string' },
+        "application/json",
+        { parseAs: "string" },
         (_, body: string, done) => {
             try {
                 const isBodyEmpty =
-                    body == undefined || body == null || body == ''
+                    body == undefined || body == null || body == ""
                 if (isBodyEmpty) done(null)
                 else done(null, JSON.parse(body))
             } catch (err) {

@@ -1,14 +1,14 @@
-import { Paginated } from '@libs/models'
-import { FastifyReply, FastifyRequest } from 'fastify'
-import { defaultPaginatedMappers } from './mappers/defaults'
-import { AcceptHeader, BufferedDataMappers } from './mappers/models'
+import { Paginated } from "@libs/models"
+import { FastifyReply, FastifyRequest } from "fastify"
+import { defaultPaginatedMappers } from "./mappers/defaults"
+import { AcceptHeader, BufferedDataMappers } from "./mappers/models"
 import {
     ContentResponse,
     GetPaginatedResultParams,
     PaginatedQuery,
     PaginatedResultOption,
     TypedPaginated,
-} from './models'
+} from "./models"
 
 export type HttpParams<X> = {
     data: X
@@ -21,7 +21,7 @@ export function createContentResponse<X>(
     bufferedDataMappers: BufferedDataMappers<X> = new Map(),
 ): ContentResponse<X | Buffer | string> {
     const { data, reply } = params
-    reply.header('Content-Type', AcceptHeader.JSON)
+    reply.header("Content-Type", AcceptHeader.JSON)
     reply.serializer(payload =>
         JSON.stringify(
             mapDataForBuffer(bufferedDataMappers, payload, AcceptHeader.JSON),
@@ -39,7 +39,7 @@ export function mapDataForBuffer<X>(
     return mapper ? mapper(data) : data
 }
 
-export function getPaginatedResult<Item extends Paginated['items']>(
+export function getPaginatedResult<Item extends Paginated["items"]>(
     params: GetPaginatedResultParams<Item>,
     bufferedDataMappers?: BufferedDataMappers<Paginated>,
 ): PaginatedResultOption {

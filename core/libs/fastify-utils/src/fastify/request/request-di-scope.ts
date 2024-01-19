@@ -1,7 +1,7 @@
-import { AwilixContainer } from 'awilix'
-import { FastifyInstance, FastifyRequest } from 'fastify'
+import { AwilixContainer } from "awilix"
+import { FastifyInstance, FastifyRequest } from "fastify"
 
-declare module 'fastify' {
+declare module "fastify" {
     interface FastifyRequest {
         scopedContainer: AwilixContainer
     }
@@ -12,16 +12,16 @@ export function diScope<Services extends object>(
     container: AwilixContainer<Services>,
     addServicesToRequest: (request: FastifyRequest) => void,
 ) {
-    app.addHook('preHandler', async request => {
+    app.addHook("preHandler", async request => {
         request.scopedContainer = container.createScope()
         addServicesToRequest(request)
     })
 
-    app.addHook('onClose', async () => {
+    app.addHook("onClose", async () => {
         await container.dispose()
     })
 
-    app.addHook('onResponse', async request => {
+    app.addHook("onResponse", async request => {
         await request.scopedContainer.dispose()
     })
 }

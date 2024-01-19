@@ -1,13 +1,13 @@
-import fastifyCors, { FastifyCorsOptions } from '@fastify/cors'
-import { FastifyInstance } from 'fastify'
+import fastifyCors, { FastifyCorsOptions } from "@fastify/cors"
+import { FastifyInstance } from "fastify"
 
 export type AppCorsOptions = FastifyCorsOptions | boolean | undefined
 
 export const DEFAULT_CORS_OPTIONS: FastifyCorsOptions = {
-    origin: '*',
-    allowedHeaders: '*',
+    origin: "*",
+    allowedHeaders: "*",
     credentials: true,
-    methods: ['POST', 'PUT', 'DELETE', 'GET', 'OPTIONS', 'PATCH'],
+    methods: ["POST", "PUT", "DELETE", "GET", "OPTIONS", "PATCH"],
     strictPreflight: false,
 }
 

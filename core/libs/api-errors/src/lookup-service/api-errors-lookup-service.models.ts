@@ -1,5 +1,5 @@
-import { ErrorCode } from '@libs/models'
-import { StatusCodes } from 'http-status-codes'
+import { ErrorCode } from "@libs/models"
+import { StatusCodes } from "http-status-codes"
 
 /**
  * Semantic type to represent the identifier of an error.

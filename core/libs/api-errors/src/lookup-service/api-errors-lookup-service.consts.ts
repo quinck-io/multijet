@@ -1,6 +1,6 @@
-import { ErrorCode } from '@libs/models'
-import { StatusCodes } from 'http-status-codes'
-import { ApiErrorParser } from './api-errors-lookup-service.models'
+import { ErrorCode } from "@libs/models"
+import { StatusCodes } from "http-status-codes"
+import { ApiErrorParser } from "./api-errors-lookup-service.models"
 
 /**
  * The default parser the get ApiError from an error.

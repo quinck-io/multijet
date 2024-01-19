@@ -22,7 +22,7 @@ rules:
   "@typescript-eslint/no-empty-function": "warn"
   quotes:
     - error
-    - single
+    - double
   semi:
     - error
     - never

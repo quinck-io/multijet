@@ -1,5 +1,5 @@
-import pino, { LoggerOptions } from 'pino'
-import { Logger, LoggerExtensions } from './logger.models'
+import pino, { LoggerOptions } from "pino"
+import { Logger, LoggerExtensions } from "./logger.models"
 
 export const extendLogger = <Options = LoggerOptions>(
     logger: pino.Logger<Options>,

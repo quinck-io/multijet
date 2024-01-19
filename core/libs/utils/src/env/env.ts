@@ -1,7 +1,7 @@
-import Joi from 'joi'
-import { isPresent } from '..'
-import { createLoggerFromEnv } from '../logger/logger.factory'
-import { CommonEnvironment, NodeEnv } from './env.models'
+import Joi from "joi"
+import { isPresent } from ".."
+import { createLoggerFromEnv } from "../logger/logger.factory"
+import { CommonEnvironment, NodeEnv } from "./env.models"
 
 export function getEnvironment<Environment extends NodeJS.ProcessEnv>(
     validationSchema: Joi.ObjectSchema<Environment>,
@@ -12,7 +12,7 @@ export function getEnvironment<Environment extends NodeJS.ProcessEnv>(
 
     if (error) throw error
     if (warning) createLoggerFromEnv(NodeEnv.production).warn(warning)
-    if (!isPresent(value)) throw new Error('Joi missing environment value')
+    if (!isPresent(value)) throw new Error("Joi missing environment value")
 
     return value
 }

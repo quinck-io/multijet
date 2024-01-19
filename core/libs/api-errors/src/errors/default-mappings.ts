@@ -1,4 +1,4 @@
-import { ErrorCode } from '@libs/models'
+import { ErrorCode } from "@libs/models"
 import {
     BadRequestError,
     ConflictError,
@@ -9,9 +9,9 @@ import {
     UnkownInternalError,
     UserNotAuthenticatedError,
     UserNotFoundError,
-} from '@libs/utils'
-import { StatusCodes } from 'http-status-codes'
-import { ApiErrorMappings } from '../lookup-service/api-errors-lookup-service.models'
+} from "@libs/utils"
+import { StatusCodes } from "http-status-codes"
+import { ApiErrorMappings } from "../lookup-service/api-errors-lookup-service.models"
 
 export const defaultMappings = (): ApiErrorMappings => ({
     [ResourceNotFoundError.name]: () => ({

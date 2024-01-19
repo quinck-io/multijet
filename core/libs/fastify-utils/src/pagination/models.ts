@@ -1,7 +1,7 @@
-import { Paginated } from '@libs/models'
-import { FastifyReply, FastifyRequest } from 'fastify'
+import { Paginated } from "@libs/models"
+import { FastifyReply, FastifyRequest } from "fastify"
 
-export type TypedPaginated<X> = Omit<Paginated, 'items'> & {
+export type TypedPaginated<X> = Omit<Paginated, "items"> & {
     items: X[]
 }
 

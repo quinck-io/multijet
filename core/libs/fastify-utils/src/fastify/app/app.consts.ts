@@ -1,4 +1,4 @@
-import { FastifyServerOptions } from 'fastify'
+import { FastifyServerOptions } from "fastify"
 
 export const DEFAULT_OPTIONS: FastifyServerOptions = {
     ignoreTrailingSlash: true,

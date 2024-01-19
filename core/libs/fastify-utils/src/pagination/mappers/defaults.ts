@@ -1,6 +1,6 @@
-import { Paginated } from '@libs/models'
-import { BufferedDataMappersBuilder } from './BufferedDataMappersBuilder'
-import { AcceptHeader, BufferedDataMappers } from './models'
+import { Paginated } from "@libs/models"
+import { BufferedDataMappersBuilder } from "./BufferedDataMappersBuilder"
+import { AcceptHeader, BufferedDataMappers } from "./models"
 
 export function defaultPaginatedMappers(
     offset: number,

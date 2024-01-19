@@ -1,20 +1,20 @@
-import { IncomingHttpHeaders } from 'http2'
-import { jwtDecode } from 'jwt-decode'
+import { IncomingHttpHeaders } from "http2"
+import { jwtDecode } from "jwt-decode"
 // import { BadRequestError, FrobiddenError } from '../errors/common'
 // import { UserRole } from '../generated/openapi'
 
 export type TokenHeaderKey = keyof TokenHeader
 
 export type TokenHeader = IncomingHttpHeaders & {
-    'x-access-token'?: string
-    'x-refresh-token'?: string
+    "x-access-token"?: string
+    "x-refresh-token"?: string
 }
 
-export type BasicAuthHeader = Pick<IncomingHttpHeaders, 'authorization'>
+export type BasicAuthHeader = Pick<IncomingHttpHeaders, "authorization">
 
 export type UserAuthHeader = Pick<
     TokenHeader,
-    'authorization' | 'x-access-token'
+    "authorization" | "x-access-token"
 >
 
 export type UserToken = {
@@ -23,17 +23,17 @@ export type UserToken = {
     readonly refreshToken: string
 }
 
-export type BasicAuthToken = Pick<UserToken, 'authorization'>
+export type BasicAuthToken = Pick<UserToken, "authorization">
 
-export type UserAuthToken = Pick<UserToken, 'authorization' | 'accessToken'>
+export type UserAuthToken = Pick<UserToken, "authorization" | "accessToken">
 
-export type RefreshAuthToken = Pick<UserToken, 'refreshToken'>
+export type RefreshAuthToken = Pick<UserToken, "refreshToken">
 
 export function formatUserToken(token: TokenHeader): UserToken {
     return {
-        accessToken: formatToken(token['x-access-token']),
-        authorization: formatToken(token['authorization']),
-        refreshToken: formatToken(token['x-refresh-token']),
+        accessToken: formatToken(token["x-access-token"]),
+        authorization: formatToken(token["authorization"]),
+        refreshToken: formatToken(token["x-refresh-token"]),
     }
 }
 
@@ -45,36 +45,36 @@ export function formatBasicAuthToken(token: TokenHeader): BasicAuthToken {
 
 export function formatUserAuthToken(token: TokenHeader): UserAuthToken {
     return {
-        accessToken: formatToken(token['x-access-token']),
+        accessToken: formatToken(token["x-access-token"]),
         authorization: formatToken(token.authorization),
     }
 }
 
 export function formatRefreshAuthToken(token: TokenHeader): RefreshAuthToken {
     return {
-        refreshToken: formatToken(token['x-refresh-token']),
+        refreshToken: formatToken(token["x-refresh-token"]),
     }
 }
 
 export function formatToken(token?: string): string {
-    if (token) return token.startsWith('Bearer ') ? token.split(' ')[1] : token
-    return ''
+    if (token) return token.startsWith("Bearer ") ? token.split(" ")[1] : token
+    return ""
 }
 
 export function userIdFromHeaders(headers: TokenHeader): string {
-    return resourceFromToken(formatBasicAuthToken(headers), 'cognito:username')
+    return resourceFromToken(formatBasicAuthToken(headers), "cognito:username")
 }
 
 export function isUserInGroups(token: UserToken, groups: string[]): boolean {
-    return getUserGroupsFromToken(token)['cognito:groups'].some(x =>
+    return getUserGroupsFromToken(token)["cognito:groups"].some(x =>
         groups.includes(x),
     )
 }
 
 export function getUserGroupsFromToken(token: UserToken): UserWithGroups {
     return {
-        'cognito:groups':
-            jwtDecode<UserWithGroups>(token.authorization)['cognito:groups'] ||
+        "cognito:groups":
+            jwtDecode<UserWithGroups>(token.authorization)["cognito:groups"] ||
             [],
     }
 }
@@ -92,11 +92,11 @@ export function getUserGroupsFromToken(token: UserToken): UserWithGroups {
 // }
 
 export type IdTokenStructure = {
-    'cognito:username': string
+    "cognito:username": string
 }
 
 export interface UserWithGroups {
-    'cognito:groups': string[]
+    "cognito:groups": string[]
 }
 
 export function resourceFromToken(
@@ -108,5 +108,5 @@ export function resourceFromToken(
 }
 
 export function userIdFromToken(authorization: string): string {
-    return resourceFromToken({ authorization }, 'cognito:username')
+    return resourceFromToken({ authorization }, "cognito:username")
 }

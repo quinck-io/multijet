@@ -1,6 +1,6 @@
-import { AwilixContainer, asFunction, asValue, createContainer } from 'awilix'
+import { AwilixContainer, asFunction, asValue, createContainer } from "awilix"
 
-declare module 'fastify' {
+declare module "fastify" {
     interface FastifyRequest {
         services: AppServices
     }
@@ -15,7 +15,7 @@ export function appContainer(): AwilixContainer<AppServices> {
     const container = createContainer<AppServices>()
 
     container.register({
-        message: asValue('world'),
+        message: asValue("world"),
         dateTime: asFunction(() => new Date()),
     })
 

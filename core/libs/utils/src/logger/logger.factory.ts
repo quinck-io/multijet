@@ -1,10 +1,10 @@
-import pino, { LoggerOptions } from 'pino'
-import { NodeEnv } from '../env/env.models'
+import pino, { LoggerOptions } from "pino"
+import { NodeEnv } from "../env/env.models"
 import {
     commonOptions,
     defaulLoggerOptions,
     envToLogger,
-} from './logger.consts'
+} from "./logger.consts"
 
 export function createLoggerFromEnv(
     nodeEnv: NodeEnv,
