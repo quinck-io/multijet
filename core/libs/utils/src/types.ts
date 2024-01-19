@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 export type RecursiveKeyOf<TObj extends object> = {
     [TKey in keyof TObj & (string | number)]: RecursiveKeyOfHandleValue<
         TObj[TKey],

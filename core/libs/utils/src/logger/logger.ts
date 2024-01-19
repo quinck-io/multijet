@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { NodeEnv } from "@libs/utils"
 import { createWinstonLogger } from "./winston/winston"
 

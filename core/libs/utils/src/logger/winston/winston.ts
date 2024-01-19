@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NodeEnv } from "@libs/utils"
 import winston, { LoggerOptions } from "winston"
 import { Logger } from "../logger"

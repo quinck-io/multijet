@@ -12,7 +12,7 @@
         "openapi:generate": "npm run openapi-route-configs:generate && npm run openapi-types:generate"
     },
     "dependencies": {
-        "@fastify/cors": "^8.4.1",
+        "@fastify/cors": "^8.5.0",
         "@libs/api-errors": "^0.0.1",
         "@libs/utils": "*",
         "jwt-decode": "^4.0.0"
