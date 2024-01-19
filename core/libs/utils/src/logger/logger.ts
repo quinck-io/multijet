@@ -1,8 +1,27 @@
-import { commonEnvironment } from "../env/env"
-import { createLoggerFromEnv } from "./logger.factory"
-import { Logger } from "./logger.models"
-import { extendLogger } from "./logger.utils"
+import { NodeEnv } from "@libs/utils"
+import { createWinstonLogger } from "./winston/winston"
 
-export const logger: Logger = extendLogger(
-    createLoggerFromEnv(commonEnvironment.NODE_ENV),
-)
+export interface LogFunction {
+    <T extends object>(obj: T, msg?: string, ...args: any[]): void
+    (obj: unknown, msg?: string, ...args: any[]): void
+    (msg: string, ...args: any[]): void
+}
+
+export interface Logger {
+    level: string
+
+    fatal: LogFunction
+    error: LogFunction
+    warn: LogFunction
+    info: LogFunction
+    debug: LogFunction
+    trace: LogFunction
+    silent: LogFunction
+
+    child(): Logger
+}
+
+export const createLogger = (): Logger =>
+    createWinstonLogger(process.env.NODE_ENV as NodeEnv)
+
+export const logger = createLogger()
