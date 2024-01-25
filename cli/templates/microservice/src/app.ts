@@ -1,8 +1,8 @@
-import { createApiErrorsLookupService, defaultMappings } from '@libs/api-errors'
-import { defaultApp, diScope } from '@libs/fastify-utils'
-import { FastifyServerOptions } from 'fastify'
-import { appContainer } from './di-container'
-import { createRoutes } from './routes'
+import { createApiErrorsLookupService, defaultMappings } from "@libs/api-errors"
+import { defaultApp, diScope } from "@libs/fastify-utils"
+import { FastifyServerOptions } from "fastify"
+import { appContainer } from "./di-container"
+import { createRoutes } from "./routes"
 
 export const createApp = (opts?: FastifyServerOptions) => {
     const app = defaultApp(opts, { cors: true }, createErrorsLookupService())
