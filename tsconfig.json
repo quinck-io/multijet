@@ -1,3 +1,13 @@
 {
-    "exclude": ["cli"]
+    "exclude": ["node_modules", "dist", "core", "modules", "cli/templates"],
+    "compilerOptions": {
+        "rootDir": "cli",
+        "outDir": "dist",
+        "strict": true,
+        "target": "es6",
+        "sourceMap": true,
+        "esModuleInterop": true,
+        "moduleResolution": "node",
+        "resolveJsonModule": true
+    }
 }
