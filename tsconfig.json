@@ -4,8 +4,7 @@
         "rootDir": "cli",
         "outDir": "dist",
         "strict": true,
-        "target": "es6",
-        "sourceMap": true,
+        "target": "ES2021",
         "esModuleInterop": true,
         "moduleResolution": "node",
         "resolveJsonModule": true
