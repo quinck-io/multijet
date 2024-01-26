@@ -1,7 +1,14 @@
 import { IncomingHttpHeaders } from "http2"
 import { jwtDecode } from "jwt-decode"
-// import { BadRequestError, FrobiddenError } from '../errors/common'
-// import { UserRole } from '../generated/openapi'
+
+// TODO: modify jwt structure to your needs
+export type IdTokenStructure = {
+    "cognito:username": string
+}
+
+export interface UserWithGroups {
+    "cognito:groups": string[]
+}
 
 export type TokenHeaderKey = keyof TokenHeader
 
@@ -77,26 +84,6 @@ export function getUserGroupsFromToken(token: UserToken): UserWithGroups {
             jwtDecode<UserWithGroups>(token.authorization)["cognito:groups"] ||
             [],
     }
-}
-
-// export function userHasRole(headers: TokenHeader, roles: UserRole[]): boolean {
-//     try {
-//         return isUserInGroups(formatUserToken(headers), roles)
-//     } catch (error) {
-//         throw new BadRequestError(error as Error)
-//     }
-// }
-
-// export function assertRole(headers: TokenHeader, roles: UserRole[]): void {
-//     if (!userHasRole(headers, roles)) throw new FrobiddenError()
-// }
-
-export type IdTokenStructure = {
-    "cognito:username": string
-}
-
-export interface UserWithGroups {
-    "cognito:groups": string[]
 }
 
 export function resourceFromToken(

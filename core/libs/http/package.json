@@ -1,5 +1,5 @@
 {
-    "name": "@libs/fastify-utils",
+    "name": "@libs/http",
     "private": true,
     "version": "0.0.1",
     "types": "src/index.ts",
