@@ -16,7 +16,7 @@ export const RUNTIME_CHOICES: Choice[] = [
 ]
 
 export const OPTIONAL_LIBS: Choice[] = [
-    { title: "Cognito Authentication", value: "auth" },
-    { title: "S3 Media Storage", value: "media" },
-    { title: "DynamoDB Utils", value: "dynamo" },
+    { title: "Cognito Authentication", value: "user-manager" },
+    { title: "S3 Media Storage", value: "media-storage" },
+    { title: "DynamoDB Utils", value: "dynamoose-utils" },
 ]

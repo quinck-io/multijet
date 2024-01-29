@@ -1,5 +1,0 @@
-{
-    "require": "esbuild-runner/register",
-    "spec": "**/*.test.ts",
-    "exclude": ["**/node_modules/**/*"]
-}

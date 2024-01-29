@@ -11,7 +11,7 @@ import ora from "ora"
 import path, { dirname } from "path"
 import { fileURLToPath } from "url"
 import { FILE_BLACKLIST } from "./consts.js"
-import { changePackageName } from "./helper.js"
+import { changePackageName, copyOptionalLibs } from "./helper.js"
 import { CreateProjectResponse, Runtime } from "./models.js"
 
 const __filename = fileURLToPath(import.meta.url)
@@ -23,7 +23,8 @@ export async function scaffoldProject(
 ) {
     const { modulesIncluded, initializeGit, projectDir } = answers
 
-    const coreFilesPath = path.join(__dirname, "..", "..", "core")
+    const rootFilesPath = path.join(__dirname, "..", "..")
+    const coreFilesPath = path.join(rootFilesPath, "core")
     const optionalDir = path.join(__dirname, "..", "res", "optional")
     const pManager = answers.runtime === Runtime.NODE ? "npm" : "bun"
 
@@ -67,14 +68,12 @@ export async function scaffoldProject(
     }
 
     spinner.start("Applying modules")
-    // await applyOptionalModules(
-    //     projectName,
-    //     projectDir,
-    //     modulesIncluded,
-    // ).catch(error => {
-    //     spinner.fail("Failed to apply optional modules")
-    //     throw error
-    // })
+    try {
+        copyOptionalLibs(rootFilesPath, projectDir, modulesIncluded)
+    } catch (error) {
+        spinner.fail("Failed to apply optional modules")
+        throw error
+    }
     spinner.succeed("Optional modules applied")
 
     spinner.start("Installing dependencies")
