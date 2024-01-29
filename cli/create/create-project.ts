@@ -1,4 +1,3 @@
-import chalk from "chalk"
 import prompts from "prompts"
 
 import { OPTIONAL_LIBS, RUNTIME_CHOICES } from "./consts.js"
@@ -43,16 +42,5 @@ export async function handleCreateProject() {
         .replaceAll(" ", "-")
         .replace(/[^\w\d\s-]/g, "")
 
-    scaffoldProject(projectName, response)
-
-    console.log(
-        "\n",
-        chalk.blue(
-            `${chalk.bold(
-                "Your project is ready!",
-            )} Enjoy the speed of Multijet:`,
-        ),
-    )
-    console.log("-", chalk.yellow(`cd ${projectName}`))
-    console.log("-", chalk.yellow(`npm run build`))
+    await scaffoldProject(projectName, response)
 }

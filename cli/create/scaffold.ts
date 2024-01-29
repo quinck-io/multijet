@@ -1,3 +1,4 @@
+import chalk from "chalk"
 import { execa } from "execa"
 import {
     copyFileSync,
@@ -10,8 +11,9 @@ import {
 import ora from "ora"
 import path, { dirname } from "path"
 import { fileURLToPath } from "url"
+import { changePackageName } from "../util.js"
 import { FILE_BLACKLIST } from "./consts.js"
-import { changePackageName, copyOptionalLibs } from "./helper.js"
+import { copyOptionalLibs } from "./helper.js"
 import { CreateProjectResponse, Runtime } from "./models.js"
 
 const __filename = fileURLToPath(import.meta.url)
@@ -97,4 +99,15 @@ export async function scaffoldProject(
 
         spinner.succeed("Repository initialized")
     }
+
+    console.log(
+        "\n",
+        chalk.blue(
+            `${chalk.bold(
+                "Your project is ready!",
+            )} Enjoy the speed of Multijet:`,
+        ),
+    )
+    console.log("-", chalk.yellow(`cd ${projectName}`))
+    console.log("-", chalk.yellow(`${pManager} run build`))
 }

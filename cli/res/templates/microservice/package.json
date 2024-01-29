@@ -1,0 +1,18 @@
+{
+    "name": "@microservices/hello-service",
+    "private": true,
+    "version": "0.0.1",
+    "scripts": {
+        "start": "node ./dist/index.js",
+        "build": "node ../../configs/esbuild/esbuild.config.js",
+        "build:debug": "node ../../configs/esbuild/esbuild.debug.js",
+        "lint": "eslint ./src",
+        "typecheck": "tsc",
+        "clean": "rm -rf dist .turbo node_modules"
+    },
+    "dependencies": {
+        "@fastify/aws-lambda": "^3.2.0",
+        "@libs/http": "^0.0.1",
+        "@libs/utils": "^0.0.1"
+    }
+}

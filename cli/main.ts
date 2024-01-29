@@ -3,6 +3,7 @@
 import chalk from "chalk"
 import { Command } from "commander"
 import { handleCreateProject } from "./create/create-project.js"
+import { generateMs } from "./new/generate-new.js"
 import { upgradeCli } from "./upgrade/upgrade.js"
 
 const version = "2.0.0"
@@ -12,7 +13,7 @@ cli.name("multijet").description("multijet CLI").version(version)
 
 cli.command("create")
     .description(chalk.magenta("create a new Multijet project"))
-    .action(() => handleCreateProject())
+    .action(async () => await handleCreateProject())
 
 const newCommand = new Command("new")
     .description(chalk.green("generate a mjet module"))
@@ -22,10 +23,16 @@ newCommand
     .command("ms")
     .description("generate a microservice")
     .argument("<name>", "name of the microservice")
+    .action(async name => {
+        await generateMs(name, "microservices")
+    })
 newCommand
     .command("lib")
     .description("generate a shared library")
     .argument("<name>", "name of the library")
+    .action(async name => {
+        await generateMs(name, "libs")
+    })
 newCommand
     .command("pkg")
     .description("generate a basic package")

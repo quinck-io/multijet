@@ -1,5 +1,5 @@
 {
-    "exclude": ["node_modules", "dist", "core", "modules", "cli/templates"],
+    "exclude": ["node_modules", "dist", "core", "modules", "cli/res"],
     "compilerOptions": {
         "rootDir": "cli",
         "outDir": "dist",
