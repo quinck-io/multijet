@@ -3,6 +3,7 @@
 import chalk from "chalk"
 import { Command } from "commander"
 import { handleCreateProject } from "./create/create-project.js"
+import { upgradeCli } from "./upgrade/upgrade.js"
 
 const version = "2.0.0"
 const cli = new Command()
@@ -32,9 +33,9 @@ newCommand
 
 cli.addCommand(newCommand)
 
-cli.command("upgrade").description(
-    chalk.yellow("update multijet to the latest version"),
-)
+cli.command("upgrade")
+    .description(chalk.yellow("update multijet to the latest version"))
+    .action(upgradeCli)
 
 cli.addHelpText(
     "after",
