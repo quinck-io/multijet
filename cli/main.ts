@@ -9,14 +9,14 @@ import { upgradeCli } from "./upgrade/upgrade.js"
 const version = "2.0.0"
 const cli = new Command()
 
-cli.name("multijet").description("multijet CLI").version(version)
+cli.name("mjet").description("multijet CLI").version(version)
 
 cli.command("create")
     .description(chalk.magenta("create a new Multijet project"))
     .action(async () => await handleCreateProject())
 
 const newCommand = new Command("new")
-    .description(chalk.green("generate a mjet module"))
+    .description(chalk.green("generate a module based on a template"))
     .arguments("<module>")
 
 newCommand
@@ -53,5 +53,5 @@ Examples:
   $ mjet new ms my-microservice`),
 )
 
-console.log(chalk.white.bgBlue(" multijet "))
+console.log(chalk.white.bgBlue(" multijet/v2 "))
 cli.parse()
