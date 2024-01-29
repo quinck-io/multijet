@@ -12,7 +12,7 @@
         "email": "paolo.galeotti@quinck.io"
     },
     "scripts": {
-        "build:cli": "tsc"
+        "build:cli": "tsc && cp -r cli/res ./dist"
     },
     "contributors": [
         {

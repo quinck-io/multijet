@@ -3,6 +3,7 @@ import prompts from "prompts"
 
 import { OPTIONAL_LIBS, RUNTIME_CHOICES } from "./consts.js"
 import { CreateProjectResponse } from "./models.js"
+import { scaffoldProject } from "./scaffold.js"
 
 export async function handleCreateProject() {
     const response: CreateProjectResponse = await prompts([
@@ -37,12 +38,12 @@ export async function handleCreateProject() {
         },
     ])
 
-    console.log(response.runtime)
-
     const projectName = response.projectName
         .trim()
         .replaceAll(" ", "-")
         .replace(/[^\w\d\s-]/g, "")
+
+    scaffoldProject(projectName, response)
 
     console.log(
         "\n",

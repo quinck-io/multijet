@@ -1,9 +1,14 @@
 import { Choice } from "prompts"
+import { Runtime } from "./models.js"
 
-export enum Runtime {
-    NODE = "node",
-    BUN = "bun",
-}
+export const FILE_BLACKLIST = [
+    ".aws-sam",
+    "node_modules",
+    "dist",
+    ".turbo",
+    "package-lock.json",
+    "bun.lockb",
+]
 
 export const RUNTIME_CHOICES: Choice[] = [
     { title: "Node.js", value: Runtime.NODE, selected: true },

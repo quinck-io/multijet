@@ -5,8 +5,9 @@
         "outDir": "dist",
         "strict": true,
         "target": "ES2021",
+        "module": "NodeNext",
         "esModuleInterop": true,
-        "moduleResolution": "node",
+        "moduleResolution": "NodeNext",
         "resolveJsonModule": true
     }
 }
