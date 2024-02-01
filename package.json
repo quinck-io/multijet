@@ -24,12 +24,12 @@
         "chalk": "^5.3.0",
         "commander": "^11.1.0",
         "execa": "^8.0.1",
-        "ora": "^7.0.1",
+        "ora": "^8.0.1",
         "prompts": "^2.4.2",
         "yaml": "^2.3.4"
     },
     "devDependencies": {
-        "@types/node": "^20.11.7",
+        "@types/node": "^20.11.15",
         "@types/prompts": "^2.4.9",
         "typescript": "^5.3.3"
     }
