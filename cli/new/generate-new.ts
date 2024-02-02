@@ -5,19 +5,13 @@ import ora from "ora"
 import path, { dirname } from "path"
 import { fileURLToPath } from "url"
 import { changePackageName, getPackageManager, trimName } from "../util.js"
+import { Namespace, templates } from "./consts.js"
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 const CURRENT_USER_DIR = process.cwd()
 
-export type Namespace = "microservices" | "libs"
-
-const templates: Record<Namespace, string> = {
-    microservices: "microservice",
-    libs: "lib",
-}
-
-export async function generateMs(name: string, ns: Namespace) {
+export async function generateModule(name: string, ns: Namespace) {
     const packageName = trimName(name)
     const packageType = templates[ns]
     const templateDir = path.join(

@@ -68,14 +68,16 @@ export async function scaffoldProject(
         throw error
     }
 
-    spinner.start("Applying modules")
-    try {
-        copyOptionalLibs(rootFilesPath, projectDir, modulesIncluded)
-    } catch (error) {
-        spinner.fail("Failed to apply optional modules")
-        throw error
+    if (variant === Variant.CORE && modulesIncluded) {
+        spinner.start("Applying modules")
+        try {
+            copyOptionalLibs(rootFilesPath, projectDir, modulesIncluded)
+        } catch (error) {
+            spinner.fail("Failed to apply optional modules")
+            throw error
+        }
+        spinner.succeed("Optional modules applied")
     }
-    spinner.succeed("Optional modules applied")
 
     spinner.start("Installing dependencies")
     await execa(pManager, ["i"], { cwd: projectDir }).catch(error => {

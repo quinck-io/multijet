@@ -3,7 +3,7 @@
 import chalk from "chalk"
 import { Command } from "commander"
 import { handleCreateProject } from "./create/create-project.js"
-import { generateMs } from "./new/generate-new.js"
+import { generateModule } from "./new/generate-new.js"
 import { upgradeCli } from "./upgrade/upgrade.js"
 
 const version = "2.0.0"
@@ -24,19 +24,22 @@ newCommand
     .description("generate a microservice")
     .argument("<name>", "name of the microservice")
     .action(async name => {
-        await generateMs(name, "microservices")
+        await generateModule(name, "microservices")
     })
 newCommand
     .command("lib")
     .description("generate a shared library")
     .argument("<name>", "name of the library")
     .action(async name => {
-        await generateMs(name, "libs")
+        await generateModule(name, "libs")
     })
 newCommand
     .command("pkg")
     .description("generate a basic package")
     .argument("<name>", "name of the package")
+    .action(async name => {
+        await generateModule(name, "packages")
+    })
 
 cli.addCommand(newCommand)
 

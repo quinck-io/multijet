@@ -3,7 +3,7 @@ export interface CreateProjectResponse {
     projectDir: string
     variant: Variant
     runtime: Runtime
-    modulesIncluded: string[]
+    modulesIncluded?: string[]
     initializeGit: boolean
 }
 

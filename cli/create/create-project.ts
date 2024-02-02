@@ -1,11 +1,11 @@
 import prompts from "prompts"
 
 import { OPTIONAL_LIBS, RUNTIME_CHOICES, VARIANT_CHOICES } from "./consts.js"
-import { CreateProjectResponse } from "./models.js"
+import { CreateProjectResponse, Variant } from "./models.js"
 import { scaffoldProject } from "./scaffold.js"
 
 export async function handleCreateProject() {
-    const response: CreateProjectResponse = await prompts([
+    const response = await prompts([
         {
             name: "projectName",
             message: "How do you want to name the project?",
@@ -29,24 +29,31 @@ export async function handleCreateProject() {
             type: "select",
             choices: RUNTIME_CHOICES,
         },
-        {
+    ])
+
+    if (response.variant === Variant.CORE) {
+        const moduleResponse = await prompts({
             name: "modulesIncluded",
             message: "What modules do you want to include?",
             type: "multiselect",
             choices: OPTIONAL_LIBS,
-        },
-        {
-            name: "initializeGit",
-            message: "Initialize a Git repository?",
-            type: "confirm",
-            initial: true,
-        },
-    ])
+        })
+        Object.assign(response, moduleResponse)
+    }
+
+    const gitResponse = await prompts({
+        name: "initializeGit",
+        message: "Initialize a Git repository?",
+        type: "confirm",
+        initial: true,
+    })
+
+    const finalResponse: CreateProjectResponse = { ...response, ...gitResponse }
 
     const projectName = response.projectName
         .trim()
         .replaceAll(" ", "-")
         .replace(/[^\w\d\s-]/g, "")
 
-    await scaffoldProject(projectName, response)
+    await scaffoldProject(projectName, finalResponse)
 }
