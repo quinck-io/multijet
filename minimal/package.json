@@ -1,0 +1,29 @@
+{
+    "name": "multijet-minimal",
+    "private": true,
+    "workspaces": [
+        "packages/*"
+    ],
+    "scripts": {
+        "ts": "esr",
+        "build": "turbo run build",
+        "build:nocache": "turbo run build --force",
+        "build:debug": "turbo run build:debug --force",
+        "lint": "eslint .",
+        "lint:fix": "eslint --fix .",
+        "clean": "turbo run clean && rm -rf .aws-sam node_modules",
+        "typecheck": "turbo run typecheck"
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "@types/node": "^20.11.15",
+        "@typescript-eslint/eslint-plugin": "^6.20.0",
+        "esbuild": "^0.20.0",
+        "esbuild-plugin-copy": "^2.1.1",
+        "esbuild-runner": "^2.2.2",
+        "eslint": "^8.56.0",
+        "eslint-config-prettier": "^9.1.0",
+        "turbo": "^1.12.2",
+        "typescript": "^5.3.3"
+    }
+}

@@ -1,0 +1,18 @@
+{
+    "pipeline": {
+        "typecheck": {
+            "dependsOn": ["^typecheck"]
+        },
+        "build": {
+            "dependsOn": ["^build", "typecheck"],
+            "outputs": ["dist/**"]
+        },
+        "build:debug": {
+            "dependsOn": ["^build:debug", "typecheck"]
+        },
+        "clean": {
+            "cache": false
+        }
+    },
+    "globalDependencies": ["tsconfig.base.json"]
+}
