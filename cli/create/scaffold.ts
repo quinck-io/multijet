@@ -12,7 +12,7 @@ import ora from "ora"
 import path, { dirname } from "path"
 import { fileURLToPath } from "url"
 import { changePackageName } from "../util.js"
-import { FILE_BLACKLIST } from "./consts.js"
+import { FILE_BLACKLIST, getDockerComposeTemplate } from "./consts.js"
 import { copyOptionalLibs } from "./helper.js"
 import { CreateProjectResponse, Runtime, Variant } from "./models.js"
 
@@ -61,6 +61,10 @@ export async function scaffoldProject(
             readmeFilePath,
             [`# ${projectName}`, ...readmeLines].join("\n"),
         )
+
+        // scaffold docker compose
+        const dockerComposePath = path.join(projectDir, "docker-compose.yml")
+        writeFileSync(dockerComposePath, getDockerComposeTemplate(projectName))
 
         spinner.succeed("Project initialized")
     } catch (error) {

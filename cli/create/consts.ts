@@ -34,3 +34,28 @@ export const OPTIONAL_LIBS: Choice[] = [
     { title: "S3 Media Storage", value: "media-storage" },
     { title: "DynamoDB Utils", value: "dynamoose-utils" },
 ]
+
+export const getDockerComposeTemplate = (projectName: string) =>
+    `
+version: "3.8"
+
+services:
+    hello-service:
+        image: ${projectName}-hello-service
+        restart: unless-stopped
+        env_file:
+            - .env
+        networks:
+            - ${projectName}-net
+
+    api-gateway:
+        image: nginx:alpine
+        volumes:
+            - ./nginx.conf:/etc/nginx/nginx.conf
+        ports:
+            - "3000:3000"
+        networks:
+            - ${projectName}-net
+networks:
+    ${projectName}-net:
+`.trimStart()

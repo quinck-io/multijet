@@ -1,9 +1,8 @@
 /* eslint-disable */
 
-import { program } from 'commander'
-import { readdir } from 'fs/promises'
-import path from 'path'
-import microservicesConfigs from '../microservices-build-configs.json'
+import { program } from "commander"
+import { readdir } from "fs/promises"
+import path from "path"
 
 type NonGenericMicroservice = {
     dockerfilePath?: string
@@ -11,18 +10,20 @@ type NonGenericMicroservice = {
     runnerImage: string
 }
 
-const DOCKERFILE_PATH = path.join(__dirname, '..', 'Dockerfile')
+const DOCKERFILE_PATH = path.join(__dirname, "..", "Dockerfile")
 const MICROSERVICES_PATH = path.join(
     __dirname,
-    '..',
-    '..',
-    '..',
-    'microservices',
+    "..",
+    "..",
+    "..",
+    "microservices",
 )
 const getMicroservicePath = (microservice: string) =>
     path.join(MICROSERVICES_PATH, microservice)
 
-const NON_GENERIC: Record<string, NonGenericMicroservice> = microservicesConfigs
+// ----- Define non-generic microservices here ---
+const NON_GENERIC: Record<string, NonGenericMicroservice> = {}
+// -----------------------------------------------
 
 const log = (label: string, ...text: unknown[]) =>
     console.log(`${label}: `, ...text)
@@ -33,18 +34,18 @@ const buildDockerImage = async (
     platform: string,
     fromImage: string,
 ) => {
-    const { execa } = await import('execa')
+    const { execa } = await import("execa")
 
-    await execa('docker', [
-        'build',
-        '.',
-        '-f',
+    await execa("docker", [
+        "build",
+        ".",
+        "-f",
         DOCKERFILE_PATH,
-        '-t',
+        "-t",
         `${projectName}-${microservice}`,
-        '--build-arg',
+        "--build-arg",
         `MICROSERVICE=${microservice}`,
-        '--build-arg',
+        "--build-arg",
         `FROM_DOCKER_IMAGE=${fromImage}`,
         `--platform=${platform}`,
     ])
@@ -55,19 +56,19 @@ const buildNonGenericDockerImage = async (
     microservice: string,
     platform: string,
 ) => {
-    const { execa } = await import('execa')
+    const { execa } = await import("execa")
 
-    await execa('docker', [
-        'build',
+    await execa("docker", [
+        "build",
         getMicroservicePath(microservice),
-        '-f',
+        "-f",
         NON_GENERIC[microservice].dockerfilePath ??
-            path.join(getMicroservicePath(microservice), 'Dockerfile'),
-        '-t',
+            path.join(getMicroservicePath(microservice), "Dockerfile"),
+        "-t",
         `${projectName}-${microservice}`,
-        '--build-arg',
+        "--build-arg",
         `FROM_BUILDER_DOCKER_IMAGE=${NON_GENERIC[microservice].builderImage}`,
-        '--build-arg',
+        "--build-arg",
         `FROM_RUNNER_DOCKER_IMAGE=${NON_GENERIC[microservice].runnerImage}`,
         `--platform=${platform}`,
     ])
@@ -79,13 +80,13 @@ async function buildMicroservice(
     platform: string,
     fromImage: string,
 ): Promise<void> {
-    log(microservice, 'Build started')
+    log(microservice, "Build started")
     if (Object.keys(NON_GENERIC).includes(microservice)) {
         await buildNonGenericDockerImage(projectName, microservice, platform)
     } else {
         await buildDockerImage(projectName, microservice, platform, fromImage)
     }
-    log(microservice, 'Image created')
+    log(microservice, "Image created")
 }
 
 async function buildMicroservices(
@@ -94,9 +95,9 @@ async function buildMicroservices(
     fromImage: string,
     sequential: boolean,
 ) {
-    const microservices = await readdir('microservices')
-    log('main', 'STARTED DOCKER BUILD')
-    log('services to build', microservices)
+    const microservices = await readdir("microservices")
+    log("main", "STARTED DOCKER BUILD")
+    log("services to build", microservices)
 
     if (sequential) {
         for (const microservice of microservices) {
@@ -119,14 +120,14 @@ async function buildMicroservices(
 }
 
 program
-    .argument('<projectName>', 'Project name')
-    .option('-p, --platform <platform>', 'build platform', 'linux/amd64')
-    .option('-i, --fromImage <fromImage>', 'build from image', 'node:18-alpine')
-    .option('--sequential', 'build sequentially', false)
+    .argument("<projectName>", "Project name")
+    .option("-p, --platform <platform>", "build platform", "linux/amd64")
+    .option("-i, --fromImage <fromImage>", "build from image", "node:18-alpine")
+    .option("--sequential", "build sequentially", false)
     .action(async (projectName: string) => {
         const options = program.opts()
 
-        log('options', options)
+        log("options", options)
 
         const { platform, fromImage, sequential } = options
 
