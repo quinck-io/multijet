@@ -14,7 +14,6 @@
         "clean": "turbo run clean && rm -rf .aws-sam node_modules",
         "typecheck": "turbo run typecheck"
     },
-    "dependencies": {},
     "devDependencies": {
         "@types/node": "^20.11.15",
         "@typescript-eslint/eslint-plugin": "^6.20.0",
@@ -23,6 +22,7 @@
         "esbuild-runner": "^2.2.2",
         "eslint": "^8.56.0",
         "eslint-config-prettier": "^9.1.0",
+        "eslint-plugin-sonarjs": "^0.23.0",
         "turbo": "^1.12.2",
         "typescript": "^5.3.3"
     }

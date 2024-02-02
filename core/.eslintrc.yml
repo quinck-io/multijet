@@ -4,8 +4,10 @@ extends:
   - "eslint:recommended"
   - "plugin:@typescript-eslint/recommended"
   - "prettier"
+  - "plugin:sonarjs/recommended"
 plugins:
   - "@typescript-eslint"
+  - sonarjs
 ignorePatterns:
   - "node_modules"
   - "dist"
@@ -20,6 +22,7 @@ rules:
   "@typescript-eslint/ban-ts-comment": "warn"
   "@typescript-eslint/no-unused-vars": "warn"
   "@typescript-eslint/no-empty-function": "warn"
+  "sonarjs/no-duplicate-string": "warn"
   quotes:
     - error
     - double

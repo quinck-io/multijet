@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/no-duplicate-string */
 import { IncomingHttpHeaders } from "http2"
 import { jwtDecode } from "jwt-decode"
 
