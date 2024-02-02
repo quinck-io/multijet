@@ -4,14 +4,24 @@ import { program } from "commander"
 import { readdir } from "fs/promises"
 import path from "path"
 
+// ------ Configure default options here ---------
+const DEFAULT_PLATFORM = "linux/amd64"
+const DEFAULT_IMAGE = "node:18-alpine" // use "oven/bun:alpine" for Bun runtime
+const DEFAULT_SEQUENTIAL_BUILD = false
+// ---------------------------------------------
+
 type NonGenericMicroservice = {
     dockerfilePath?: string
     builderImage: string
     runnerImage: string
 }
 
-const DOCKERFILE_PATH = path.join(__dirname, "..", "Dockerfile")
-const MICROSERVICES_PATH = path.join(
+// ----- Define non-generic microservices here ---
+const NON_GENERIC_MS: Record<string, NonGenericMicroservice> = {}
+// -----------------------------------------------
+
+const dockerfilePath = path.join(__dirname, "..", "Dockerfile")
+const microservicesPath = path.join(
     __dirname,
     "..",
     "..",
@@ -19,11 +29,7 @@ const MICROSERVICES_PATH = path.join(
     "microservices",
 )
 const getMicroservicePath = (microservice: string) =>
-    path.join(MICROSERVICES_PATH, microservice)
-
-// ----- Define non-generic microservices here ---
-const NON_GENERIC: Record<string, NonGenericMicroservice> = {}
-// -----------------------------------------------
+    path.join(microservicesPath, microservice)
 
 const log = (label: string, ...text: unknown[]) =>
     console.log(`${label}: `, ...text)
@@ -40,7 +46,7 @@ const buildDockerImage = async (
         "build",
         ".",
         "-f",
-        DOCKERFILE_PATH,
+        dockerfilePath,
         "-t",
         `${projectName}-${microservice}`,
         "--build-arg",
@@ -62,14 +68,14 @@ const buildNonGenericDockerImage = async (
         "build",
         getMicroservicePath(microservice),
         "-f",
-        NON_GENERIC[microservice].dockerfilePath ??
+        NON_GENERIC_MS[microservice].dockerfilePath ??
             path.join(getMicroservicePath(microservice), "Dockerfile"),
         "-t",
         `${projectName}-${microservice}`,
         "--build-arg",
-        `FROM_BUILDER_DOCKER_IMAGE=${NON_GENERIC[microservice].builderImage}`,
+        `FROM_BUILDER_DOCKER_IMAGE=${NON_GENERIC_MS[microservice].builderImage}`,
         "--build-arg",
-        `FROM_RUNNER_DOCKER_IMAGE=${NON_GENERIC[microservice].runnerImage}`,
+        `FROM_RUNNER_DOCKER_IMAGE=${NON_GENERIC_MS[microservice].runnerImage}`,
         `--platform=${platform}`,
     ])
 }
@@ -81,7 +87,7 @@ async function buildMicroservice(
     fromImage: string,
 ): Promise<void> {
     log(microservice, "Build started")
-    if (Object.keys(NON_GENERIC).includes(microservice)) {
+    if (Object.keys(NON_GENERIC_MS).includes(microservice)) {
         await buildNonGenericDockerImage(projectName, microservice, platform)
     } else {
         await buildDockerImage(projectName, microservice, platform, fromImage)
@@ -121,9 +127,9 @@ async function buildMicroservices(
 
 program
     .argument("<projectName>", "Project name")
-    .option("-p, --platform <platform>", "build platform", "linux/amd64")
-    .option("-i, --fromImage <fromImage>", "build from image", "node:18-alpine")
-    .option("--sequential", "build sequentially", false)
+    .option("-p, --platform <platform>", "build platform", DEFAULT_PLATFORM)
+    .option("-i, --fromImage <fromImage>", "build from image", DEFAULT_IMAGE)
+    .option("--sequential", "build sequentially", DEFAULT_SEQUENTIAL_BUILD)
     .action(async (projectName: string) => {
         const options = program.opts()
 
