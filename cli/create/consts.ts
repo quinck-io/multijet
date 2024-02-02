@@ -1,5 +1,5 @@
 import { Choice } from "prompts"
-import { Runtime } from "./models.js"
+import { Runtime, Variant } from "./models.js"
 
 export const FILE_BLACKLIST = [
     ".aws-sam",
@@ -8,6 +8,20 @@ export const FILE_BLACKLIST = [
     ".turbo",
     "package-lock.json",
     "bun.lockb",
+]
+
+export const VARIANT_CHOICES: Choice[] = [
+    {
+        title: "Core",
+        value: Variant.CORE,
+        selected: true,
+        description: "Full-featured multijet stack to build flexible REST APIs",
+    },
+    {
+        title: "Minimal",
+        value: Variant.MINIMAL,
+        description: "Minimal monorepo template focused on essentials",
+    },
 ]
 
 export const RUNTIME_CHOICES: Choice[] = [

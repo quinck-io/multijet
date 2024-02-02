@@ -1,6 +1,6 @@
 import prompts from "prompts"
 
-import { OPTIONAL_LIBS, RUNTIME_CHOICES } from "./consts.js"
+import { OPTIONAL_LIBS, RUNTIME_CHOICES, VARIANT_CHOICES } from "./consts.js"
 import { CreateProjectResponse } from "./models.js"
 import { scaffoldProject } from "./scaffold.js"
 
@@ -16,6 +16,12 @@ export async function handleCreateProject() {
             message: "Where do you want to place the project?",
             type: "text",
             initial: prev => prev,
+        },
+        {
+            name: "variant",
+            message: "Select the multijet flavor to use",
+            type: "select",
+            choices: VARIANT_CHOICES,
         },
         {
             name: "runtime",

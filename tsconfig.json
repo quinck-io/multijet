@@ -1,5 +1,12 @@
 {
-    "exclude": ["node_modules", "dist", "core", "modules", "cli/res"],
+    "exclude": [
+        "node_modules",
+        "dist",
+        "core",
+        "modules",
+        "cli/res",
+        "minimal"
+    ],
     "compilerOptions": {
         "rootDir": "cli",
         "outDir": "dist",

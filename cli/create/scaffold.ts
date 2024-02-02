@@ -14,7 +14,7 @@ import { fileURLToPath } from "url"
 import { changePackageName } from "../util.js"
 import { FILE_BLACKLIST } from "./consts.js"
 import { copyOptionalLibs } from "./helper.js"
-import { CreateProjectResponse, Runtime } from "./models.js"
+import { CreateProjectResponse, Runtime, Variant } from "./models.js"
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -23,29 +23,28 @@ export async function scaffoldProject(
     projectName: string,
     answers: CreateProjectResponse,
 ) {
-    const { modulesIncluded, initializeGit, projectDir } = answers
+    const { modulesIncluded, initializeGit, projectDir, variant } = answers
 
     const rootFilesPath = path.join(__dirname, "..", "..")
     const coreFilesPath = path.join(rootFilesPath, "core")
+    const minimalFilesPath = path.join(rootFilesPath, "minimal")
     const optionalDir = path.join(__dirname, "..", "res", "optional")
     const pManager = answers.runtime === Runtime.NODE ? "npm" : "bun"
 
     const spinner = ora("Scaffolding the project").start()
 
+    const variantDir =
+        variant === Variant.CORE ? coreFilesPath : minimalFilesPath
+
     try {
         mkdirSync(projectDir)
-        const filesToCopy = readdirSync(coreFilesPath)
+        const filesToCopy = readdirSync(variantDir)
 
         filesToCopy.forEach(file => {
-            cpSync(
-                path.join(coreFilesPath, file),
-                path.join(projectDir, file),
-                {
-                    recursive: true,
-                    filter: file =>
-                        !FILE_BLACKLIST.includes(path.basename(file)),
-                },
-            )
+            cpSync(path.join(variantDir, file), path.join(projectDir, file), {
+                recursive: true,
+                filter: file => !FILE_BLACKLIST.includes(path.basename(file)),
+            })
         })
         changePackageName(projectDir, projectName)
 
