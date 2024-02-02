@@ -12,7 +12,7 @@ const cli = new Command()
 cli.name("mjet").description("multijet CLI").version(version)
 
 cli.command("create")
-    .description(chalk.magenta("create a new Multijet project"))
+    .description(chalk.magenta("create a new multijet project"))
     .action(async () => await handleCreateProject())
 
 const newCommand = new Command("new")
