@@ -16,38 +16,38 @@ import { ApiErrorMappings } from "../lookup-service/api-errors-lookup-service.mo
 export const defaultMappings = (): ApiErrorMappings => ({
     [ResourceNotFoundError.name]: () => ({
         status: StatusCodes.NOT_FOUND,
-        errorCode: ErrorCode.RESOURCE_NOT_FOUND,
+        title: ErrorCode.RESOURCE_NOT_FOUND,
     }),
     [ExpectedResourceNotFoundError.name]: () => ({
         status: StatusCodes.INTERNAL_SERVER_ERROR,
-        errorCode: ErrorCode.RESOURCE_NOT_RETRIEVED,
+        title: ErrorCode.RESOURCE_NOT_RETRIEVED,
     }),
     [ForbiddenError.name]: () => ({
         status: StatusCodes.FORBIDDEN,
-        errorCode: ErrorCode.FORBIDDEN_NOT_AUTHORIZED,
+        title: ErrorCode.FORBIDDEN_NOT_AUTHORIZED,
     }),
     [UserNotAuthenticatedError.name]: () => ({
         status: StatusCodes.UNAUTHORIZED,
-        errorCode: ErrorCode.UNAUTHORIZED_NOT_AUTHENTICATED,
+        title: ErrorCode.UNAUTHORIZED_NOT_AUTHENTICATED,
     }),
     [UnkownInternalError.name]: () => ({
         status: StatusCodes.INTERNAL_SERVER_ERROR,
-        errorCode: ErrorCode.INTERNAL,
+        title: ErrorCode.INTERNAL,
     }),
     [InvalidCredentialsError.name]: () => ({
         status: StatusCodes.UNAUTHORIZED,
-        errorCode: ErrorCode.CREDENTIALS_NOT_VALID,
+        title: ErrorCode.CREDENTIALS_NOT_VALID,
     }),
     [UserNotFoundError.name]: () => ({
         status: StatusCodes.NOT_FOUND,
-        errorCode: ErrorCode.USER_NOT_FOUND,
+        title: ErrorCode.USER_NOT_FOUND,
     }),
     [ConflictError.name]: () => ({
         status: StatusCodes.CONFLICT,
-        errorCode: ErrorCode.CONFLICT,
+        title: ErrorCode.CONFLICT,
     }),
     [BadRequestError.name]: () => ({
         status: StatusCodes.BAD_REQUEST,
-        errorCode: ErrorCode.BAD_REQUEST,
+        title: ErrorCode.BAD_REQUEST,
     }),
 })

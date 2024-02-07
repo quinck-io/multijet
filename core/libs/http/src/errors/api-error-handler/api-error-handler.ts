@@ -11,19 +11,13 @@ import { httpErrorsRfcType } from "./http-errors-rfc-types"
 
 export type ErrorHandler = Parameters<FastifyInstance["setErrorHandler"]>[0]
 
-export const apiErrorHandler = (
-    apiErrorsLookupService: ApiErrorsLookupService,
-): ErrorHandler =>
-    function (error, _, reply) {
-        this.log.error(error)
+export const apiErrorHandler: ErrorHandler = function (error, request, reply) {
+    request.log.error(error)
 
-        const [statusCode, errorData] = errorResponseInformation(
-            apiErrorsLookupService,
-            error,
-        )
+    const [statusCode, errorData] = errorResponseInformation(this.apiErrorsLookupService, error)
 
-        reply.status(statusCode).send(errorData)
-    }
+    reply.status(statusCode).send(errorData)
+}
 
 const errorResponseInformation = (
     apiErrorsLookupService: ApiErrorsLookupService,
@@ -51,7 +45,7 @@ const errorResponseInformation = (
 
 const validationErrorData = (error: FastifyValidationError) => {
     const errorData = buildErrorData(error, {
-        errorCode: ErrorCode.VALIDATION,
+        title: ErrorCode.VALIDATION,
         status: StatusCodes.BAD_REQUEST,
     })
     errorData.validationErrors = getValidationErrors(error)
@@ -64,7 +58,7 @@ const buildErrorData = (error: Error, apiError?: ApiError): ErrorData => {
 
     return {
         type: httpErrorsRfcType(status),
-        title: apiError?.errorCode ?? ErrorCode.GENERIC,
+        title: apiError?.title ?? ErrorCode.GENERIC,
         detail: error.message,
         status,
     }

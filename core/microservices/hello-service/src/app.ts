@@ -1,25 +1,16 @@
-import { createApiErrorsLookupService, defaultMappings } from "@libs/api-errors"
-import { defaultApp, diScope } from "@libs/http"
+import { diScope, serverApp } from "@libs/http"
 import { FastifyServerOptions } from "fastify"
 import { appContainer } from "./di-container"
 import { createRoutes } from "./routes"
 
-export const createApp = (opts?: FastifyServerOptions) => {
-    const app = defaultApp(opts, { cors: true }, createErrorsLookupService())
+export const createApp = async (opts?: FastifyServerOptions) => {
+    const app = serverApp({ cors: true, fastifyOptions: opts })
 
     diScope(app, appContainer(), request => {
         request.services = request.scopedContainer.cradle
     })
 
-    createRoutes().forEach(({ config, handler }) =>
-        app.route({ ...config, handler }),
-    )
+    createRoutes().forEach(({ config, handler }) => app.route({ ...config, handler }))
 
     return app
-}
-
-const createErrorsLookupService = () => {
-    const errorsLookupService = createApiErrorsLookupService()
-    errorsLookupService.putMappings(defaultMappings())
-    return errorsLookupService
 }

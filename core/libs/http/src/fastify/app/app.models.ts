@@ -1,11 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { ApiErrorsLookupService } from "@libs/api-errors"
 import {
+    FastifyServerOptions,
     RawReplyDefaultExpression,
     RawRequestDefaultExpression,
     RawServerDefault,
     RouteOptions,
 } from "fastify"
 import { AppCorsOptions } from "./cors.app"
+
+declare module "fastify" {
+    interface FastifyInstance {
+        apiErrorsLookupService: ApiErrorsLookupService
+    }
+}
 
 type GenericRouteOptions = RouteOptions<
     RawServerDefault,
@@ -28,6 +36,7 @@ export type RoutesHandlerMapping = Array<{
 export type ApplicationOptions = {
     cors?: AppCorsOptions
     healthCheck?: HealthCheck
+    fastifyOptions?: FastifyServerOptions
 }
 
 export type HealthCheck = {

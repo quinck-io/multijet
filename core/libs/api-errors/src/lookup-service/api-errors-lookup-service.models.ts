@@ -1,5 +1,4 @@
-import { ErrorCode } from "@libs/models"
-import { StatusCodes } from "http-status-codes"
+import { ErrorData } from "@libs/models"
 
 /**
  * Semantic type to represent the identifier of an error.
@@ -9,10 +8,7 @@ export type ErrorIdentifier = string
 /**
  * Semantic type to represent the additional information of a rest api error.
  */
-export type ApiError = {
-    errorCode: ErrorCode
-    status: StatusCodes
-}
+export type ApiError = Pick<ErrorData, "title" | "status"> & Partial<ErrorData>
 
 /**
  * Semantic type to represent the parser of an error.
