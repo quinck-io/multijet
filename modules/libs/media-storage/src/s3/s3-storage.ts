@@ -6,21 +6,21 @@ import {
     ListObjectsV2CommandInput,
     PutObjectCommand,
     S3Client,
-} from '@aws-sdk/client-s3'
-import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
-import { isPresent } from '@libs/utils'
-import '@quinck/collections'
-import { Readable } from 'stream'
-import { MediaStorageServiceParams } from '../factory'
+} from "@aws-sdk/client-s3"
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
+import "@quinck/collections"
+import { isPresent } from "@quinck/type-utils"
+import { Readable } from "stream"
+import { MediaStorageServiceParams } from "../factory"
 import {
     FileInformation,
     MediaStorageService,
     SearchFileParams,
-} from '../models'
-import { readableToBuffer } from '../utils'
+} from "../models"
+import { readableToBuffer } from "../utils"
 
 const URL_EXPIRES_SECONDS = 60 * 60 * 24 * 7
-const SLASH = '/'
+const SLASH = "/"
 
 export class S3MediaStorageService implements MediaStorageService {
     private readonly bucketName: string

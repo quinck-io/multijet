@@ -1,9 +1,9 @@
-import { BasicError, isPresent } from '@libs/utils'
+import { isPresent } from "@quinck/type-utils"
 import {
     CommandInput,
     CommandOutput,
     HandlerOptions,
-} from '../models/command.models'
+} from "../models/command.models"
 
 export type DynamoCommandErrorProps = {
     commandInput?: CommandInput
@@ -13,6 +13,33 @@ export type DynamoCommandErrorProps = {
 
 export type DynamoCommandErrorPropsKey = keyof DynamoCommandErrorProps
 
+export class BasicError extends Error {
+    name = BasicError.name
+
+    constructor(error?: unknown) {
+        super(BasicError.formatMessage(error))
+    }
+
+    static formatMessage(error?: unknown): string {
+        if (!isPresent(error)) return ""
+        if (error instanceof Error) return `[${error.name}] ${error.message}`
+        switch (typeof error) {
+            case "bigint":
+            case "number":
+            case "boolean":
+                return String(error)
+            case "string":
+                return error
+            case "object":
+                return error.toString()
+            case "function":
+                return `Function ${error.name}, with arguments ${error.arguments}`
+            default:
+                return ""
+        }
+    }
+}
+
 export class DynamoCommandError extends BasicError {
     name = DynamoCommandError.name
     constructor(props?: DynamoCommandErrorProps, error?: unknown) {
@@ -20,17 +47,17 @@ export class DynamoCommandError extends BasicError {
         if (isPresent(props)) {
             const { commandInput, commandOutput, handlerOptions } = props
             const commandInputAsString = DynamoCommandError.formatValueToString(
-                'commandInput',
+                "commandInput",
                 commandInput,
             )
             const commandOutputAsString =
                 DynamoCommandError.formatValueToString(
-                    'commandOutput',
+                    "commandOutput",
                     commandOutput,
                 )
             const handlerOptionsAsString =
                 DynamoCommandError.formatValueToString(
-                    'handlerOptions',
+                    "handlerOptions",
                     handlerOptions,
                 )
             this.message = [
@@ -38,14 +65,14 @@ export class DynamoCommandError extends BasicError {
                 commandInputAsString,
                 handlerOptionsAsString,
                 commandOutputAsString,
-            ].join('\n')
+            ].join("\n")
         }
     }
     private static formatValueToString(
         label: DynamoCommandErrorPropsKey,
         value?: unknown,
     ): string {
-        return isPresent(value) ? [label, value].join('\n') : ''
+        return isPresent(value) ? [label, value].join("\n") : ""
     }
 }
 

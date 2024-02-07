@@ -1,3 +1,3 @@
 export enum DynamoErrors {
-    CONDITION_FAILED = 'ConditionalCheckFailedException',
+    CONDITION_FAILED = "ConditionalCheckFailedException",
 }

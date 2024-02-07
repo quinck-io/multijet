@@ -1,9 +1,9 @@
-import { isPresent } from '@libs/utils'
-import { mergeRecords } from '../dynamo.utils'
+import { isPresent } from "@quinck/type-utils"
+import { mergeRecords } from "../dynamo.utils"
 import {
     ConditionExpressionAggregator,
     InputCondition,
-} from './condition.models'
+} from "./condition.models"
 
 export function aggregateInputCondition(
     conditions: InputCondition[],

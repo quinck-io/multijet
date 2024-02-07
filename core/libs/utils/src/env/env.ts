@@ -1,5 +1,6 @@
+import { isPresent } from "@quinck/type-utils"
 import Joi from "joi"
-import { isPresent, logger } from ".."
+import { logger } from ".."
 import { CommonEnvironment, NodeEnv } from "./env.models"
 
 export function getEnvironment<Environment extends NodeJS.ProcessEnv>(

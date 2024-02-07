@@ -1,20 +1,21 @@
-import { ReturnValue, UpdateItemCommandInput } from '@aws-sdk/client-dynamodb'
-import { Builder, isPresent } from '@libs/utils'
-import dynamoose from 'dynamoose'
+import { ReturnValue, UpdateItemCommandInput } from "@aws-sdk/client-dynamodb"
+import { Builder } from "@libs/utils"
+import { isPresent } from "@quinck/type-utils"
+import dynamoose from "dynamoose"
 import {
     ConditionExpressionAggregator,
     InputCondition,
-} from '../condition/condition.models'
-import { aggregateInputCondition } from '../condition/condition.utils'
-import { mergeRecords } from '../dynamo.utils'
+} from "../condition/condition.models"
+import { aggregateInputCondition } from "../condition/condition.utils"
+import { mergeRecords } from "../dynamo.utils"
 import {
     UpdateItemCommandInputOptionalProps,
     UpdateItemCommandInputRequiredProps,
-} from './update-builder.models'
+} from "./update-builder.models"
 import {
     UpdateExpressionVerb,
     UpdateItemCommandInputUpdate,
-} from './update-item.models'
+} from "./update-item.models"
 
 export class UpdateItemCommandInputBuilder
     implements Builder<UpdateItemCommandInput>
@@ -23,7 +24,7 @@ export class UpdateItemCommandInputBuilder
     private conditions: InputCondition[] = []
     private verb?: UpdateExpressionVerb
     private conditionAggregator?: ConditionExpressionAggregator
-    private key?: UpdateItemCommandInput['Key']
+    private key?: UpdateItemCommandInput["Key"]
     private requiredProps?: UpdateItemCommandInputRequiredProps
     private optionalProps?: UpdateItemCommandInputOptionalProps
     private returnValue?: ReturnValue
@@ -116,7 +117,7 @@ export class UpdateItemCommandInputBuilder
     }
 
     private aggregateUpdateItemCommandInputUpdate(): UpdateItemCommandInputUpdate {
-        if (!isPresent(this.verb)) throw new Error('verb is required')
+        if (!isPresent(this.verb)) throw new Error("verb is required")
         if (this.updates.length <= 0) return {}
 
         const concatenatedUpdates = this.updates.reduce((prev, curr) => {
@@ -146,9 +147,9 @@ export class UpdateItemCommandInputBuilder
     }
 
     build(): UpdateItemCommandInput {
-        if (!isPresent(this.key)) throw new Error('key is required')
+        if (!isPresent(this.key)) throw new Error("key is required")
         if (!isPresent(this.requiredProps))
-            throw new Error('required props are required')
+            throw new Error("required props are required")
 
         const update = this.aggregateUpdateItemCommandInputUpdate()
         const condition = aggregateInputCondition(

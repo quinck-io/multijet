@@ -1,7 +1,5 @@
-import { logger as defaultLogger, Logger } from '@libs/utils'
-import dynamooseLib from 'dynamoose'
-
-export const logger: Logger = defaultLogger.extendedChild({})
+import { logger } from "@libs/utils"
+import dynamooseLib from "dynamoose"
 
 dynamooseLib.logger().then(dynamooseLogger => {
     dynamooseLogger.providers.set(logger)
