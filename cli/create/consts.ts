@@ -34,6 +34,7 @@ export const OPTIONAL_LIBS: Choice[] = [
     { title: "S3 Media Storage", value: "media-storage" },
     { title: "DynamoDB Utils", value: "dynamoose-utils" },
     { title: "MongoDB", value: "mongodb" },
+    { title: "Events", value: "events" },
 ]
 
 export const getDockerComposeTemplate = (projectName: string) =>

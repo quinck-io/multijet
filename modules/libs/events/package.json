@@ -1,0 +1,21 @@
+{
+    "name": "@libs/events",
+    "private": true,
+    "version": "0.0.1",
+    "types": "src/index.ts",
+    "main": "src/index.ts",
+    "scripts": {
+        "typecheck": "tsc",
+        "lint": "eslint .",
+        "clean": "rm -rf .turbo node_modules"
+    },
+    "dependencies": {
+        "@aws-sdk/client-cloudwatch-events": "^3.496.0",
+        "@libs/models": "^0.0.1",
+        "@libs/utils": "^0.0.1",
+        "uuid": "^9.0.1"
+    },
+    "devDependencies": {
+        "@types/uuid": "^9.0.8"
+    }
+}
