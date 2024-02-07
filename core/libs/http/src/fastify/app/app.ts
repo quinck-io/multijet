@@ -1,4 +1,4 @@
-import { createApiErrorsLookupService } from "@libs/api-errors"
+import { createApiErrorsLookupService, defaultMappings } from "@libs/api-errors"
 import fastify, { FastifyPluginAsync } from "fastify"
 import { apiErrorHandler } from "../../errors/api-error-handler/api-error-handler"
 import { DEFAULT_OPTIONS } from "./app.consts"
@@ -9,6 +9,7 @@ export const serverApp = (opts?: ApplicationOptions) => {
     const app = fastify(opts?.fastifyOptions ?? DEFAULT_OPTIONS)
 
     app.apiErrorsLookupService = createApiErrorsLookupService()
+    app.apiErrorsLookupService.putMappings(defaultMappings())
 
     app.setErrorHandler(apiErrorHandler)
 
