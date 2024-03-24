@@ -1,6 +1,6 @@
 # multijet
 
-![logo](https://media.discordapp.net/attachments/1004365881675087984/1082967431850508288/Logo_wide_3_1.png)
+![Logo](https://github.com/quinck-io/multijet/assets/119496044/5e2ee862-de17-4801-a1f7-186c6bd678fc)
 
 **Multijet** is a highly opinonated framework for building large **microservice based** monorepos in Typescript.
 
