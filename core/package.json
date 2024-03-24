@@ -42,7 +42,7 @@
         "esbuild-runner": "^2.2.2",
         "eslint": "^8.56.0",
         "eslint-config-prettier": "^9.1.0",
-        "eslint-plugin-sonarjs": "^0.23.0",
+        "eslint-plugin-sonarjs": "^0.24.0",
         "turbo": "^1.12.2",
         "typescript": "^5.3.3"
     }
