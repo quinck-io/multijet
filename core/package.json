@@ -40,7 +40,7 @@
         "esbuild": "^0.20.0",
         "esbuild-plugin-copy": "^2.1.1",
         "esbuild-runner": "^2.2.2",
-        "eslint": "^8.56.0",
+        "eslint": "^8.57.0",
         "eslint-config-prettier": "^9.1.0",
         "eslint-plugin-sonarjs": "^0.24.0",
         "turbo": "^1.12.2",
