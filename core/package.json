@@ -43,7 +43,7 @@
         "eslint": "^8.57.0",
         "eslint-config-prettier": "^9.1.0",
         "eslint-plugin-sonarjs": "^0.24.0",
-        "turbo": "^1.12.2",
+        "turbo": "^1.13.0",
         "typescript": "^5.3.3"
     }
 }
