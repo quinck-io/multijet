@@ -10,6 +10,6 @@
         "openapi:generate": "openapi -i ../../configs/openapi.yaml -o ./src/generated --exportCore false --exportServices false --exportModels true --exportSchemas false"
     },
     "devDependencies": {
-        "openapi-typescript-codegen": "^0.28.0"
+        "openapi-typescript-codegen": "^0.29.0"
     }
 }
