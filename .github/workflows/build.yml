@@ -22,9 +22,7 @@ jobs:
               run: npm run build:cli
 
     build-core:
-        runs-on: self-hosted-x64
-        container:
-            image: ubuntu:latest
+        runs-on: ubuntu-latest
         defaults:
             run:
                 working-directory: ./core
