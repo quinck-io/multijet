@@ -1,2 +1,2 @@
-export * from "./core/mongodb"
-export * from "./core/mongodb.models"
+export { Collection, Db, MongoClient } from "mongodb"
+export * from "./factories"
