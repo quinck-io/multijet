@@ -1,6 +1,7 @@
 import { createApiErrorsLookupService, defaultMappings } from "@libs/api-errors"
 import fastify, { FastifyPluginAsync } from "fastify"
 import { apiErrorHandler } from "../../errors/api-error-handler/api-error-handler"
+import { diScope } from "../request/request-di-scope"
 import { DEFAULT_OPTIONS } from "./app.consts"
 import { ApplicationOptions } from "./app.models"
 import { decorateAppWithCors } from "./cors.app"
@@ -30,10 +31,10 @@ export const serverApp = (opts?: ApplicationOptions) => {
 
 const appOptions: FastifyPluginAsync<ApplicationOptions> = async (app, opts) => {
     if (opts) {
-        const { cors, healthCheck } = opts
+        if (opts.diContainer) diScope(app, opts.diContainer)
 
-        decorateAppWithCors(app, cors)
+        decorateAppWithCors(app, opts.cors)
 
-        if (healthCheck) app.all(healthCheck.path, (_, reply) => reply.send())
+        if (opts.healthCheck) app.all(opts.healthCheck.path, (_, reply) => reply.send())
     }
 }

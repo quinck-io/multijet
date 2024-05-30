@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ApiErrorsLookupService } from "@libs/api-errors"
+import { AwilixContainer } from "awilix"
 import {
     FastifyServerOptions,
     RawReplyDefaultExpression,
@@ -36,6 +37,7 @@ export type RoutesHandlerMapping = Array<{
 export type ApplicationOptions = {
     cors?: AppCorsOptions
     healthCheck?: HealthCheck
+    diContainer?: AwilixContainer
     fastifyOptions?: FastifyServerOptions
 }
 
