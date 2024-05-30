@@ -10,7 +10,7 @@
         "clean": "rm -rf .turbo node_modules"
     },
     "dependencies": {
-        "@aws-sdk/client-cloudwatch-events": "^3.496.0",
+        "@aws-sdk/client-scheduler": "^3.583.0",
         "@libs/models": "^0.0.1",
         "@libs/utils": "^0.0.1",
         "uuid": "^9.0.1"

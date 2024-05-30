@@ -3,19 +3,17 @@ export interface EventSchedulerService {
     unschedule(eventId: string): Promise<void>
 }
 
-export type ScheduledEvent = {
+export type ScheduledEvent = ScheduleEvent & {
     eventId: string
-    type: string
-    schedule: Schedule
     createdAt: number
-    metadata?: Record<string, unknown>
 }
 
 export type ScheduleEvent = {
-    type: string
+    eventId?: string
+    type?: string
     schedule: Schedule
     metadata?: Record<string, unknown>
-}
+} & Record<string, unknown>
 
 export type Schedule =
     | {
