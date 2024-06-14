@@ -83,6 +83,17 @@ export async function scaffoldProject(
         spinner.succeed("Optional modules applied")
     }
 
+    if (cicds && cicds.length > 0) {
+        spinner.start("Setting up CI/CD")
+        try {
+            copyGihubWorkflows(rootFilesPath, projectDir, cicds.flat())
+        } catch (error) {
+            spinner.fail("Failed to set up CI/CD")
+            throw error
+        }
+        spinner.succeed("CI/CD set up")
+    }
+
     spinner.start("Installing dependencies")
     await execa(pManager, ["i"], { cwd: projectDir }).catch(error => {
         spinner.fail(
@@ -103,17 +114,6 @@ export async function scaffoldProject(
         }
 
         spinner.succeed("Repository initialized")
-    }
-
-    if (cicds && cicds.length > 0) {
-        spinner.start("Setting up CI/CD")
-        try {
-            copyGihubWorkflows(rootFilesPath, projectDir, cicds.flat())
-        } catch (error) {
-            spinner.fail("Failed to set up CI/CD")
-            throw error
-        }
-        spinner.succeed("CI/CD set up")
     }
 
     console.log(
