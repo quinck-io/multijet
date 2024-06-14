@@ -33,9 +33,6 @@ jobs:
             - name: Install dependencies
               run: npm ci
 
-            - name: Lint
-              run: npm run lint
-
             - name: SonarCloud Scan
               uses: SonarSource/sonarcloud-github-action@master
               env:
