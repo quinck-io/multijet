@@ -1,6 +1,11 @@
 import prompts from "prompts"
 
-import { OPTIONAL_LIBS, RUNTIME_CHOICES, VARIANT_CHOICES } from "./consts.js"
+import {
+    CICD_CHOICES,
+    OPTIONAL_LIBS,
+    RUNTIME_CHOICES,
+    VARIANT_CHOICES,
+} from "./consts.js"
 import { CreateProjectResponse, Variant } from "./models.js"
 import { scaffoldProject } from "./scaffold.js"
 
@@ -29,16 +34,22 @@ export async function handleCreateProject() {
             type: "select",
             choices: RUNTIME_CHOICES,
         },
+        {
+            name: "cicds",
+            message: "Do you want to include CI/CD?",
+            type: "multiselect",
+            choices: CICD_CHOICES,
+        },
     ])
 
     if (response.variant === Variant.CORE) {
-        const moduleResponse = await prompts({
-            name: "modulesIncluded",
-            message: "What modules do you want to include?",
+        const libResponse = await prompts({
+            name: "libsIncluded",
+            message: "What libs do you want to include?",
             type: "multiselect",
             choices: OPTIONAL_LIBS,
         })
-        Object.assign(response, moduleResponse)
+        Object.assign(response, libResponse)
     }
 
     const gitResponse = await prompts({

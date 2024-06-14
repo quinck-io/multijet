@@ -17,3 +17,22 @@ export function copyOptionalLibs(
         })
     })
 }
+
+export const copyGihubWorkflows = (
+    rootPath: string,
+    projectPath: string,
+    cicds: string[],
+) => {
+    const modulesWorkflowsPath = path.join(
+        rootPath,
+        "modules",
+        ".github",
+        "workflows",
+    )
+    const projectWorkflowsPath = path.join(projectPath, ".github", "workflows")
+
+    cicds.forEach(cicd => {
+        const cicdPath = path.join(modulesWorkflowsPath, `${cicd}.yaml`)
+        cpSync(cicdPath, path.join(projectWorkflowsPath, `${cicd}.yaml`))
+    })
+}

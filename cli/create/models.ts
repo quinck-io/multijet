@@ -3,8 +3,9 @@ export interface CreateProjectResponse {
     projectDir: string
     variant: Variant
     runtime: Runtime
-    modulesIncluded?: string[]
+    libsIncluded?: string[]
     initializeGit: boolean
+    cicds?: string[][]
 }
 
 export enum Variant {

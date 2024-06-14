@@ -13,7 +13,7 @@ import path, { dirname } from "path"
 import { fileURLToPath } from "url"
 import { changePackageName } from "../util.js"
 import { FILE_BLACKLIST, getDockerComposeTemplate } from "./consts.js"
-import { copyOptionalLibs } from "./helper.js"
+import { copyGihubWorkflows, copyOptionalLibs } from "./helper.js"
 import { CreateProjectResponse, Runtime, Variant } from "./models.js"
 
 const __filename = fileURLToPath(import.meta.url)
@@ -23,7 +23,7 @@ export async function scaffoldProject(
     projectName: string,
     answers: CreateProjectResponse,
 ) {
-    const { modulesIncluded, initializeGit, projectDir, variant } = answers
+    const { libsIncluded, initializeGit, projectDir, variant, cicds } = answers
 
     const rootFilesPath = path.join(__dirname, "..", "..")
     const coreFilesPath = path.join(rootFilesPath, "core")
@@ -72,10 +72,10 @@ export async function scaffoldProject(
         throw error
     }
 
-    if (variant === Variant.CORE && modulesIncluded) {
+    if (variant === Variant.CORE && libsIncluded) {
         spinner.start("Applying modules")
         try {
-            copyOptionalLibs(rootFilesPath, projectDir, modulesIncluded)
+            copyOptionalLibs(rootFilesPath, projectDir, libsIncluded)
         } catch (error) {
             spinner.fail("Failed to apply optional modules")
             throw error
@@ -103,6 +103,17 @@ export async function scaffoldProject(
         }
 
         spinner.succeed("Repository initialized")
+    }
+
+    if (cicds && cicds.length > 0) {
+        spinner.start("Setting up CI/CD")
+        try {
+            copyGihubWorkflows(rootFilesPath, projectDir, cicds.flat())
+        } catch (error) {
+            spinner.fail("Failed to set up CI/CD")
+            throw error
+        }
+        spinner.succeed("CI/CD set up")
     }
 
     console.log(

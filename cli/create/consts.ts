@@ -37,6 +37,11 @@ export const OPTIONAL_LIBS: Choice[] = [
     { title: "Events", value: "events" },
 ]
 
+export const CICD_CHOICES: Choice[] = [
+    { title: "GitHub Actions (SAM)", value: ["sam-deploy", "sam-undeploy"] },
+    { title: "GitHub Actions (QA only)", value: ["qa"] },
+]
+
 export const getDockerComposeTemplate = (projectName: string) =>
     `
 version: "3.8"
