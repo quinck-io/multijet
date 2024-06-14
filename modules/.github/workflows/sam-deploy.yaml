@@ -1,0 +1,136 @@
+name: SAM Deploy
+
+on:
+    workflow_dispatch:
+    push:
+        branches:
+            - "**"
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref_name }}
+    cancel-in-progress: false
+
+env:
+    PROJECT_NAME: ${{ github.event.repository.name }} # Replace with your project name
+    NODE_VERSION: 20
+
+jobs:
+    qa:
+        name: Quality Assurance
+        runs-on: self-hosted-x64
+        container:
+            image: ubuntu:latest
+        steps:
+            - run: apt-get update && apt-get install -y curl jq
+
+            - uses: actions/checkout@v4
+
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Lint
+              run: npm run lint
+
+            - name: SonarCloud Scan
+              uses: SonarSource/sonarcloud-github-action@master
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
+                  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+            - name: SonarQube Quality Gate check
+              id: sonarqube-quality-gate-check
+              uses: sonarsource/sonarqube-quality-gate-action@master
+              # Force to fail step after specific time.
+              timeout-minutes: 5
+              env:
+                  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+                  SONAR_HOST_URL: https://sonarcloud.io
+
+            - name: Notify Discord
+              if: always()
+              uses: quinck-io/actions-notify-discord@v2.0.2
+              with:
+                  webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+                  status: ${{ job.status }}
+                  projectName: ${{ env.PROJECT_NAME }}
+                  sonarProjectKey: quinck-io_${{ github.event.repository.name }}
+                  sonarQualityGateStatus: ${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}
+
+    deploy:
+        name: Deployment
+        if: ${{ github.ref_name == 'master' || startsWith(github.ref_name, 'release') || github.ref_name == 'develop' }}
+        runs-on: self-hosted-x64-power
+        container:
+            image: ubuntu:latest
+        needs: qa
+        env:
+            AWS_REGION: eu-west-1
+            PYTHON_VERSION: 3.9
+        steps:
+            - uses: actions/checkout@v4
+
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
+
+            - uses: actions/setup-python@v5
+              with:
+                  python-version: ${{ env.PYTHON_VERSION }}
+
+            - name: Install dependencies
+              run: npm ci
+
+            # Deployment
+            - uses: aws-actions/setup-sam@v2
+
+            - uses: aws-actions/configure-aws-credentials@v4
+              with:
+                  aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                  aws-region: ${{ env.AWS_REGION }}
+
+            - name: Build project
+              run: |
+                  npm run openapi:generate
+                  npm run sam:build
+
+            - name: Validate SAM template
+              run: sam validate -t deploy/aws/sam/template.yaml
+
+            - name: Set Environment
+              env:
+                  ENVIRONMENT_BY_BRANCH: ${{ github.ref_name == 'master' && 'prod' || (github.ref_name == 'develop' && 'dev' || github.ref_name) }}
+              run: |
+                  ENVIRONMENT=$(python -c "import sys; input_string = sys.argv[1]; replaced_string = input_string.replace('/', '_').replace('.', '_'); print(replaced_string)" "${ENVIRONMENT_BY_BRANCH}")
+                  ENVIRONMENT_STACK_NAME=$(python -c "import sys; input_string = sys.argv[1]; replaced_string = input_string.replace('/', '-').replace('.', '-').replace('_', '-'); print(replaced_string)" "${ENVIRONMENT_BY_BRANCH}")
+                  echo "ENVIRONMENT=${ENVIRONMENT}" >> $GITHUB_ENV
+                  echo "ENVIRONMENT_STACK_NAME=${ENVIRONMENT_STACK_NAME}" >> $GITHUB_ENV
+
+            - name: Deploy SAM Application
+              env:
+                  MONGO_URI: ${{ secrets[format('mongo_uri_{0}', env.ENVIRONMENT)] }}
+                  MEMORY_SIZE: ${{ env.ENVIRONMENT == 'prod' && 1024 || 512 }}
+                  NODE_ENV: ${{ env.ENVIRONMENT == 'prod' && 'production' || (env.ENVIRONMENT == 'dev' && 'development' || 'staging') }}
+                  STACK_NAME: ${{ format('{0}-{1}', env.PROJECT_NAME, env.ENVIRONMENT_STACK_NAME) }}
+                  S3_BUCKET: ${{ format('{0}-sam', env.PROJECT_NAME) }}
+              run: |
+                  sam deploy \
+                    --template-file deploy/aws/sam/template.yaml \
+                    --stack-name $STACK_NAME \
+                    --capabilities CAPABILITY_IAM \
+                    --region $AWS_REGION \
+                    --s3-bucket $S3_BUCKET \
+                    --no-fail-on-empty-changeset \
+                    --parameter-overrides MongoDBUri=${MONGO_URI} Environment=${ENVIRONMENT} MemorySize=${MEMORY_SIZE} NodeEnv=${NODE_ENV}
+
+            - name: Notify Discord
+              if: always()
+              uses: quinck-io/actions-notify-discord@v2.0.2
+              with:
+                  webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+                  status: ${{ job.status }}
+                  projectName: ${{ env.PROJECT_NAME }}

@@ -1,0 +1,69 @@
+name: SAM Undeploy
+
+on: delete
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref_name }}
+    cancel-in-progress: false
+
+env:
+    PROJECT_NAME: ${{ github.event.repository.name }} # Replace with your project name
+
+jobs:
+    undeploy:
+        name: Undeploy
+        if: ${{ github.ref_name == 'master' || startsWith(github.ref_name, 'release') || github.ref_name == 'develop' }}
+        runs-on: self-hosted-x64
+        container:
+            image: ubuntu:latest
+        env:
+            AWS_REGION: eu-west-1
+            PYTHON_VERSION: 3.9
+        steps:
+            - run: apt-get update && apt-get install -y curl jq unzip make
+
+            - uses: actions/checkout@v4
+
+            - uses: actions/setup-python@v5
+              with:
+                  python-version: ${{ env.PYTHON_VERSION }}
+
+            - name: Install AWS CLI v2
+              if: ${{ github.ref_name == 'develop' }}
+              run: |
+                  mkdir -p ./tmp
+                  curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o ./tmp/awscliv2.zip
+                  unzip -q ./tmp/awscliv2.zip -d ./tmp
+                  rm ./tmp/awscliv2.zip
+                  ./tmp/aws/install --update
+                  rm -rf ./tmp/aws/
+
+            - uses: aws-actions/configure-aws-credentials@v4
+              if: ${{ github.ref_name == 'develop' }}
+              with:
+                  aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                  aws-region: ${{ env.AWS_REGION }}
+
+            - name: Set Environment
+              env:
+                  ENVIRONMENT_BY_BRANCH: ${{ github.ref_name == 'master' && 'prod' || (github.ref_name == 'develop' && 'dev' || github.ref_name) }}
+              run: |
+                  ENVIRONMENT=$(python -c "import sys; input_string = sys.argv[1]; replaced_string = input_string.replace('/', '_').replace('.', '_'); print(replaced_string)" "${ENVIRONMENT_BY_BRANCH}")
+                  ENVIRONMENT_STACK_NAME=$(python -c "import sys; input_string = sys.argv[1]; replaced_string = input_string.replace('/', '-').replace('.', '-').replace('_', '-'); print(replaced_string)" "${ENVIRONMENT_BY_BRANCH}")
+                  echo "ENVIRONMENT=${ENVIRONMENT}" >> $GITHUB_ENV
+                  echo "ENVIRONMENT_STACK_NAME=${ENVIRONMENT_STACK_NAME}" >> $GITHUB_ENV
+
+            - name: Deploy SAM Application
+              env:
+                  STACK_NAME: ${{ format('{0}-{1}', env.PROJECT_NAME, env.ENVIRONMENT_STACK_NAME) }}
+              run: |
+                  aws cloudformation delete-stack --stack-name $STACK_NAME
+
+            - name: Notify Discord
+              if: always()
+              uses: quinck-io/actions-notify-discord@v2.0.2
+              with:
+                  webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+                  status: ${{ job.status }}
+                  projectName: ${{ env.PROJECT_NAME }}
