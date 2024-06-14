@@ -1,0 +1,57 @@
+name: SAM Deploy
+
+on:
+    workflow_dispatch:
+    push:
+        branches:
+            - "**"
+
+env:
+    PROJECT_NAME: ${{ github.event.repository.name }} # Replace with your project name
+    NODE_VERSION: 20
+
+jobs:
+    qa:
+        name: Quality Assurance
+        runs-on: self-hosted-x64
+        container:
+            image: ubuntu:latest
+        steps:
+            - run: apt-get update && apt-get install -y curl jq
+
+            - uses: actions/checkout@v4
+
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Lint
+              run: npm run lint
+
+            - name: SonarCloud Scan
+              uses: SonarSource/sonarcloud-github-action@master
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
+                  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+            - name: SonarQube Quality Gate check
+              id: sonarqube-quality-gate-check
+              uses: sonarsource/sonarqube-quality-gate-action@master
+              # Force to fail step after specific time.
+              timeout-minutes: 5
+              env:
+                  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+                  SONAR_HOST_URL: https://sonarcloud.io
+
+            - name: Notify Discord
+              if: always()
+              uses: quinck-io/actions-notify-discord@v2.0.2
+              with:
+                  webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+                  status: ${{ job.status }}
+                  projectName: ${{ env.PROJECT_NAME }}
+                  sonarProjectKey: quinck-io_${{ github.event.repository.name }}
+                  sonarQualityGateStatus: ${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}
