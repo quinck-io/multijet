@@ -22,7 +22,7 @@ export type Params = {
 export class AWSEventSchedulerService implements EventSchedulerService {
     private constructor(private readonly params: Params) {}
 
-    public static create = (params: Params) => () =>
+    public static readonly create = (params: Params) => () =>
         new AWSEventSchedulerService(params)
 
     public async schedule(event: ScheduleEvent): Promise<ScheduledEvent> {
