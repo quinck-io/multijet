@@ -29,7 +29,7 @@
         "yaml": "^2.4.5"
     },
     "devDependencies": {
-        "@types/node": "^20.14.9",
+        "@types/node": "^20.14.10",
         "@types/prompts": "^2.4.9",
         "typescript": "^5.5.3"
     }
