@@ -35,7 +35,7 @@
     "devDependencies": {
         "@types/aws-lambda": "^8.10.140",
         "@aws-sdk/client-ecr": "^3.554.0",
-        "@aws-sdk/client-ecr-public": "^3.614.0",
+        "@aws-sdk/client-ecr-public": "^3.616.0",
         "@types/node": "^20.14.10",
         "@typescript-eslint/eslint-plugin": "^7.16.0",
         "esbuild": "^0.23.0",
