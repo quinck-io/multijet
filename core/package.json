@@ -33,7 +33,7 @@
         "joi": "^17.13.3"
     },
     "devDependencies": {
-        "@types/aws-lambda": "^8.10.140",
+        "@types/aws-lambda": "^8.10.141",
         "@aws-sdk/client-ecr": "^3.554.0",
         "@aws-sdk/client-ecr-public": "^3.614.0",
         "@types/node": "^20.14.10",
