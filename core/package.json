@@ -37,7 +37,7 @@
         "@aws-sdk/client-ecr": "^3.554.0",
         "@aws-sdk/client-ecr-public": "^3.614.0",
         "@types/node": "^20.14.10",
-        "@typescript-eslint/eslint-plugin": "^7.16.0",
+        "@typescript-eslint/eslint-plugin": "^8.0.0",
         "esbuild": "^0.23.0",
         "esbuild-plugin-copy": "^2.1.1",
         "esbuild-runner": "^2.2.2",
